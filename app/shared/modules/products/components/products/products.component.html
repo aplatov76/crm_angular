@@ -1,0 +1,112 @@
+<div
+  class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2"></h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group mr-2">
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="currentView = true">Дерево категорий</button>
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="currentView = false">Таблица</button>
+    </div>
+    <div class="btn-group mr-2">
+      <button type="button" class="btn btn-sm btn-outline-secondary">Export xlsx</button>
+      <button type="button" class="btn btn-sm btn-outline-secondary">Export pdf</button>
+    </div>
+    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="feather feather-calendar">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+      This week
+    </button>
+  </div>
+</div>
+<ng-container *ngIf="currentView"> 
+  <div class="d-flex header-dashboard">
+    <h2>Прайс лист</h2>
+    <i class="material-icons" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">filter_list</i>
+  </div>
+
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <button type="button" class="btn btn-outline-secondary">Поиск</button>
+              <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="sr-only">Статус</span>
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Наименование</a>
+                <a class="dropdown-item" href="#">Артикул</a>
+                <a class="dropdown-item" href="#">Код</a>
+              </div>
+            </div>
+            <input type="text" class="form-control" id="filter" #filter (keyup)="filterFn(filter.value, tree.treeModel)" placeholder="">
+          </div>
+    </div>
+  </div>
+
+    <table class="table table-striped">
+      <tree-root #tree [nodes]="nodes" (activate)="onEvent($event)">      
+        <ng-template #treeNodeTemplate let-node let-index="index">
+          <tr *ngIf="!node.data.stock" class="ndp">
+            <td class="d-flex" colspan="6">{{ node.data.title }} <i class="material-icons pl-3 pr-1" (click)="addChildren(node.data.id)">playlist_add</i><i class="material-icons">delete_sweep</i></td>
+          </tr>
+            <tr *ngIf="node.data.stock">
+              <td >{{ node.data.id }}</td>
+              <td width="700px">{{ node.data.title }}</td>
+              <td width="50px">{{ node.data.articul }}</td>
+              <td class="nds">{{ node.data.stock }}</td>
+              <td class="ndp" >{{ (node.data.trade_price).toFixed(2) }}</td>
+              <td class="ndp" >{{ (node.data.price).toFixed(2) }}</td>
+            </tr>
+        </ng-template>
+      </tree-root>
+    </table>
+
+  </ng-container>
+  <ng-container *ngIf="!currentView"> 
+    <div class="d-flex header-dashboard">
+      <h2>Прайс лист</h2>
+      <i class="material-icons" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">filter_list</i>
+    </div>
+  
+    <div class="collapse" id="collapseExample">
+      <div class="card card-body">
+          <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <button type="button" class="btn btn-outline-secondary">Поиск</button>
+                <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="sr-only">Статус</span>
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="#">Наименование</a>
+                  <a class="dropdown-item" href="#">Артикул</a>
+                  <a class="dropdown-item" href="#">Код</a>
+                </div>
+              </div>
+              <input type="text" class="form-control" id="filter" placeholder="">
+            </div>
+      </div>
+    </div>
+
+    <table class="table table-striped">
+      <tr *ngFor="let data of productsTable"  class="table-cursor">
+        <ng-container *ngIf="data.visible != 2"> 
+          <td ><span *ngIf="data.price">{{ data.id }}</span></td>
+          <td width="700px">
+            <span *ngIf="data.parent && !data.price">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <i class="material-icons" (click)="itemTableVisible(data.id, 2)" *ngIf="!data.price ">remove</i>
+            <i class="material-icons" (click)="itemTableVisible(data.id, 0)" *ngIf="!data.price ">add</i>            
+            <span (click)="onEventTable(data.id)" [ngClass]="{'h6':!data.price, 'font-weight-bold': data.parent && !data.price}">{{ data.title }}</span>
+          </td>
+          <td width="50px">{{ data.articul }}</td>
+          <td class="nds">{{ data.stock }}</td>
+          <td class="ndp" ><span *ngIf="data.trade_price">{{ (data.trade_price).toFixed(2) }}</span></td>
+          <td class="ndp" ><span *ngIf="data.price">{{ (data.price).toFixed(2) }}</span></td>
+        </ng-container> 
+      </tr>
+    </table>
+  </ng-container>
