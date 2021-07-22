@@ -1,0 +1,101 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+<h1 class="h2"></h1>
+<div class="btn-toolbar mb-2 mb-md-0">
+  <div class="btn-group mr-2">
+    <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+    <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+  </div>
+  <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      class="feather feather-calendar">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+      <line x1="16" y1="2" x2="16" y2="6"></line>
+      <line x1="8" y1="2" x2="8" y2="6"></line>
+      <line x1="3" y1="10" x2="21" y2="10"></line>
+    </svg>
+    This week
+  </button>
+</div>
+</div>
+<div class="table-responsive">
+          <div class="d-flex header-dashboard">
+              <h2>История продаж</h2>
+              <i class="material-icons" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">filter_list</i>
+            </div>
+            <div class="collapse" id="collapseExample">
+              <div class="card card-body">
+
+                  <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <button type="button" class="btn btn-outline-secondary">Поиск</button>
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">Наименование</a>
+                          <a class="dropdown-item" href="#">Код</a>
+                        </div>
+                      </div>
+                      <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
+                    </div>
+                    <div class="header-time">
+                      <input type="date" class="form-control" name="trip-start" value="2018-07-22" min="2018-01-01">
+                      <input type="date" class="form-control" name="trip-start" value="2018-07-22" min="2018-01-01">
+                      <div class="buttons m-1">
+                        <button class="btn btn-secondary btn-sm mr-1">Показать</button>
+                        <button class="btn btn-warning btn-sm mr-1">Отчет</button>
+                      </div>
+                    </div>
+              </div>
+            </div>
+      <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Код</th>
+              <th scope="col">Наименование</th>
+              <th scope="col">Количество</th>
+              <th scope="col">Цена</th>
+              <th scope="col">Сумма</th>
+              <th scope="col">Дата</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>123</td>
+              <td>Утеплитель экструдированный Урсафоам плиты URSA XPS (250 кПа) N-III-L (30*600-1180) 0.254м3 12 плит 8,496кв.м ( 14 упак. на поддоне) </td>
+              <td>34</td>
+              <td>234.00</td>
+              <td>16509.00</td>
+              <td>20.09.2019 14:54</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>1044</td>
+              <td>Утеплитель экструдированный Технониколь XPS CARBON ECO (150 кПа) 50*580*1180мм в уп. 8 плит 0,27376м3 - 5.4752 кв.м. гр. горючести Г4 кромка L (СПБ)  </td>
+              <td>34</td>
+              <td>234.00</td>
+              <td>16509.00</td>
+              <td>14.09.2020 11:54</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>45</td>
+              <td>Пленка пароизоляционная D-Folie BR 75 м2  </td>
+              <td>34</td>
+              <td>234.00</td>
+              <td>16509.00</td>
+              <td>20.11.2019 09:54</td>
+            </tr>
+          </tbody>
+        </table>
+          <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="">Итоги: </span>
+              </div>
+              <input type="text" placeholder="Продажи" class="form-control border border-success" value="48 094, 20">
+              <input type="text" placeholder="Возврат" class="form-control border border-danger" value="0.00">
+          </div>
+</div>

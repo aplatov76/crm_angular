@@ -1,0 +1,62 @@
+<div class="modal-header" *ngIf="data">
+    <h4 class="modal-title pull-left">Отчет по продажам {{data}}</h4>
+    <button type="button" class="close pull-right" (click)="modalService.hide()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-bordered table-striped" *ngIf="currentSales">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Код</th>
+            <th scope="col">Наименование</th>
+            <th scope="col">Шт.</th>
+            <th scope="col">Цена</th>
+            <th scope="col">Сумма</th>
+          </tr>
+        </thead>
+        <tbody >
+          <tr *ngFor="let element of currentSales; let i = index">
+            <th scope="row">{{i + 1}}</th>
+            <td>{{element.id}}</td>
+            <td>{{element.product.title}}</td>
+            <td>{{element.quantity}}</td>
+            <td>{{element.price | currency:'RUB': ' '}}</td>
+            <td>{{element.sum | currency:'RUB': ' '}}</td>
+          </tr>
+          <tr>
+            <th scope="row"></th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>Продажи:</b></td>
+            <td>{{sum | currency:'RUB': ' '}}</td>
+          </tr>
+          <tr *ngIf="currentCassa">
+            <th scope="row"></th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>Старт:</b></td>
+            <td>{{currentCassa.sum | currency:'RUB': ' '}}</td>
+          </tr>
+          <tr>
+            <th scope="row"></th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>Возврат:</b></td>
+            <td></td>
+          </tr>
+          <tr>
+            <th scope="row"></th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>Итого:</b></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+</div>
