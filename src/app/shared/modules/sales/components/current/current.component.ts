@@ -72,7 +72,7 @@ export class CurrentSaleComponent{
     }
 
     initializeForm(){
-        console.log('Initialize form: ', this.isCurrentProduct)
+        //console.log('Initialize form: ', this.isCurrentProduct)
         this.form = this.fb.group({
             id: [this.isCurrentProduct.id, [Validators.required]],
             stock: [{value: this.isCurrentProduct.stock, disabled: true}, [Validators.required]],

@@ -15,8 +15,9 @@ import { PraisInterface } from '../../../../interfaces/prais.interface';
 import { praisAction, productAction } from '../../../../utilmodules/prais/store/actions/action';
 import { ProductInterface } from '../../../../interfaces/product.interface';
 import { CassaValueInterface } from '../../interfaces/cassaValue.interface';
-
-
+import { returnSalesAction } from '../../../returnSales/store/actions/actions';
+import { isReturnSalesSelector } from '../../../returnSales/store/selectors';
+import { ReturnSalesInterface } from '../../../returnSales/interfaces/returnSales.interface';
 
 @Component({
     selector: 'sales',
@@ -31,21 +32,16 @@ export class SalesComponent implements OnInit, OnDestroy{
     sales: SalesInterface[]
     errorSubscription : Subscription
     sum: number = 0
+    returnSum: number = 0
     currentSum: number =  0
     dt: Date = new Date()
     
     salesSubscription: Subscription
+    returnSalesSubscription: Subscription
     isLoading$ : Observable<boolean>
     //praisList$: Observable<PraisInterface[]>
     currentCassa$: Observable<CassaValueInterface>
 
-    //isType: number = 0
-    //currentSale: CurrentSale[] = []
-    //isCurrentProduct: ProductInterface
-    //isCurrentProduct$: Subscription
-    //praisList: PraisInterface[] = null
-
-    //form: FormGroup
 
     constructor(private store: Store, private fb: FormBuilder, private toastr: ToastrService, private modalService: BsModalService){
 
@@ -56,6 +52,7 @@ export class SalesComponent implements OnInit, OnDestroy{
         this.store.dispatch(salesAction())
         this.store.dispatch(praisAction())
         this.store.dispatch(cassaAction())
+        this.store.dispatch(returnSalesAction({}))
         
        // this.praisList$ = this.store.pipe(select(currentPraisSelector))
         this.isLoading$ = this.store.pipe(select(isLoadingSelector))
@@ -68,6 +65,11 @@ export class SalesComponent implements OnInit, OnDestroy{
                 //console.log(currentSales)
                 this.sales = currentSales
                 this.sum = this.sales.reduce((sum, current) => (sum + current.price*current.quantity), 0)
+        })
+
+        this.returnSalesSubscription = this.store.pipe(select(isReturnSalesSelector), filter(Boolean))
+            .subscribe((returnSales: ReturnSalesInterface[]) => {
+                this.returnSum = returnSales.reduce((sum, current) => (sum + current.sale.price*current.quantity), 0)
             })
 
 

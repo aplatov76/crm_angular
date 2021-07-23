@@ -20,7 +20,7 @@ export class ReturnSalesService{
     }
 
     createReturnSale(currentReturnSale: CreateReturnSaleInterface): Observable<ReturnSalesInterface>{
-
+        console.log('in services')
         return this.http.post<ReturnSalesInterface>(`${environment.url}/returnsale`, {returnsale: currentReturnSale});
     }
 

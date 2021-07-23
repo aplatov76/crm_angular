@@ -13,3 +13,13 @@ export const isReturnSalesSelector = createSelector(
     returnSalesFeatureSelectors,
     (salesState: ReturnSalesStateInterface) => salesState.returnSales
 )
+
+export const isCreatedReturnSaleSelector = createSelector(
+    returnSalesFeatureSelectors,
+    (salesState: ReturnSalesStateInterface) => salesState.createdReturnSale
+)
+
+export const isErrorReturnSalesSelector = createSelector(
+    returnSalesFeatureSelectors,
+    (salesState: ReturnSalesStateInterface) => salesState.err
+)

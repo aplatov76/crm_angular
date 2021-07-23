@@ -5,7 +5,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <div class="card card-body">
+    <div class="card card-body mb-2">
       <div class="d-flex input-group mb-3">
         <div class="input-group-prepend">
           <button type="button" class="btn btn-outline-secondary">Поиск</button>
@@ -28,28 +28,50 @@
         </ng-select>
         
       </div>
+      <div *ngIf="selectCurrent">
+        <div class="alert alert-warning" role="alert">
+          {{selectCurrent.product.title}}
+        </div>
+        <div class="input-group mb-3">
+          <input type="number" class="form-control" value="{{selectCurrent.quantity}}" aria-describedby="basic-addon2" disabled>
+          <input type="number" class="form-control" [(ngModel)]="selectCurrentQuantity" [ngClass]="{'border border-danger': (selectCurrentQuantity > selectCurrent.quantity || selectCurrentQuantity < 1)}" placeholder="0" aria-describedby="basic-addon2" >
+          
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" (click)="createReturnSale()" [disabled]="(selectCurrentQuantity > selectCurrent.quantity || selectCurrentQuantity < 1)" type="button">Возврат</button>
+          </div>
+        </div>
+      </div>
 
     </div>
-    <table class="table table-bordered table-striped" *ngIf="selectSales$ | async">
+    <div *ngIf="selectSales$" class="table-responsive">
+      <table class="table table-bordered table-hover table-striped" >
         <thead>
           <tr>
             <th scope="col">#</th>
             <th scope="col">Код</th>
             <th scope="col">Наименование</th>
             <th scope="col">Шт.</th>
+            <th scope="col">Дата продажи</th>
             <th scope="col">Цена</th>
             <th scope="col">Сумма</th>
           </tr>
         </thead>
         <tbody *ngFor="let element of (selectSales$ | async); let i = index">
-          <tr>
+          <tr (click)="onClickSelectCurrent(element)">
             <th scope="row">{{i + 1}}</th>
             <td>{{element.product.id}}</td>
             <td>{{element.product.title}}</td>
             <td>{{element.quantity}}</td>
+            <td>{{element.check.data | date: 'yyy-MM-dd hh:mm a'}}</td>
             <td>{{element.price | currency:'RUB': ' '}}</td>
             <td>{{element.sum | currency:'RUB': ' '}}</td>
           </tr>
         </tbody>
-      </table>
+    </table>
+    </div>
+
+      <div class="d-flex justify-content-center">
+        <pagination (pageChanged)="pageChanged($event)" previousText="&lsaquo;" nextText="&rsaquo;" [totalItems]="50" [(ngModel)]="currentPage"></pagination>
+      </div>
+     
 </div>

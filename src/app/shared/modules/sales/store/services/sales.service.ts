@@ -14,7 +14,7 @@ export class SalesService{
 
     }
 
-    getSales(databegin: string = new Date().toISOString().slice(0, 10), dataend: string = new Date().toISOString().slice(0, 10), productId?: number): Observable<SalesInterface[]> {
+    getSales(databegin: string = new Date().toISOString().slice(0, 10), dataend: string = new Date().toISOString().slice(0, 10), productId?: number, order?: string): Observable<SalesInterface[]> {
 
         //const currentData = new Date().toISOString().slice(0, 10);
         console.log(databegin)
@@ -23,6 +23,9 @@ export class SalesService{
 
         if(productId){
             query = query + `&productid=${productId}`;
+        }
+        if(order){
+            query = query + `&order=${order}`;
         }
 
         return this.http.get<SalesInterface[]>(`${environment.url}/sales?${query}`);

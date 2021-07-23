@@ -12,6 +12,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -50,6 +51,7 @@ import {WebProductsModule} from './shared/modules/webProducts/webProducts.module
     CollapseModule.forRoot(),
     ModalModule.forRoot(),
     BsDatepickerModule.forRoot(),
+    PaginationModule.forRoot(),
     SalesModule,
     OrdersModule,
     WebOrdersModule,

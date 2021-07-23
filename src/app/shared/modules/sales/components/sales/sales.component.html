@@ -19,14 +19,14 @@
                     </div>
                   </div>
                   <div  id="collapseBasic" [collapse]="isCollapsed" >
-                    123
+                    
                   </div>
                   <div class="input-group mb-1">
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="">Продажи: </span>
                     </div>
                     <input type="text" placeholder="Продажа" class="form-control border border-success" value="{{sum | currency:'RUB': ' '}}" disabled>
-                    <input type="text" placeholder="Возврат" class="form-control border border-danger" disabled>
+                    <input type="text" placeholder="Возврат" class="form-control border border-danger" value="{{returnSum | currency:'RUB': ' '}}" disabled>
                   </div>
             <table class="table table-bordered table-striped" *ngIf="sales">
                 <thead>

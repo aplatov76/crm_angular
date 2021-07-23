@@ -5,8 +5,10 @@ import { returnSalesAction, returnSalesActionFailure, returnSalesActionSuccess,
 
 
 const initialState: ReturnSalesStateInterface = {
+    err: null,
     loading: false,
-    returnSales: null
+    returnSales: null,
+    createdReturnSale: null
 }
 
 
@@ -23,6 +25,15 @@ const returnSalesReducer = createReducer(
     on(returnSalesActionFailure, (state, action) => ({
         returnSales: null,
         loading: false
+    })),
+    on(createReturnSalesActionSuccess, (state, action) => ({
+        ...state,
+        createdReturnSale: action.returnsale
+    })),
+    on(createReturnSalesActionFailed, (state, action) => ({
+        returnSales: null,
+        loading: false,
+        err: action.err
     }))
 )
 

@@ -18,6 +18,7 @@ import {ReturnSalesEffect} from './store/effects/returnSales.effect';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 const routes = [{
     path: 'return-sales',
@@ -29,8 +30,10 @@ const routes = [{
         CommonModule, 
         CollapseModule,
         BrowserAnimationsModule,
+        //ReactiveFormsModule,
         ModalModule,
         BsDatepickerModule,
+        PaginationModule,
         RouterModule.forChild(routes),
         StoreModule.forFeature('returnsales', reducer),
         EffectsModule.forFeature([ReturnSalesEffect]),

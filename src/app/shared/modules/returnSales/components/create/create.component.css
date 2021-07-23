@@ -2,7 +2,11 @@
     flex: auto;
 }
 
-.modal-dialog{
-    min-width: 80%;
+.table-responsive{
+    height: 300px;
+    overflow:scroll;
 }
 
+tr:hover{
+    cursor: pointer;
+}

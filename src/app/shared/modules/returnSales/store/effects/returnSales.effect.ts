@@ -44,6 +44,7 @@ export class ReturnSalesEffect{
     createReturnSale$ = createEffect(() => this.actions$.pipe(
         ofType(createReturnSalesAction),
         switchMap(({returnsale}) => {
+            console.log('createruturnsales')
             return this.returnSalesService.createReturnSale(returnsale).pipe(
                 map((returnsale: ReturnSalesInterface) => {
                     

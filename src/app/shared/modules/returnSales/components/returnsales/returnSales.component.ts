@@ -85,17 +85,17 @@ export class ReturnSalesComponent implements OnInit{
                                 {
                                     //console.log(item)
                                     //console.log((item.sale.product.id === target.id))
-                                    console.log('map: ', ((item.sale.product.id === target.id) ? ({...item, visible: true}) : ({...item, visible: false})))
+                                    //console.log('map: ', ((item.sale.product.id === target.id) ? ({...item, visible: true}) : ({...item, visible: false})))
                                     return ((item.sale.product.id === target.id) ? ({...item, visible: true}) : ({...item, visible: false}))
                                 }
-                                ))
+                    ))
         )
 
        //console.log(co$)
     }
 
     openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
+        this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
     }
     
 }

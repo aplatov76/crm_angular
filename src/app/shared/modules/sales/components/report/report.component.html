@@ -25,6 +25,30 @@
             <td>{{element.price | currency:'RUB': ' '}}</td>
             <td>{{element.sum | currency:'RUB': ' '}}</td>
           </tr>
+          <tr *ngIf="currentReturnSales">
+            <td scope="row"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>Список возвратов:</b></td>
+            <td></td>
+          </tr>
+          <tr *ngFor="let element of currentReturnSales; let i = index">
+            <th scope="row">{{i + 1}}</th>
+            <td>{{element.id}}</td>
+            <td>{{element.sale.product.title}}</td>
+            <td>{{element.quantity}}</td>
+            <td>{{element.sale.price | currency:'RUB': ' '}}</td>
+            <td>{{element.sale.price*element.quantity | currency:'RUB': ' '}}</td>
+          </tr>
+          <tr>
+            <th scope="row"></th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>Итого возврат:</b></td>
+            <td>{{returnsum | currency: 'RUB': ' '}}</td>
+          </tr>
           <tr>
             <th scope="row"></th>
             <td></td>
@@ -46,16 +70,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td><b>Возврат:</b></td>
-            <td></td>
-          </tr>
-          <tr>
-            <th scope="row"></th>
-            <td></td>
-            <td></td>
-            <td></td>
             <td><b>Итого:</b></td>
-            <td></td>
+            <td>{{currentCassa.sum+sum-returnsum | currency:'RUB': ' '}}</td>
           </tr>
         </tbody>
       </table>
