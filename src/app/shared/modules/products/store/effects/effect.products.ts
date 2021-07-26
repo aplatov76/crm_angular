@@ -23,6 +23,7 @@ import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { ProductsService } from "../services/products.service";
 import { ProductsInterface } from "../../interfaces/products.interface";
+import { ProductInterface } from '../../../../interfaces/product.interface';
 import { GroupsInterface } from "../../interfaces/groups.interface";
 
 @Injectable()
@@ -39,8 +40,8 @@ export class ProductsEffect {
 
     products$ = createEffect(() => this.actions$.pipe(
         ofType(productsAction),
-        switchMap(() => {
-            return this.productsService.getAllProducts().pipe(
+        switchMap((view) => {
+            return this.productsService.getAllProducts(view).pipe(
                 map((products: ProductsInterface[]) => {
                     return productsActionSuccess({products})
                 } ),
@@ -56,8 +57,8 @@ export class ProductsEffect {
         ofType(productAction),
         switchMap(({id}) => {
             return this.productsService.getProduct(id).pipe(
-                map((product: ProductsInterface) => {
-                    //console.log(product)
+                map((product: ProductInterface) => {
+                    console.log('effect product: ',product)
                     return productActionSuccess({product})
                 } ),
                 catchError((errorResponse: HttpErrorResponse) => {
@@ -90,7 +91,8 @@ export class ProductsEffect {
             return this.productsService.getGroups().pipe(
                 map((groups: GroupsInterface[]) => {
                     //console.log(product)
-                    return productGroupsSuccess({groups})
+                    console.log('tree: ', this.buildTree(groups))
+                    return productGroupsSuccess({groups:  this.buildTree(groups)})
                 } ),
                 catchError((errorResponse: HttpErrorResponse) => {
                     return of(productGroupsFailed({err: errorResponse}))
@@ -99,5 +101,34 @@ export class ProductsEffect {
         } )
       )
     )
+
+    buildTree (controllers: GroupsInterface[]): GroupsInterface[] {
+
+     
+        // Складываем все элементы будущего дерева в мап под id-ключами
+        // Так легче делать поиск родительской ноды
+        const map = new Map(controllers.map((item: GroupsInterface) => [item.id, item]));
+        //console.log(map.values());
+        // Обход в цикле по значениям, хранящимся в мапе
+        for (let item of map.values()) {
+          
+          // Проверка, является ли нода дочерней (при parent === null вернет undefined)
+          if (!map.has(item.parent)) {
+            continue;
+          }
+          
+          // Сохраняем прямую ссылку на родительскую ноду, чтобы дважды не доставать из мапа
+          const parent = map.get(item.parent);
+      
+          // Добавляем поточную ноду в список дочерних нод родительчкого узла.
+          // Здесь сокращено записана проверка на то, есть ли у ноды свойство children.
+          parent.children = [...parent.children || [], item];
+          //console.log(parent)
+    
+        }
+      
+        // Возвращаем верхний уровень дерева. Все дочерние узлы уже есть в нужных родительских нодах
+        return [...map.values()].filter(item => !item.parent);
+      }
 
 }

@@ -1,0 +1,25 @@
+.cw{
+    width: 150px;
+}
+
+.group-tree{
+    position: absolute;
+    left: 20%;
+    background-color: white;
+    z-index: 100;
+}
+
+::ng-deep .toggle-children{
+    top: -2px !important;
+}
+
+#table{ 
+    display: table; 
+  }
+  .tr{ 
+    display: table-row; 
+  }
+  .td{ 
+    display: table-cell; 
+    width: 100px;
+  }

@@ -1,12 +1,14 @@
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
+import {Component, OnInit, OnDestroy, TemplateRef, ViewChild} from '@angular/core';
 import { State, Store, select } from '@ngrx/store';
 import { productsAction, productGroups } from '../../store/actions/action';
 import {isProductsList, isGroupsProduct} from '../../store/selectors';
+
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ProductsInterface } from '../../interfaces/products.interface';
 import { Router } from '@angular/router';
-import { TreeModel, TreeNode, TreeComponent } from '@circlon/angular-tree-component';
+import { TreeModel, TreeNode, TreeComponent, ITreeOptions } from '@circlon/angular-tree-component';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 //import { TreeTableData, TreeTableHeaderObject, TreeTableRow, ExpandableType, TreeTableDataConfig, ExpandableArrowPlacement } from 'angular-tree-table';
 
@@ -17,27 +19,28 @@ import { TreeModel, TreeNode, TreeComponent } from '@circlon/angular-tree-compon
 })
 export class ProductsComponent implements OnInit, OnDestroy {
 
-  constructor(private store: Store, private router: Router){
+  constructor(
+      private store: Store, 
+      private router: Router,
+      private modalService: BsModalService
+      ){
 
   }
 
   productsSub: Subscription
   nodes: ProductsInterface[] = null
-  /*true => tree, false => table */
-  currentView: boolean = true
   productsTable: ProductsInterface[] = []
+  modalRef: BsModalRef
       
-      options = {displayField: 'title'};
-
+  options = {displayField: 'title'};
+  selectedProduct: number
 
       ngOnInit():void {
-        //this.populateDummyData()
-        this.store.dispatch(productsAction());
-        
-
+        this.store.dispatch(productsAction({view: 'tree'}));
+        this.store.dispatch(productGroups())
         this.initializeSubscription()
       }
-      //tree.treeModel.filterNodes(filter.value)
+     
 
       filterFn(value: string, treeModel: TreeModel) {
         value = value.toLowerCase();
@@ -57,33 +60,16 @@ export class ProductsComponent implements OnInit, OnDestroy {
       initializeSubscription(): void {
         this.productsSub = this.store.pipe(select(isProductsList), filter(Boolean)).subscribe(
           (items: ProductsInterface[]) => {
-           // console.log(items)
-            this.nodes = items//this.buildTree(items)
-            this.treeToTable(items)
-            //console.log(this.nodes)
-            //this.productsTable = this.treeToTable(items)
-            //this.groups = this.filterData(this.products)
 
-          }
-        )
-      }
+            this.nodes = items
 
-      treeToTable(arr: ProductsInterface[]){
-          //return arr.map(item => (item.children) ? this.treeToTable(item.children) : ({...item, children: null}))
-          arr.map(item => {
-            if(item.children){ 
-                this.productsTable.push({...item, children: null})
-                this.treeToTable(item.children) 
-            } 
-            else if(!item.price)this.productsTable.push({...item, children: null})
-            else this.productsTable.push({...item, visible: 2, children: null})
           }
         )
       }
 
       itemTableVisible(id, view){
         //console.log('itemVisibleTable');
-        this.productsTable = this.productsTable.map(item => (item.parent === id) ? ({...item, visible: view}) : item);
+        this.productsTable = this.productsTable.map(item => (item.parentId === id) ? ({...item, visible: view}) : item);
       }
 
       del(){
@@ -92,5 +78,20 @@ export class ProductsComponent implements OnInit, OnDestroy {
       }
 
       onEventTable = (id) => this.router.navigate(['/products', id]);
-      onEvent = ($event) => this.router.navigate(['/products', $event.node.data.id]);
+      onEvent = ($event, template: TemplateRef<any>) => {
+        //console.log('event start')
+        //this.router.navigate(['/products', $event.node.data.id]);
+        //console.log($event)
+        if($event.node.data.price){
+          console.log('position ', $event.node.data.id)
+
+          this.selectedProduct = $event.node.data.id
+          this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
+        }
+      }
+
+      openModal(template: TemplateRef<any>, idproduct: any) {
+        //console.log('modal start')
+        this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
+    }
 }

@@ -4,12 +4,12 @@ import { ProductsInterface } from "../../interfaces/products.interface";
 import { ProductInterface } from "../../../../interfaces/product.interface";
 import { GroupsInterface } from "../../interfaces/groups.interface";
 
-export const productsAction = createAction(ActionTypes.PRODUCTS_LIST);
+export const productsAction = createAction(ActionTypes.PRODUCTS_LIST, props<{view?: string}>());
 export const productsActionSuccess = createAction(ActionTypes.PRODUCTS_LIST_SUCCESS, props<{products: ProductsInterface[]}>());
 export const productsActionFailed = createAction(ActionTypes.PRODUCTS_LIST_FAILED, props<{err: any}>());
 
 export const productAction = createAction(ActionTypes.PRODUCT, props<{id: number}>());
-export const productActionSuccess = createAction(ActionTypes.PRODUCTS_SUCCESS, props<{product: ProductsInterface}>());
+export const productActionSuccess = createAction(ActionTypes.PRODUCTS_SUCCESS, props<{product: ProductInterface}>());
 export const productActionFailed = createAction(ActionTypes.PRODUCTS_FAILED, props<{err: any}>());
 
 export const productInsertUpdate = createAction(ActionTypes.PRODUCT_INSERT_UPDATE, props<{product: ProductInterface}>());

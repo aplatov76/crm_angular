@@ -13,16 +13,24 @@ export class ProductsService{
 
     }
 
-    getAllProducts(): Observable<ProductsInterface[]> {
-        return this.http.post<ProductsInterface[]>(`${environment.url}/prais/allproducts`, {});
+    getAllProducts(query?: any): Observable<ProductsInterface[]> {
+
+        console.log(`query in products: `,query)
+
+        let queryParams: string = '';
+        if(query.view){
+            queryParams = queryParams + `view=${query.view}`;
+        }
+
+        return this.http.get<ProductsInterface[]>(`${environment.url}/product?${queryParams}`,);
     }
 
-    getProduct(id: number): Observable<ProductsInterface>{
-        return this.http.post<ProductsInterface>(`${environment.url}/prais/product`, {id});
+    getProduct(id: number): Observable<ProductInterface>{
+        return this.http.get<ProductInterface>(`${environment.url}/product?id=${id}`);
     }
 
     getGroups(): Observable<GroupsInterface[]>{
-        return this.http.post<GroupsInterface[]>(`${environment.url}/prais/groups`, {});
+        return this.http.get<GroupsInterface[]>(`${environment.url}/product?type=group`);
     }
 
     saveProduct(product: ProductInterface): Observable<any>{

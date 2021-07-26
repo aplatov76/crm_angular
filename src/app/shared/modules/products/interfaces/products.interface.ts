@@ -1,10 +1,5 @@
-export interface ProductsInterface{
-    id: number,
-    title: string,
-    articul: string,
-    stock: number,
-    price: number,
-    parent: number,
-    visible?: number,
+import { ProductInterface } from "src/app/shared/interfaces/product.interface";
+
+export interface ProductsInterface extends ProductInterface{
     children?: ProductsInterface[]
 }

@@ -9,6 +9,9 @@ import {ProductsEffect} from './store/effects/effect.products';
 import {ProductsService} from './store/services/products.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 //import {OrderItemComponent} from './components/order/order.component'
 import {ProductsComponent} from './components/products/products.component';
@@ -16,6 +19,7 @@ import {ProductComponent} from './components/product/product.component';
 import {FilterComponent} from './components/del/del.component';
 import {GroupComponent} from './components/groups/group.component';
 import { TreeModule } from '@circlon/angular-tree-component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 //import { AngularTreeTableModule } from 'angular-tree-table';
 
 const routes = [
@@ -40,13 +44,16 @@ const routes = [
 @NgModule({
     imports: [
         CommonModule, 
+        FormsModule,
         RouterModule.forChild(routes),
         TreeModule,
+        ModalModule,
+        NzTreeSelectModule,
         //AngularTreeTableModule
         StoreModule.forFeature('products', reducer),
         EffectsModule.forFeature([ProductsEffect]),
         ReactiveFormsModule,
-        FormsModule,
+        
         NgSelectModule
     ],
     declarations: [ProductsComponent, ProductComponent, GroupComponent, FilterComponent],

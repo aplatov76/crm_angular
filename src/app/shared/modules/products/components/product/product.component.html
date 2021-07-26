@@ -1,95 +1,87 @@
-<div
-  class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2"></h1>
-  <div class="btn-toolbar mb-2 mb-md-0">
-    <div class="btn-group mr-2">
-      <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-      <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-    </div>
-    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        class="feather feather-calendar">
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-        <line x1="16" y1="2" x2="16" y2="6"></line>
-        <line x1="8" y1="2" x2="8" y2="6"></line>
-        <line x1="3" y1="10" x2="21" y2="10"></line>
-      </svg>
-      This week
+<div class="modal-header">
+    <h4 *ngIf="form" class="modal-title pull-left">{{form.get('title').value}}</h4>
+    <button type="button" class="close pull-right" (click)="modalService.hide()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
     </button>
   </div>
+  <div class="modal-body">
+
+    <nz-tree-select
+        style="width: 250px"
+        nzPlaceHolder="Please select"
+        [(ngModel)]="value"
+        [nzMaxTagCount]="3"
+        [nzMaxTagPlaceholder]="omittedPlaceHolder"
+        [nzNodes]="nodes"
+        [nzDefaultExpandAll]="true"
+        [nzAllowClear]="false"
+        [nzMultiple]="true"
+        (ngModelChange)="onChange($event)">
+    </nz-tree-select>
+    <ng-template #omittedPlaceHolder let-omittedValues>and {{ omittedValues.length }} more...</ng-template>
+
+    <form [formGroup]="form" class="mb-1" *ngIf="form" (ngSubmit)="submit()">
+        <div class="input-group mb-1">
+            <div class="input-group-prepend ">
+                <span class="input-group-text cw">Наименование: </span>
+            </div>
+            <input type="text"  [ngClass]="{'border border-danger' : form.get('title').invalid && form.get('title').touched}" class="form-control mr-1" formControlName="title">
+        </div>
+        <div class="input-group mb-1">
+            <div class="input-group-prepend">
+                <span class="input-group-text cw">Остаток склад: </span>
+            </div>
+            <input type="number"  [ngClass]="{'border border-danger' : form.get('stock').invalid && form.get('stock').touched}" class="form-control mr-1" formControlName="stock">
+        </div>
+        <div class="d-flex input-group mb-1">
+    
+            <div class="input-group-prepend ">
+                <span class="input-group-text cw">Артикул:</span>
+            </div>
+            <input type="text" class="form-control mr-1" formControlName="articul" placeholder="Артикул">
+        </div>
+        <div class="d-flex input-group mb-1">
+    
+            <div class="input-group-prepend">
+                <span class="input-group-text cw">Цена товара:</span>
+            </div>
+            <input type="text" class="form-control mr-1" formControlName="price" type="number" placeholder="Цена">
+        </div>
+        <div class="d-flex input-group mb-1">
+            <div class="input-group-prepend">
+                <span class="input-group-text cw">Цена постащика: </span>
+            </div>
+                <input type="number" class="form-control" formControlName="trade_price" placeholder="Цена поставщика">
+        </div>
+        <div class="d-flex input-group mb-1 align-self-center">
+            <div class="input-group-prepend">
+                <span class="input-group-text cw" >Группа товара: </span>
+            </div>
+            <div *ngIf="groups$ | async" class="pt-1">
+
+            </div>
+
+        </div>
+        <div class="d-flex input-group mb-1">
+            <div class="input-group-prepend">
+                <span class="input-group-text cw" >Показывать: </span>
+            </div>
+                <select class="form-control" formControlName="visible" data-toggle="tooltip" data-placement="top" title="Показывать данное наименование в списке товаров в разделе продажи">
+                    <option [value]="0">Нет</option>
+                    <option [value]="1">Да</option>
+                </select>
+        </div>
+        <div class="d-flex input-group mb-1">
+            <div class="input-group-prepend">
+                <span class="input-group-text cw" >Информация: </span>
+            </div>
+            <textarea class="form-control" formControlName="description"></textarea>
+        </div>
+        <div class=" btn-group mt-2">
+            <button type="submit" class="btn btn-outline-success mr-1">Сохранить</button>
+            <button type="submit" class="btn btn-outline-danger mr-1">Удалить</button>
+        </div>
+      </form>
+
+  
 </div>
-  <div class="d-flex header-dashboard">
-        <a [routerLink]="['/products']"><i class="material-icons" >undo</i></a>
-    <i class="material-icons" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">filter_list</i>
-  </div>
-  <div class="collapse" id="collapseExample">
-    <div class="card card-body">
-        <div class="btn-group">
-            <button type="button" class="btn btn-outline-primary mr-1 mb-1">История изменений</button>
-            <button type="button" class="btn btn-outline-secondary mr-1 mb-1">История продаж</button>
-        </div>
-    </div>
-  </div>
-
-  <form [formGroup]="form" class="mb-1" *ngIf="form" (ngSubmit)="submit()">
-    <div class="input-group mb-1">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Наименование: </span>
-        </div>
-        <input type="text"  [ngClass]="{'border border-danger' : form.get('title').invalid && form.get('title').touched}" class="form-control mr-1" formControlName="title">
-    </div>
-    <div class="input-group mb-1">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Остаток склад: </span>
-        </div>
-        <input type="number"  [ngClass]="{'border border-danger' : form.get('stock').invalid && form.get('stock').touched}" class="form-control mr-1" formControlName="stock">
-    </div>
-    <div class="d-flex input-group mb-1">
-
-        <div class="input-group-prepend">
-            <span class="input-group-text">Артикул:</span>
-        </div>
-        <input type="text" class="form-control mr-1" formControlName="articul" type="number" placeholder="Артикул">
-    </div>
-    <div class="d-flex input-group mb-1">
-
-        <div class="input-group-prepend">
-            <span class="input-group-text">Цена товара:</span>
-        </div>
-        <input type="text" class="form-control mr-1" formControlName="price" type="number" placeholder="Цена">
-    </div>
-    <div class="d-flex input-group mb-1">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Цена постащика: </span>
-        </div>
-            <input type="number" class="form-control" formControlName="trade_price" placeholder="Цена поставщика">
-    </div>
-    <div class="d-flex input-group mb-1">
-        <div class="input-group-prepend">
-            <span class="input-group-text" >Группа товара: </span>
-        </div>
-            <select class="form-control " *ngIf="groups" formControlName="parent">
-                <option *ngFor="let el of groups" [value]="el.id">{{el.title}}</option>
-            </select>
-    </div>
-    <div class="d-flex input-group mb-1">
-        <div class="input-group-prepend">
-            <span class="input-group-text" >Показывать: </span>
-        </div>
-            <select class="form-control" formControlName="visible" data-toggle="tooltip" data-placement="top" title="Показывать данное наименование в списке товаров в разделе продажи">
-                <option [value]="0">Нет</option>
-                <option [value]="1">Да</option>
-            </select>
-    </div>
-    <div class="d-flex input-group mb-1">
-        <div class="input-group-prepend">
-            <span class="input-group-text" >Информация: </span>
-        </div>
-        <textarea class="form-control" formControlName="info"></textarea>
-    </div>
-    <div class=" btn-group mt-2">
-        <button type="submit" class="btn btn-outline-success mr-1">Сохранить</button>
-        <button type="submit" class="btn btn-outline-danger mr-1">Удалить</button>
-    </div>
-  </form>

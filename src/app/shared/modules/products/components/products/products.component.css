@@ -9,3 +9,19 @@
 .table-cursor{
   cursor: pointer;
 }
+
+.position{
+  top:-10px;
+  left:0;
+}
+
+#table{ 
+  display: table; 
+}
+.tr{ 
+  display: table-row; 
+}
+.td{ 
+  display: table-cell; 
+  width: 100px;
+}
