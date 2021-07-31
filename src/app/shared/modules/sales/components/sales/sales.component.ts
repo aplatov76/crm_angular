@@ -1,33 +1,33 @@
-import {Component, TemplateRef, OnInit, OnDestroy} from '@angular/core';
+import {Component, TemplateRef, OnInit, OnDestroy, ViewContainerRef, ViewEncapsulation} from '@angular/core';
 import { Observable, Subscribable, Subscription } from 'rxjs';
 import {Store, select} from '@ngrx/store';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { ToastrService } from 'ngx-toastr';
 import { filter } from 'rxjs/operators';
 
 import { SalesInterface } from '../../interfaces/sales.interface';
 import { salesAction, addSaleAction, cassaAction } from '../../store/actions/action';
 import {isLoadingSelector, isSubmittingSelector, currentSalesSelector, currentError, currentCassaValue } from '../../store/selectors';
-import {currentDataSelector as currentPraisSelector, currentProductSelector} from '../../../../utilmodules/prais/store/selectors';
-import {CurrentSale} from '../../interfaces/currentSale.interface';
-import { PraisInterface } from '../../../../interfaces/prais.interface';
+import {CurrentSaleComponent} from '../current/current.component'
+
 import { praisAction, productAction } from '../../../../utilmodules/prais/store/actions/action';
-import { ProductInterface } from '../../../../interfaces/product.interface';
 import { CassaValueInterface } from '../../interfaces/cassaValue.interface';
 import { returnSalesAction } from '../../../returnSales/store/actions/actions';
 import { isReturnSalesSelector } from '../../../returnSales/store/selectors';
 import { ReturnSalesInterface } from '../../../returnSales/interfaces/returnSales.interface';
+import { CassaModalComponent } from '../cassamodal/cassamodal.component';
+import { ReportComponent } from '../report/report.component';
 
 @Component({
     selector: 'sales',
     templateUrl: './sales.component.html',
+    encapsulation: ViewEncapsulation.None,
     styleUrls: ['./sales.component.css']
 })
 export class SalesComponent implements OnInit, OnDestroy{
 
-    isCollapsed: boolean = false
-    modalRef: BsModalRef; 
+    isCollapsed: boolean = false 
 
     sales: SalesInterface[]
     errorSubscription : Subscription
@@ -43,7 +43,13 @@ export class SalesComponent implements OnInit, OnDestroy{
     currentCassa$: Observable<CassaValueInterface>
 
 
-    constructor(private store: Store, private fb: FormBuilder, private toastr: ToastrService, private modalService: BsModalService){
+    constructor(
+        private store: Store, 
+        private fb: FormBuilder, 
+        private toastr: ToastrService,
+        private modalService: NzModalService,
+        private viewContainerRef: ViewContainerRef
+        ){
 
     }
 
@@ -78,7 +84,7 @@ export class SalesComponent implements OnInit, OnDestroy{
     }
 
     openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
+     //   this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
     }
 
     ngOnDestroy(): void {
@@ -189,6 +195,48 @@ export class SalesComponent implements OnInit, OnDestroy{
     }
     */
 
+    showModal(title: string, component: number){
 
+        console.log(component)
+        
+        if(component === 0)
+            this.modalService.create({
+                nzTitle: title,
+                nzViewContainerRef: this.viewContainerRef,
+                nzComponentParams: {
+
+                },
+                nzFooter: [],
+                nzStyle: { width: '80%' },
+                nzAutofocus: null,
+                nzContent: CurrentSaleComponent
+            });
+        
+        if(component === 1)
+            this.modalService.create({
+                nzTitle: title,
+                nzViewContainerRef: this.viewContainerRef,
+                nzComponentParams: {
+
+                },
+                nzFooter: [],
+                nzStyle: { width: '80%' },
+                nzAutofocus: null,
+                nzContent: CassaModalComponent
+            });
+        if(component === 2)
+            this.modalService.create({
+                nzTitle: `${title} ${this.dt}`,
+                nzViewContainerRef: this.viewContainerRef,
+                nzComponentParams: {
+                    data: this.dt
+                },
+                nzFooter: [],
+                nzStyle: { width: '80%' },
+                nzAutofocus: null,
+                nzContent: ReportComponent
+            });
+        
+    }
     
 }

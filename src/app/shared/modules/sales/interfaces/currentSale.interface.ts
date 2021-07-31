@@ -1,4 +1,4 @@
-export interface CurrentSale{
+export interface CurrentSaleInterface{
     id: number,
     quantity: number,
     price: number,

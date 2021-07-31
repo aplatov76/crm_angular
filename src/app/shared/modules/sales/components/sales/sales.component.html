@@ -3,7 +3,7 @@
       <h1 class="h2">Продажи</h1>
       <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-          <button type="button" (click)="openModal(report)" class="btn btn-sm btn-outline-secondary">Отчет</button>
+          <button type="button" (click)="showModal('Отчет за ', 2)" [disabled]="!dt" class="btn btn-sm btn-outline-secondary">Отчет</button>
           <button type="button" class="btn btn-sm btn-outline-secondary">Печать</button>
         </div>
         <input type="date" min="2021-01-01" [ngModel] ="dt | date:'yyyy-MM-dd'" (ngModelChange)="dt = $event">
@@ -12,14 +12,13 @@
     <div class="table-responsive">
                 <div class="header header-dashboard">
                     <div>
-                      <i class="material-icons" (click)="openModal(createSaleModal)">post_add</i>
-                      <i class="material-icons" *ngIf="!(currentCassa$ | async)" (click)="openModal(createCassaValue)">how_to_vote</i>
-                      <i class="material-icons" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">filter_list</i>
-
+                      <i class="material-icons" (click)="showModal('Добавить продажу', 0)">post_add</i>
+                      <i class="material-icons" *ngIf="!(currentCassa$ | async)" (click)="showModal('Касса', 1)">how_to_vote</i>
+                      <i class="material-icons" (click)="isCollapsed = !isCollapsed">filter_list</i>
                     </div>
                   </div>
-                  <div  id="collapseBasic" [collapse]="isCollapsed" >
-                    
+                  <div  id="collapseBasic" *ngIf="isCollapsed">
+                    123
                   </div>
                   <div class="input-group mb-1">
                     <div class="input-group-prepend">
@@ -52,16 +51,3 @@
               </table>
 
     </div>
-
-    <ng-template #report>
-      <report-sales data={{dt}}></report-sales>
-    </ng-template>
-
-    <ng-template #createSaleModal>
-      <current-sale></current-sale>
-    </ng-template>
-
-    <ng-template #createCassaValue>
-      <cassa-modal></cassa-modal>
-    </ng-template>
-

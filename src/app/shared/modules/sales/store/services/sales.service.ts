@@ -4,7 +4,7 @@ import { SalesInterface } from '../../interfaces/sales.interface';
 import { Observable } from 'rxjs';
 import {environment} from '../../../../../../environments/environment';
 import { PraisInterface } from '../../../../interfaces/prais.interface';
-import {CurrentSale} from '../../interfaces/currentSale.interface';
+import {CurrentSaleInterface} from '../../interfaces/currentSale.interface';
 import {CassaValueInterface} from '../../interfaces/cassaValue.interface';
 
 @Injectable()
@@ -35,7 +35,7 @@ export class SalesService{
         return this.http.get<PraisInterface[]>(`${environment.url}/product?type=product`);
     }
 
-    setSale(currentSules: CurrentSale[]): Observable<any> {
+    setSale(currentSules: CurrentSaleInterface[]): Observable<any> {
 
         const serviceCurrentSules = currentSules.map(el => ({id: el.id, quantity:  el.quantity}))
         

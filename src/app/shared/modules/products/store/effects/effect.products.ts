@@ -40,10 +40,13 @@ export class ProductsEffect {
 
     products$ = createEffect(() => this.actions$.pipe(
         ofType(productsAction),
-        switchMap((view) => {
-            return this.productsService.getAllProducts(view).pipe(
+        switchMap((query) => {
+            return this.productsService.getAllProducts(query.query).pipe(
                 map((products: ProductsInterface[]) => {
-                    return productsActionSuccess({products})
+
+                    console.log('add key: ', this.addKeyField(products));
+
+                    return productsActionSuccess({products: this.addKeyField(products)})
                 } ),
                 catchError((errorResponse: HttpErrorResponse) => {
                     return of(productsActionFailed({err: errorResponse}))
@@ -58,7 +61,7 @@ export class ProductsEffect {
         switchMap(({id}) => {
             return this.productsService.getProduct(id).pipe(
                 map((product: ProductInterface) => {
-                    console.log('effect product: ',product)
+                    //console.log('effect product: ',product)
                     return productActionSuccess({product})
                 } ),
                 catchError((errorResponse: HttpErrorResponse) => {
@@ -75,6 +78,7 @@ export class ProductsEffect {
             return this.productsService.saveProduct(product).pipe(
                 map((res: any) => {
                     //console.log(product)
+                    this.store.dispatch(productsAction({query: {view: 'tree'}}))
                     return productInsertUpdateSuccess({res})
                 } ),
                 catchError((errorResponse: HttpErrorResponse) => {
@@ -91,7 +95,7 @@ export class ProductsEffect {
             return this.productsService.getGroups().pipe(
                 map((groups: GroupsInterface[]) => {
                     //console.log(product)
-                    console.log('tree: ', this.buildTree(groups))
+                    ////console.log('tree: ', this.buildTree(groups))
                     return productGroupsSuccess({groups:  this.buildTree(groups)})
                 } ),
                 catchError((errorResponse: HttpErrorResponse) => {
@@ -102,15 +106,18 @@ export class ProductsEffect {
       )
     )
 
+    
+
     buildTree (controllers: GroupsInterface[]): GroupsInterface[] {
 
-     
         // Складываем все элементы будущего дерева в мап под id-ключами
         // Так легче делать поиск родительской ноды
         const map = new Map(controllers.map((item: GroupsInterface) => [item.id, item]));
         //console.log(map.values());
         // Обход в цикле по значениям, хранящимся в мапе
         for (let item of map.values()) {
+
+            item = Object.assign(item, {key: item.id});
           
           // Проверка, является ли нода дочерней (при parent === null вернет undefined)
           if (!map.has(item.parent)) {
@@ -129,6 +136,21 @@ export class ProductsEffect {
       
         // Возвращаем верхний уровень дерева. Все дочерние узлы уже есть в нужных родительских нодах
         return [...map.values()].filter(item => !item.parent);
+      }
+
+      addKeyField(item: ProductsInterface[]): ProductsInterface[]{
+
+       return  item.map((el: ProductsInterface) => {
+           // return (el.children) ? this.addKeyField(el.children) : ({...item, key: el.id});
+            if(el.children){
+                // isLeaf: (el.children.length > 0) ? false : true, 
+                return ({...el, isLeaf: (el.children.length > 0) ? false : true, children: this.addKeyField(el.children), key: el.id})
+                //this.addKeyField(el.children);
+            }   
+            return ({...el, isLeaf: true, key: el.id})
+        })
+
+     // return t;
       }
 
 }

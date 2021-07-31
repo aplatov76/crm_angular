@@ -1,25 +1,8 @@
-.cw{
-    width: 150px;
+::ng-deep .ant-select-selector{
+  height: 100%;
+  width:100%;
 }
 
-.group-tree{
-    position: absolute;
-    left: 20%;
-    background-color: white;
-    z-index: 100;
+.custom-group{
+  flex: auto;
 }
-
-::ng-deep .toggle-children{
-    top: -2px !important;
-}
-
-#table{ 
-    display: table; 
-  }
-  .tr{ 
-    display: table-row; 
-  }
-  .td{ 
-    display: table-cell; 
-    width: 100px;
-  }

@@ -1,10 +1,4 @@
-<div class="modal-header">
-    <h4 class="modal-title pull-left">Добавить возврат</h4>
-    <button type="button" class="close pull-right" (click)="modalService.hide()" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
+
     <div class="card card-body mb-2">
       <div class="d-flex input-group mb-3">
         <div class="input-group-prepend">
@@ -44,7 +38,7 @@
 
     </div>
     <div *ngIf="selectSales$" class="table-responsive">
-      <table class="table table-bordered table-hover table-striped" >
+      <table class="table table-bordered table-hover table-striped table-sm" >
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -70,8 +64,7 @@
     </table>
     </div>
 
-      <div class="d-flex justify-content-center">
-        <pagination (pageChanged)="pageChanged($event)" previousText="&lsaquo;" nextText="&rsaquo;" [totalItems]="50" [(ngModel)]="currentPage"></pagination>
+      <div class="d-flex justify-content-center pt-2">
+ 
+        <nz-pagination [nzPageIndex]="currentPage" (nzPageIndexChange)="pageChanged($event)"   [nzTotal]="50"></nz-pagination> `
       </div>
-     
-</div>

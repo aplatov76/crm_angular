@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Store, select } from "@ngrx/store";
-import { BsModalService } from "ngx-bootstrap/modal";
 import { ToastrService } from "ngx-toastr";
 import { Observable, Subscription, of } from "rxjs";
 import {filter, map, catchError} from "rxjs/operators";
@@ -35,7 +34,6 @@ export class CreateReturnSaleComponent implements OnInit, OnDestroy{
         private store: Store, 
         private salesService: SalesService,
         private returnSalesService: ReturnSalesService,
-        public modalService: BsModalService,
         private toastService: ToastrService
         ){
 
@@ -70,8 +68,8 @@ export class CreateReturnSaleComponent implements OnInit, OnDestroy{
     }
 
     pageChanged($target): void{
-        //console.log($target)
-        this.currentPage = $target.page;
+        console.log($target)
+        this.currentPage = $target;
         this.getSalesInPeriod()
     }
 

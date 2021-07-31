@@ -9,18 +9,17 @@ import {ProductsEffect} from './store/effects/effect.products';
 import {ProductsService} from './store/services/products.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 
 //import {OrderItemComponent} from './components/order/order.component'
 import {ProductsComponent} from './components/products/products.component';
 import {ProductComponent} from './components/product/product.component';
-import {FilterComponent} from './components/del/del.component';
 import {GroupComponent} from './components/groups/group.component';
-import { TreeModule } from '@circlon/angular-tree-component';
-import { ModalModule } from 'ngx-bootstrap/modal';
-//import { AngularTreeTableModule } from 'angular-tree-table';
+
+import { NzTreeModule } from 'ng-zorro-antd/tree';
+import { NzModalModule, NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
+import { NzIconModule, NZ_ICONS } from 'ng-zorro-antd/icon';
+import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 
 const routes = [
     {
@@ -34,10 +33,6 @@ const routes = [
     {
         path: 'group/:id',
         component: GroupComponent
-    },
-    {
-        path: 'del',
-        component: FilterComponent
     }
 ]
 
@@ -46,18 +41,20 @@ const routes = [
         CommonModule, 
         FormsModule,
         RouterModule.forChild(routes),
-        TreeModule,
-        ModalModule,
-        NzTreeSelectModule,
-        //AngularTreeTableModule
-        StoreModule.forFeature('products', reducer),
-        EffectsModule.forFeature([ProductsEffect]),
         ReactiveFormsModule,
+        //nz modules
+        NzTreeModule,
+        NzTreeSelectModule,
+        NzModalModule,
+        NzIconModule,
+        NgSelectModule,
+        //ngrx modules
+        StoreModule.forFeature('products', reducer),
+        EffectsModule.forFeature([ProductsEffect])
         
-        NgSelectModule
     ],
-    declarations: [ProductsComponent, ProductComponent, GroupComponent, FilterComponent],
-    providers: [ProductsService]
+    declarations: [ProductsComponent, ProductComponent, GroupComponent],
+    providers: [ProductsService, { provide: NZ_I18N, useValue: en_US }]
 })
 export class ProductsModule {
 

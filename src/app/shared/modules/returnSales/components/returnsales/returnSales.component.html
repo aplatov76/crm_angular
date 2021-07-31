@@ -5,26 +5,20 @@ class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-cente
 
   <div class="btn-group mr-2">
     <button type="button" (click)="getDataWithDate()" class="btn btn-sm btn-outline-secondary">Показать</button>
-    <button type="button" (click)="openModal(createReturnSale)" class="btn btn-sm btn-outline-secondary">Добавить</button>
+    <button type="button" (click)="showModal('Добавить возврат')" class="btn btn-sm btn-outline-secondary">Добавить</button>
     <button type="button" class="btn btn-sm btn-outline-secondary">Печать</button>
   </div>
   <div class="btn-group mr-2">
-    <input type="text"
-           placeholder="Daterangepicker"
-           class=""
-           bsDaterangepicker
-           [(ngModel)]="daterangepickerModel"
-           placement="bottom right">
+    <nz-range-picker  [(ngModel)]="daterangepickerModel" [nzFormat]="dateFormat"></nz-range-picker>
   </div>
-  <!--<input type="date" min="2021-01-01" [ngModel] ="dt | date:'yyyy-MM-dd'" (ngModelChange)="dt = $event">-->
 </div>
 </div>
 <div class="table-responsive">
           <div class="d-flex header-dashboard">
               
-            <i class="material-icons" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">filter_list</i>
+            <i class="material-icons" (click)="isCollapsed = !isCollapsed">filter_list</i>
             </div>
-            <div id="collapseBasic" [collapse]="isCollapsed">
+            <div id="collapseBasic" *ngIf="isCollapsed">
               <div class="card card-body">
 
                   <div class="input-group mb-3">
@@ -77,6 +71,3 @@ class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-cente
         </table>
 </div>
 
-<ng-template #createReturnSale>
-  <create-return-sale></create-return-sale>
-</ng-template>

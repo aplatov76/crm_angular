@@ -4,7 +4,7 @@ import { ProductsInterface } from "../../interfaces/products.interface";
 import { ProductInterface } from "../../../../interfaces/product.interface";
 import { GroupsInterface } from "../../interfaces/groups.interface";
 
-export const productsAction = createAction(ActionTypes.PRODUCTS_LIST, props<{view?: string}>());
+export const productsAction = createAction(ActionTypes.PRODUCTS_LIST, props<{query?: {}}>());
 export const productsActionSuccess = createAction(ActionTypes.PRODUCTS_LIST_SUCCESS, props<{products: ProductsInterface[]}>());
 export const productsActionFailed = createAction(ActionTypes.PRODUCTS_LIST_FAILED, props<{err: any}>());
 

@@ -9,11 +9,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastrModule } from 'ngx-toastr';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,7 +24,7 @@ import { DebtorsModule } from './shared/modules/debtors/debtors.module';
 import { AuthModule } from './shared/modules/auth/auth.module';
 import {AuthInterceptor} from './shared/services/auth.interceptor';
 import { ProductsModule } from './shared/modules/products/products.module';
-import {WebProductsModule} from './shared/modules/webProducts/webProducts.module';
+//import {WebProductsModule} from './shared/modules/webProducts/webProducts.module';
 
 
 @NgModule({
@@ -43,20 +38,24 @@ import {WebProductsModule} from './shared/modules/webProducts/webProducts.module
     AppRoutingModule,
     HttpClientModule,
     EffectsModule.forRoot([]),
-    StoreModule.forRoot({router: routerReducer}),
+    StoreModule.forRoot({
+      router: routerReducer,
+      
+    }, {
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true,
+      }
+    }),
     StoreDevtoolsModule.instrument({
       maxAge: 25, 
       logOnly: environment.production, 
     }),
     ToastrModule.forRoot(),
-    CollapseModule.forRoot(),
-    ModalModule.forRoot(),
-    BsDatepickerModule.forRoot(),
-    PaginationModule.forRoot(),
-    NzTreeSelectModule,
+
     SalesModule,
     OrdersModule,
-    WebOrdersModule,
+    //WebOrdersModule,
     InvoiceModule,
     HistorySalesModule,
     ReturnSalesModule,
@@ -65,7 +64,7 @@ import {WebProductsModule} from './shared/modules/webProducts/webProducts.module
     AuthModule,
     SalesModule,
     ProductsModule,
-    WebProductsModule
+    //WebProductsModule
   ],
   providers: [
     {

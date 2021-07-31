@@ -3,18 +3,17 @@ import {Component, TemplateRef, OnInit, OnDestroy} from '@angular/core';
 import { Observable, Subscribable, Subscription } from 'rxjs';
 import {Store, select} from '@ngrx/store';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 
 import { salesAction, addSaleAction } from '../../store/actions/action';
 import {isLoadingSelector, isSubmittingSelector, currentSalesSelector, currentError } from '../../store/selectors';
 import {currentDataSelector as currentPraisSelector, currentProductSelector} from '../../../../utilmodules/prais/store/selectors';
-import {CurrentSale} from '../../interfaces/currentSale.interface';
+import {CurrentSaleInterface} from '../../interfaces/currentSale.interface';
 import { PraisInterface } from '../../../../interfaces/prais.interface';
 import { praisAction, productAction } from '../../../../utilmodules/prais/store/actions/action';
 import { ProductInterface } from '../../../../interfaces/product.interface';
 import { filter } from 'rxjs/operators';
-
+import { NzModalRef } from 'ng-zorro-antd/modal';
 
 
 @Component({
@@ -31,14 +30,14 @@ export class CurrentSaleComponent{
     praisList$: Observable<PraisInterface[]>
 
     isType: number = 0
-    currentSale: CurrentSale[] = []
+    currentSale: CurrentSaleInterface[] = []
     isCurrentProduct: ProductInterface
     isCurrentProduct$: Subscription
     praisList: PraisInterface[] = null
 
     form: FormGroup
 
-    constructor(private store: Store, private fb: FormBuilder, private toastr: ToastrService, public modalService: BsModalService){
+    constructor(private store: Store, private fb: FormBuilder, private toastr: ToastrService, public modal: NzModalRef){
 
     }
 
@@ -141,7 +140,7 @@ export class CurrentSaleComponent{
     currentSaleClose(): void{
         this.currentSale = [];
         this.currentSum = 0;
-        this.modalService.hide();
+        this.modal.close()
     }
 
     saleDispatch(){

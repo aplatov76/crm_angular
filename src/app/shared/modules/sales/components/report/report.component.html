@@ -1,9 +1,4 @@
-<div class="modal-header" *ngIf="data">
-    <h4 class="modal-title pull-left">Отчет по продажам {{data}}</h4>
-    <button type="button" class="close pull-right" (click)="modalService.hide()" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
+
   <div class="modal-body">
     <table class="table table-bordered table-striped" *ngIf="currentSales">
         <thead>
@@ -65,7 +60,7 @@
             <td><b>Старт:</b></td>
             <td>{{currentCassa.sum | currency:'RUB': ' '}}</td>
           </tr>
-          <tr>
+          <tr *ngIf="currentCassa">
             <th scope="row"></th>
             <td></td>
             <td></td>

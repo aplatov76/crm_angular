@@ -1,17 +1,9 @@
-.nds{
-  min-width: 100px;
-}
-
-.ndp{
-  min-width: 100px;
-}
-
 .table-cursor{
   cursor: pointer;
 }
 
 .position{
-  top:-10px;
+  top:-11px;
   left:0;
 }
 
@@ -24,4 +16,9 @@
 .td{ 
   display: table-cell; 
   width: 100px;
+}
+
+::ng-deep .ant-tree .ant-tree-node-content-wrapper{
+
+  width:100%
 }

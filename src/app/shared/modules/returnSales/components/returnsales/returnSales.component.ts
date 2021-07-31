@@ -1,8 +1,9 @@
 import { DatePipe } from '@angular/common';
-import {Component, TemplateRef, OnInit} from '@angular/core';
+import {Component, TemplateRef, ViewContainerRef, OnInit} from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { filter, map } from 'rxjs/operators';
 import { ReturnSalesInterface } from '../../interfaces/returnSales.interface';
 import { returnSalesAction } from '../../store/actions/actions';
@@ -10,7 +11,9 @@ import { isReturnSalesSelector } from '../../store/selectors';
 import { praisAction } from '../../../../utilmodules/prais/store/actions/action';
 import {currentDataSelector as currentPraisSelector} from '../../../../utilmodules/prais/store/selectors';
 import {PraisInterface} from '../../../../interfaces/prais.interface';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { CreateReturnSaleComponent } from '../create/create.component';
+
+import { getISOWeek } from 'date-fns';
 
 @Component({
     selector: 'return-sales',
@@ -21,13 +24,17 @@ export class ReturnSalesComponent implements OnInit{
 
     returnSales$: Observable<ReturnSalesInterface[]>
     dt: Date = new Date()
-    daterangepickerModel: Date[];
-    isCollapsed: boolean = true
+    dateFormat = 'yyyy/MM/dd';
+    daterangepickerModel: Date[] = []
+    isCollapsed: boolean = false
     praisList$: Observable<PraisInterface[]>
 
-    modalRef: BsModalRef; 
-
-    constructor(private store: Store, private toastservice: ToastrService, private modalService: BsModalService, private datepipe: DatePipe){
+    constructor(
+        private store: Store, 
+        private toastservice: ToastrService, 
+        private viewContainerRef: ViewContainerRef, 
+        private modalService: NzModalService,
+        private datepipe: DatePipe){
 
     }
 
@@ -49,7 +56,7 @@ export class ReturnSalesComponent implements OnInit{
 
     getDataWithDate(): void{
 
-        if(!this.daterangepickerModel){
+        if(this.daterangepickerModel.length < 1){
             this.toastservice.error('Не указан период');
             return;
         }
@@ -94,8 +101,18 @@ export class ReturnSalesComponent implements OnInit{
        //console.log(co$)
     }
 
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
+    showModal(title: string){
+            this.modalService.create({
+                nzTitle: title,
+                nzViewContainerRef: this.viewContainerRef,
+                nzComponentParams: {
+
+                },
+                nzFooter: [],
+                nzStyle: { width: '80%' },
+                nzAutofocus: null,
+                nzContent: CreateReturnSaleComponent
+            });
     }
     
 }

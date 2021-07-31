@@ -1,9 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 
-import { mergeMap, filter, map, first } from 'rxjs/operators';
 import { forkJoin, of } from 'rxjs';
 import { Observable, Subscription, combineLatest } from 'rxjs';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+
 
 import { SalesInterface } from '../../interfaces/sales.interface';
 import {Store, select} from '@ngrx/store';
@@ -33,13 +32,18 @@ export class ReportComponent implements OnInit, OnDestroy{
     sum: number
     
 
-    constructor(private store: Store, private salesService: SalesService, private returnedSalesService: ReturnSalesService, public modalService: BsModalService, private datepipe: DatePipe){
+    constructor(
+        private store: Store, 
+        private salesService: SalesService, 
+        private returnedSalesService: ReturnSalesService,
+        private datepipe: DatePipe){
 
     }
     
     ngOnInit(): void{null
         this.initializeSubscription()
         //console.log(this.datepipe.transform(this.data, 'yyyy-MM-dd'))
+        //this.modal.c
     }
 
     ngOnDestroy(): void{

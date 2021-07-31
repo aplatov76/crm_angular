@@ -18,9 +18,10 @@ export class ProductsService{
         console.log(`query in products: `,query)
 
         let queryParams: string = '';
-        if(query.view){
-            queryParams = queryParams + `view=${query.view}`;
-        }
+            if(query.view)queryParams = queryParams + `view=${query.view}`;
+            if(query.parent === null)queryParams = queryParams + `parent=${query.parent}`;
+            if(query.parent)queryParams = queryParams + `parent=${query.parent}`;
+
 
         return this.http.get<ProductsInterface[]>(`${environment.url}/product?${queryParams}`,);
     }
@@ -34,7 +35,7 @@ export class ProductsService{
     }
 
     saveProduct(product: ProductInterface): Observable<any>{
-        return this.http.post<ProductInterface>(`${environment.url}/prais/save`, {product});
+        return this.http.put<ProductInterface>(`${environment.url}/product/${product.id}`, {product});
     }
 
 }

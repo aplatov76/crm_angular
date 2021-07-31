@@ -1,140 +1,119 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import {productAction, productInsertUpdate } from '../../store/actions/action';
+import {productAction, productInsertUpdate, productsAction } from '../../store/actions/action';
 import { isGroupsProduct} from '../../store/selectors';
-import { Observable, Subscription } from "rxjs";
+import { Observable, Subject,  Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { filter } from 'rxjs/operators';
 import { ProductInterface } from "../../../../interfaces/product.interface";
 import {GroupsInterface} from '../../interfaces/groups.interface';
 import {isCurrentProduct} from '../../store/selectors';
 
-import { productGroups } from '../../store/actions/action';
-import { BsModalService } from "ngx-bootstrap/modal";
-
+import {cloneDeep} from 'lodash-es';
+import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
     selector: 'product-component',
     templateUrl: './product.component.html',
     styleUrls: ['./product.component.css']
 })
-export class ProductComponent implements OnInit{
+export class ProductComponent implements OnInit, OnDestroy{
 
-    form: FormGroup = null
+    form: FormGroup
     currentProduct$: Subscription
     currentProduct: ProductInterface
-    groups$: Observable<GroupsInterface[]>
-    options = {displayField: 'title'};
-    @Input() id: number
+    groups$: Subscription
+    groups: GroupsInterface[]
 
-    value: string[] = [];
-    nodes = [
-      {
-        title: 'parent 1',
-        key: '100',
-        children: [
-          {
-            title: 'parent 1-0',
-            key: '1001',
-            children: [
-              { title: 'leaf 1-0-0', key: '10010', isLeaf: true },
-              { title: 'leaf 1-0-1', key: '10011', isLeaf: true }
-            ]
-          },
-          {
-            title: 'parent 1-1',
-            key: '1002',
-            children: [{ title: 'leaf 1-1-0', key: '10020', isLeaf: true }]
-          }
-        ]
-      }
-    ];
+    @Input() id: number
+    @Input() type: string
+    @Input() event: string
+    @Input() valueChange: Subject<string>;
+
+    currentParent: number[] = [];
 
     onChange($event: string[]): void {
       console.log($event);
     }
-
-    nodes1 = [
-        {
-          name: 'Каталог',
-          children: [
-            { 
-                name: 'Пленки', 
-                children: [
-                    {name: 'Изоспан'},
-                ]
-            },
-            { 
-              name: 'Утеплители', 
-              children: [
-                  {name: 'Минеральная вата'}, 
-                  {name: 'Базальтовая вата'}] 
-            }
-          ]
-        }
-      ];
-
-    //groupsQuery = []
+    
 
     constructor(
         private fb: FormBuilder, 
         private route: ActivatedRoute, 
         private store: Store,
-        public modalService: BsModalService
-        ){
-
-    }
+        private modal: NzModalRef
+    ){}
 
     ngOnInit(): void {
-        //this.store.dispatch(productGroups());
 
-        
-        
-        //this.initializeForm()
+      this.initializeSubGroup();
 
-        if(this.id){
-            this.store.dispatch(productAction({id: this.id}))
-            this.initializeSubscription()
+        if(this.id && this.event === 'correct'){
+            this.store.dispatch(productAction({id: this.id}));
+            this.initializeSubscription();
         }
+
+        if(this.event === 'new'){
+          this.initializeForm(null);
+        }
+
     }
 
+    ngOnDestroy(): void{
+
+      this.groups$.unsubscribe();
+      this.currentProduct$.unsubscribe();
+    }
     initializeSubscription(){
         this.currentProduct$ = this.store.pipe(select(isCurrentProduct), filter(Boolean))
             .subscribe((item: ProductInterface) => {
                 this.initializeForm(item[0])
             })
 
+    }
 
-        this.groups$ = this.store.pipe(select(isGroupsProduct))
-
-        /*this.groupsSub = this.store.pipe(select(isGroupsProduct), filter(Boolean)).subscribe(
-            ((items: GroupsInterface[]) => {
-                  this.groups = items
-            })
-        )*/
-
+    initializeSubGroup(){
+      this.groups$ = this.store.pipe(select(isGroupsProduct), filter(Boolean))
+          .subscribe((items: GroupsInterface[]) => {
+                console.log('sub');
+                this.groups = cloneDeep(items);
+    })
     }
 
     //`id`, `articul`, `title`, `visible`, `stock`, `price`, `trade_price`, `parent
-    initializeForm(item: ProductInterface){
+    initializeForm(item: ProductInterface | null){
 
-        //this.groupsQuery.push({id: 0, current: item.parent})
+      this.currentParent.push(item ? item.parent : this.id)
+      //console.log('currentParent:', item , this.id)
 
         this.form = this.fb.group({
-            title: new FormControl(item.title, Validators.required),
-            id: [item.id, [Validators.required]],
-            stock: [item.stock, [Validators.required]],
-            articul: [item.articul, [Validators.required]],
-            price: [item.price, [Validators.required]],
-            trade_price: [item.trade_price, [Validators.required, Validators.min(1), Validators.max(6)]],
-            parentId: [item.parentId, [Validators.required]],
-            visible: [item.visible, [Validators.required]],
-            description: [item.description]
+            title: new FormControl(item ? item.title : null, Validators.required),
+            id: [item ? item.id : null, [Validators.required]],
+            stock: [item ? item.stock : null, [Validators.required]],
+            articul: [item ? item.articul : null, [Validators.required]],
+            price: [item ? item.price : null, [Validators.required]],
+            trade_price: [item ? item.trade_price : null, [Validators.required, Validators.min(1), Validators.max(6)]],
+            parent: [item ? [item.parent] : [this.id], [Validators.required]],
+            //parent: [item ? 8: 8, [Validators.required]],
+            visible: [item ? item.visible : null, [Validators.required]],
+            description: [item ? item.description : null]
         })
     }
 
     submit(){
-        this.store.dispatch(productInsertUpdate({product: this.form.value}))
+      console.log('update product: ',{...this.form.value, parent: this.form.value.parent[0]})
+      //this.newItemEvent.emit({...this.form.value, parent: this.form.value.parent[0]});
+
+      this.store.dispatch(productInsertUpdate({product: {...this.form.value, parent: this.form.value.parent[0]}}));
+      //this.valueChange.next('hello')
+      
+      this.modal.close();
+      
     }
+
+    remove(){
+      console.log(this.groups)
+    }
+    
 }

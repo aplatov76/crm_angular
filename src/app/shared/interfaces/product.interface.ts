@@ -12,11 +12,11 @@ export interface ProductInterface{
     updateAt?: Date,
     price: number,
     trade_price?: number,
-    parentId: number,
+    parent: number,
 
     /**К удалению */
     info?: string,
-    attribute_id: number | null
+    attribute_id?: number | null
     color?: number,
     img_url? : string
 }

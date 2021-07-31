@@ -12,13 +12,13 @@
     </div>
   </div>
 </div>
-<ng-container> 
+<ng-container *ngIf="nodes"> 
   <div class="d-flex header-dashboard justify-content-between">
     <h2>Прайс лист</h2>
-    <i class="material-icons" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">filter_list</i>
+    <i class="material-icons" data-toggle="collapse" (click)="isCollapsed = !isCollapsed">filter_list</i>
   </div>
 
-  <div class="collapse" id="collapseExample">
+  <div *ngIf="isCollapsed">
     <div class="card card-body">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -32,55 +32,63 @@
                 <a class="dropdown-item" href="#">Код</a>
               </div>
             </div>
-            <input type="text" class="form-control" id="filter" #filter (keyup)="filterFn(filter.value, tree.treeModel)" placeholder="">
+            <input type="text"  class="form-control"  [(ngModel)]="searchValue" />
+            <!--<input type="text" class="form-control" id="filter" #filter (keyup)="filterFn(filter.value, tree.treeModel)" placeholder="">-->
           </div>
     </div>
   </div>
-      <tree-root #tree [nodes]="nodes" (activate)="onEvent($event, productComponent)">      
-        <ng-template #treeNodeTemplate let-node let-index="index">
-            <div *ngIf="!node.data.price" class="d-flex justify-content-between border-bottom border-top p-2" colspan="6">
-              <h6>{{ node.data.title }}</h6>
-              <div>
-                <i class="material-icons pl-3 pr-1" (click)="openModal(productComponent, node.data.id)">playlist_add</i>
-                <i class="material-icons">delete_sweep</i>
-              </div>
+    <nz-tree
+      #nzTreeComponent
+      [nzData]="nodes"
+      nzCheckable
+      [nzExpandedKeys]="expandedNodeList"
+      [nzSearchValue]="searchValue"
+      (nzDblClick)="nzClick($event)"
+      (nzContextMenu)="nzClick($event)"
+      (nzCheckBoxChange)="nzCheck($event)"
+      (nzExpandChange)="nzOpen($event)"
+      [nzTreeTemplate]="nzTreeTemplate">
+    </nz-tree>
 
-            </div>
-          
-            <div *ngIf="node.data.price" class="d-flex justify-content-between border-bottom border-top p-2">
-              <div  class="d-flex">
-                <div class="pr-2">{{ node.data.id }}</div>
-                <div >{{ node.data.title }}</div>
-              </div>
-              <div id="table">
-                <div  class="tr ">
-                  <div class="td pr-2 position-relative">
-                    <span>{{ node.data.articul }}</span>
-                    <small class="text-muted position-absolute position">Артикул</small>
-                  </div>
-                  <div class="td pr-2 position-relative">
-                    <span>{{ node.data.stock }}</span>
-                    <small class="text-muted position-absolute position">Склад</small>
-                  </div>
-                  <div class="td pr-2 position-relative" >
-                    <span>{{ (node.data.trade_price).toFixed(2) }}</span>
-                    <small class="text-muted position-absolute position">Цена</small>
-                  </div>
-                  <div class="td pr-2 position-relative" >
-                    <span>{{ (node.data.price).toFixed(2) }}</span>
-                    <small class="text-muted position-absolute position">Цена СМ</small>
-                  </div>
-                </div>
-              </div>
+<ng-template #nzTreeTemplate let-node let-origin="origin">
+
+  <div *ngIf="!node.origin.price" class="d-flex justify-content-between border-bottom border-top" colspan="6">
+    {{ node.title }}
+    <div>
+      <i class="material-icons pr-1" (click)="showModalProduct(node.origin.id, 'group', 'new', 'Новая категория')">playlist_add</i>
+      <i class="material-icons">delete_sweep</i>
+    </div>
+  </div>
+
+  <div *ngIf="node.origin.price" class="d-flex justify-content-between border-bottom border-top p-1">
+    <div  class="d-flex">
+      <div class="pr-2">{{ node.origin.id }}</div>
+      <div >{{ node.title }}</div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <div  class="tr ">
+        <div class="td pr-2 position-relative">
+          <span>{{ node.origin.articul }}</span>
+          <small class="text-muted position-absolute position">Артикул</small>
+        </div>
+        <div class="td pr-2 position-relative">
+          <span>{{ node.origin.stock }}</span>
+          <small class="text-muted position-absolute position">Склад</small>
+        </div>
+        <div class="td pr-2 position-relative" >
+          <span>{{ (node.origin.trade_price).toFixed(2) }}</span>
+          <small class="text-muted position-absolute position">Цена</small>
+        </div>
+        <div class="td pr-2 position-relative" >
+          <span>{{ (node.origin.price).toFixed(2) }}</span>
+          <small class="text-muted position-absolute position">Цена СМ</small>
+        </div>
+      </div>
+    </div>
 
 
-            </div>
-        </ng-template>
-      </tree-root>
+  </div>
 
+</ng-template>
 
-  </ng-container>
-
-  <ng-template #productComponent>
-    <product-component id={{selectedProduct}}></product-component>
-  </ng-template>
+</ng-container>

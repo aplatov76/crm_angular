@@ -1,68 +1,60 @@
-<div class="modal-header">
-    <h4 *ngIf="form" class="modal-title pull-left">{{form.get('title').value}}</h4>
-    <button type="button" class="close pull-right" (click)="modalService.hide()" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-
-    <nz-tree-select
-        style="width: 250px"
-        nzPlaceHolder="Please select"
-        [(ngModel)]="value"
-        [nzMaxTagCount]="3"
-        [nzMaxTagPlaceholder]="omittedPlaceHolder"
-        [nzNodes]="nodes"
-        [nzDefaultExpandAll]="true"
-        [nzAllowClear]="false"
-        [nzMultiple]="true"
-        (ngModelChange)="onChange($event)">
-    </nz-tree-select>
-    <ng-template #omittedPlaceHolder let-omittedValues>and {{ omittedValues.length }} more...</ng-template>
-
-    <form [formGroup]="form" class="mb-1" *ngIf="form" (ngSubmit)="submit()">
+<form [formGroup]="form" class="mb-1" *ngIf="form" (ngSubmit)="submit()">
         <div class="input-group mb-1">
             <div class="input-group-prepend ">
                 <span class="input-group-text cw">Наименование: </span>
             </div>
             <input type="text"  [ngClass]="{'border border-danger' : form.get('title').invalid && form.get('title').touched}" class="form-control mr-1" formControlName="title">
         </div>
-        <div class="input-group mb-1">
+        <div *ngIf="type === 'product'" class="input-group mb-1">
             <div class="input-group-prepend">
                 <span class="input-group-text cw">Остаток склад: </span>
             </div>
             <input type="number"  [ngClass]="{'border border-danger' : form.get('stock').invalid && form.get('stock').touched}" class="form-control mr-1" formControlName="stock">
         </div>
-        <div class="d-flex input-group mb-1">
+        <div *ngIf="type === 'product'" class="d-flex input-group mb-1">
     
             <div class="input-group-prepend ">
                 <span class="input-group-text cw">Артикул:</span>
             </div>
             <input type="text" class="form-control mr-1" formControlName="articul" placeholder="Артикул">
         </div>
-        <div class="d-flex input-group mb-1">
+        <div *ngIf="type === 'product'" class="d-flex input-group mb-1">
     
             <div class="input-group-prepend">
                 <span class="input-group-text cw">Цена товара:</span>
             </div>
             <input type="text" class="form-control mr-1" formControlName="price" type="number" placeholder="Цена">
         </div>
-        <div class="d-flex input-group mb-1">
+        <div *ngIf="type === 'product'" class="d-flex input-group mb-1">
             <div class="input-group-prepend">
                 <span class="input-group-text cw">Цена постащика: </span>
             </div>
                 <input type="number" class="form-control" formControlName="trade_price" placeholder="Цена поставщика">
         </div>
-        <div class="d-flex input-group mb-1 align-self-center">
+        <div *ngIf="form.get('parent').value" class="d-flex input-group mb-1">
             <div class="input-group-prepend">
                 <span class="input-group-text cw" >Группа товара: </span>
             </div>
-            <div *ngIf="groups$ | async" class="pt-1">
-
+            <div *ngIf="groups" class="d-flex custom-group">
+                <nz-tree-select
+                style="width: 100%;height:100%"
+                nzShowSearch
+                nzCheckable
+                formControlName="parent"
+                [nzNodes]="groups"
+                nzPlaceHolder="Please select">
+                <ng-template #nzTreeTemplate let-node>
+                  <span class="ant-tree-node-content-wrapper" [class.ant-tree-node-selected]="node.isSelected">
+                    <span>
+                      {{ node.title }}
+                    </span>
+                  </span>
+                </ng-template>
+              </nz-tree-select>
             </div>
 
         </div>
-        <div class="d-flex input-group mb-1">
+        <div *ngIf="type === 'product'" class="d-flex input-group mb-1">
             <div class="input-group-prepend">
                 <span class="input-group-text cw" >Показывать: </span>
             </div>
@@ -78,10 +70,7 @@
             <textarea class="form-control" formControlName="description"></textarea>
         </div>
         <div class=" btn-group mt-2">
-            <button type="submit" class="btn btn-outline-success mr-1">Сохранить</button>
-            <button type="submit" class="btn btn-outline-danger mr-1">Удалить</button>
+            <button type="submit" [disabled]="form.controls.invalid"class="btn btn-outline-success mr-1">Сохранить</button>
+            <button type="button" (click)="remove()" class="btn btn-outline-danger mr-1">Удалить</button>
         </div>
       </form>
-
-  
-</div>
