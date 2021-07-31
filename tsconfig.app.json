@@ -5,7 +5,7 @@
     "outDir": "./out-tsc/app",
     "types": ["resize-observer-browser"],
     "experimentalDecorators": true,
-    
+
   },
   "files": [
     "src/main.ts",

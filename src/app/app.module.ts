@@ -15,7 +15,7 @@ import { AppComponent } from './app.component';
 import { LeftNav } from './shared/components/LeftNav/leftNav.component';
 import { SalesModule } from './shared/modules/sales/sales.module';
 import { OrdersModule } from './shared/modules/orders/orders.module';
-import {WebOrdersModule} from './shared/modules/webOrders/webOrders.module'
+import {WebOrdersModule} from './shared/modules/webOrders/webOrders.module';
 import { InvoiceModule } from './shared/modules/invoice/invoice.module';
 import { HistorySalesModule } from './shared/modules/historySales/historySales.module';
 import { ReturnSalesModule } from './shared/modules/returnSales/returnSales.module';
@@ -24,8 +24,8 @@ import { DebtorsModule } from './shared/modules/debtors/debtors.module';
 import { AuthModule } from './shared/modules/auth/auth.module';
 import {AuthInterceptor} from './shared/services/auth.interceptor';
 import { ProductsModule } from './shared/modules/products/products.module';
+import {ProductsCmModule} from './shared/modules/productscm/productscm.module';
 //import {WebProductsModule} from './shared/modules/webProducts/webProducts.module';
-
 
 @NgModule({
   declarations: [
@@ -64,6 +64,7 @@ import { ProductsModule } from './shared/modules/products/products.module';
     AuthModule,
     SalesModule,
     ProductsModule,
+    ProductsCmModule
     //WebProductsModule
   ],
   providers: [

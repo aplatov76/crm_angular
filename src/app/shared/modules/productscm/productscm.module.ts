@@ -5,30 +5,28 @@ import {RouterModule} from '@angular/router';
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {reducer} from './store/reducer';
-import {ProductsEffect} from './store/effects/effect.products';
-import {ProductsService} from './store/services/products.service';
+import {ProductsCmEffects} from './store/effects/effects.productscm';
+import {ProductsCmService} from './store/services/productscm.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 //import {OrderItemComponent} from './components/order/order.component'
-import {ProductsComponent} from './components/products/products.component';
-import {ProductComponent} from './components/product/product.component';
+import {ProductsCmComponent} from './components/products/products.component';
+
 
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzModalModule, NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 import { NzIconModule, NZ_ICONS } from 'ng-zorro-antd/icon';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
 
 const routes = [
     {
-        path: 'products',
-        component: ProductsComponent
+        path: 'productscm',
+        component: ProductsCmComponent
     },
-    {
-        path: 'products/:id',
-        component: ProductComponent
-    },
+
 ]
 
 @NgModule({
@@ -43,14 +41,15 @@ const routes = [
         NzModalModule,
         NzIconModule,
         NgSelectModule,
+        NzUploadModule,
         //ngrx modules
-        StoreModule.forFeature('products', reducer),
-        EffectsModule.forFeature([ProductsEffect])
+        StoreModule.forFeature('cmproducts', reducer),
+        EffectsModule.forFeature([ProductsCmEffects])
         
     ],
-    declarations: [ProductsComponent, ProductComponent],
-    providers: [ProductsService, { provide: NZ_I18N, useValue: en_US }]
+    declarations: [ProductsCmComponent],
+    providers: [ProductsCmService, { provide: NZ_I18N, useValue: en_US }]
 })
-export class ProductsModule {
+export class ProductsCmModule {
 
 }

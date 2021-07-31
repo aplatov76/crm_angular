@@ -4,6 +4,7 @@ import {ReturnSalesInterface} from '../modules/returnSales/interfaces/returnSale
 import { PraisStateInterface } from '../utilmodules/prais/store/interfaces/prais.interface';
 import { OrderStateInterface } from '../modules/orders/store/interfaces/orderState.interface';
 import { ProductsList } from '../interfaces/productsList.interface';
+import {ProductsCmStateInterface} from '../modules/productscm/store/interfaces/productsCmState.interface';
 import {WebProductsStateInterface} from '../modules/webProducts/store/interfaces/productsState.interface';
 
 export interface AppStateInterface{
@@ -13,5 +14,6 @@ export interface AppStateInterface{
     prais: PraisStateInterface,
     orders: OrderStateInterface,
     products: ProductsList,
+    cmproducts: ProductsCmStateInterface,
     webproducts: WebProductsStateInterface
 }
