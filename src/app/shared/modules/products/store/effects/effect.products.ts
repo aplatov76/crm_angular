@@ -44,7 +44,7 @@ export class ProductsEffect {
             return this.productsService.getAllProducts(query.query).pipe(
                 map((products: ProductsInterface[]) => {
 
-                    console.log('add key: ', this.addKeyField(products));
+                    //console.log('add key: ', this.addKeyField(products));
 
                     return productsActionSuccess({products: this.addKeyField(products)})
                 } ),
@@ -64,6 +64,7 @@ export class ProductsEffect {
                     //console.log('effect product: ',product)
                     return productActionSuccess({product})
                 } ),
+                
                 catchError((errorResponse: HttpErrorResponse) => {
                     return of(productActionFailed({err: errorResponse}))
                 })

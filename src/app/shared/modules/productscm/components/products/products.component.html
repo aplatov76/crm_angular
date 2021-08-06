@@ -12,7 +12,7 @@
     </div>
   </div>
 </div>
-<ng-container> 
+<ng-container *ngIf="root | async"> 
   <div class="d-flex header-dashboard justify-content-between">
     <h2>Прайс лист СМ</h2>
     <i class="material-icons" data-toggle="collapse" (click)="isCollapsed = !isCollapsed">filter_list</i>
@@ -29,12 +29,67 @@
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="#">Наименование</a>
                 <a class="dropdown-item" href="#">Артикул</a>
-                <a class="dropdown-item" href="#">Код</a>
               </div>
             </div>
-            <input type="text"  class="form-control"  [(ngModel)]="searchValue" />
+            <input type="text"  class="form-control" (ngModelChange)='onChange($event)' [ngModel]="searchValue" />
             <!--<input type="text" class="form-control" id="filter" #filter (keyup)="filterFn(filter.value, tree.treeModel)" placeholder="">-->
           </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="card" *ngFor="let panel of root | async; let i = index">
+      <div class="ant-collapse-header">
+        <h2 class="mb-0">
+          <button class="btn btn-block text-left" type="button" (click)="nzClick(panel.index)">
+            <span class=" anticon ant-collapse-arrow">{{i+1}}. {{panel.name}}</span>
+          </button>
+        </h2>
+      </div>
+
+      <div *ngIf="currentDocument.id === panel.index && currentDocument.show">
+
+          <table *ngIf="(nodes && !(productsLoading$ | async)); else elseBlock" class="table table-striped table-hover table-sm">
+            <thead>
+              <th>№</th>
+              <th>Наименование</th>
+              <th>Артикул</th>
+              <th>Цена</th>
+              <th>Ед. изм.</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let element of nodes; let i = index">
+              <ng-container *ngIf="element.visible">
+                <td><span *ngIf="element.articul">{{element.id}}</span></td>
+                <td (dblclick)="showSelectProduct(i)" [ngClass]="{'font-weight-bold': !element.articul}">{{element.title}}</td>
+                <td>{{element.articul}}</td>
+                <td>{{element.price}}</td>
+                <td>{{element.unit}}</td>
+              </ng-container>
+              </tr>
+            </tbody>
+          </table>
+          <ng-template #elseBlock>
+            <div *ngIf="currentDocument.id === panel.index " class="loadingio-spinner-spinner-5hp8umbni2k">
+              <div class="ldio-96ex39g1grs">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </div>
+          </ng-template>
+
+      </div>
+
     </div>
   </div>
 
@@ -43,6 +98,7 @@
 <ng-template #loadprice>
     <nz-upload
       nzType="drag"
+      nzName="files"
       [nzMultiple]="true"
       nzAction="{{baseUrl}}"
       (nzChange)="handleChange($event)"

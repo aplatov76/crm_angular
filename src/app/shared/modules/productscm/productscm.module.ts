@@ -12,7 +12,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 
 //import {OrderItemComponent} from './components/order/order.component'
 import {ProductsCmComponent} from './components/products/products.component';
-
+import {CurrentCmProductComponent} from './components/current/current.component';
 
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzModalModule, NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
@@ -20,6 +20,10 @@ import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 import { NzIconModule, NZ_ICONS } from 'ng-zorro-antd/icon';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+
+import { IconDefinition } from '@ant-design/icons-angular';
+import * as AllIcons from '@ant-design/icons-angular/icons';
 
 const routes = [
     {
@@ -28,6 +32,12 @@ const routes = [
     },
 
 ]
+
+const antDesignIcons = AllIcons as {
+    [key: string]: IconDefinition;
+  };
+  const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
+  
 
 @NgModule({
     imports: [
@@ -42,13 +52,14 @@ const routes = [
         NzIconModule,
         NgSelectModule,
         NzUploadModule,
+        NzCollapseModule,
         //ngrx modules
         StoreModule.forFeature('cmproducts', reducer),
         EffectsModule.forFeature([ProductsCmEffects])
         
     ],
-    declarations: [ProductsCmComponent],
-    providers: [ProductsCmService, { provide: NZ_I18N, useValue: en_US }]
+    declarations: [ProductsCmComponent, CurrentCmProductComponent],
+    providers: [ProductsCmService, { provide: NZ_I18N, useValue: en_US },  { provide: NZ_ICONS, useValue: icons } ]
 })
 export class ProductsCmModule {
 

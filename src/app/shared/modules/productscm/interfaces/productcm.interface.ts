@@ -4,5 +4,5 @@ export interface ProductCmInterface{
     title: string,
     price: number | null,
     stock?: number | null,
-    unit: number | null
+    unit: string
 }

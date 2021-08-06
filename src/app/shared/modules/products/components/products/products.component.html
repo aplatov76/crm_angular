@@ -10,6 +10,9 @@
       <button type="button" class="btn btn-sm btn-outline-secondary">Export xlsx</button>
       <button type="button" class="btn btn-sm btn-outline-secondary">Export pdf</button>
     </div>
+    <div class="btn-group mr-2">
+      <button type="button" class="btn btn-sm btn-outline-secondary">Обновить цены</button>
+    </div>
   </div>
 </div>
 <ng-container *ngIf="nodes"> 
@@ -66,7 +69,7 @@
       <div >{{ node.title }}</div>
     </div>
     <div class="d-flex justify-content-end">
-      <div  class="tr ">
+      <div  [ngClass]="{'bg-warning': node.origin.price < node.origin.trade_price*1.2, 'bg-danger': node.origin.price < node.origin.trade_price*1.1}" class="tr ">
         <div class="td pr-2 position-relative">
           <span>{{ node.origin.articul }}</span>
           <small class="text-muted position-absolute position">Артикул</small>
@@ -76,11 +79,11 @@
           <small class="text-muted position-absolute position">Склад</small>
         </div>
         <div class="td pr-2 position-relative" >
-          <span>{{ (node.origin.trade_price).toFixed(2) }}</span>
+          <span>{{ (node.origin.price).toFixed(2) }}</span>
           <small class="text-muted position-absolute position">Цена</small>
         </div>
         <div class="td pr-2 position-relative" >
-          <span>{{ (node.origin.price).toFixed(2) }}</span>
+          <span>{{ (node.origin.trade_price).toFixed(2) }}</span>
           <small class="text-muted position-absolute position">Цена СМ</small>
         </div>
       </div>

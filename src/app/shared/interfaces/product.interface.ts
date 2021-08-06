@@ -12,7 +12,7 @@ export interface ProductInterface{
     updateAt?: Date,
     price: number,
     trade_price?: number,
-    parent: number,
+    parent: number
 
     /**К удалению */
     info?: string,

@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import {productAction, productInsertUpdate, productsAction } from '../../store/actions/action';
 import { isGroupsProduct} from '../../store/selectors';
-import { Observable, Subject,  Subscription } from "rxjs";
+import { Observable, of, Subject,  Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { filter } from 'rxjs/operators';
 import { ProductInterface } from "../../../../interfaces/product.interface";
@@ -12,6 +12,7 @@ import {isCurrentProduct} from '../../store/selectors';
 
 import {cloneDeep} from 'lodash-es';
 import { NzModalRef } from "ng-zorro-antd/modal";
+import { ProductsService } from "../../store/services/products.service";
 
 @Component({
     selector: 'product-component',
@@ -23,6 +24,7 @@ export class ProductComponent implements OnInit, OnDestroy{
     form: FormGroup
     currentProduct$: Subscription
     currentProduct: ProductInterface
+    currentProductCountCm$: Observable<number>
     groups$: Subscription
     groups: GroupsInterface[]
 
@@ -42,7 +44,8 @@ export class ProductComponent implements OnInit, OnDestroy{
         private fb: FormBuilder, 
         private route: ActivatedRoute, 
         private store: Store,
-        private modal: NzModalRef
+        private modal: NzModalRef,
+        private productService: ProductsService
     ){}
 
     ngOnInit(): void {
@@ -69,7 +72,12 @@ export class ProductComponent implements OnInit, OnDestroy{
         this.currentProduct$ = this.store.pipe(select(isCurrentProduct), filter(Boolean))
             .subscribe((item: ProductInterface) => {
                 this.initializeForm(item[0])
-            })
+                this.currentProductCountCm$ = this.productService.getCountCm({articul: item[0].articul});
+        })
+
+     // of(this.currentProduct).pipe(
+     //   this.productService.getCountCm({query: {articul: this.currentProduct.articul}})
+     // )
 
     }
 
@@ -78,7 +86,7 @@ export class ProductComponent implements OnInit, OnDestroy{
           .subscribe((items: GroupsInterface[]) => {
                 console.log('sub');
                 this.groups = cloneDeep(items);
-    })
+      })
     }
 
     //`id`, `articul`, `title`, `visible`, `stock`, `price`, `trade_price`, `parent
