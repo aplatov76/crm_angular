@@ -19,7 +19,7 @@ import {WebOrdersModule} from './shared/modules/webOrders/webOrders.module';
 import { InvoiceModule } from './shared/modules/invoice/invoice.module';
 import { HistorySalesModule } from './shared/modules/historySales/historySales.module';
 import { ReturnSalesModule } from './shared/modules/returnSales/returnSales.module';
-import { RequestManagerModule } from './shared/modules/requestManager/requestManager.module';
+import { OrderCmModule } from './shared/modules/ordercm/ordercm.module';
 import { DebtorsModule } from './shared/modules/debtors/debtors.module';
 import { AuthModule } from './shared/modules/auth/auth.module';
 import {AuthInterceptor} from './shared/services/auth.interceptor';
@@ -59,7 +59,7 @@ import {ProductsCmModule} from './shared/modules/productscm/productscm.module';
     InvoiceModule,
     HistorySalesModule,
     ReturnSalesModule,
-    RequestManagerModule,
+    OrderCmModule,
     DebtorsModule,
     AuthModule,
     SalesModule,
