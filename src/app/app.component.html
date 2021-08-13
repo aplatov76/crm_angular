@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow ">
     <div class="d-flex justify-content-between navbar-brand col-md-3 col-lg-2 mr-0 px-3">
       <a class="text-white"  [routerLink]="['/']">CRM Repeat</a>
       <i class="material-icons d-none d-sm-block" (click)="view = !view">storage</i>
@@ -8,12 +8,16 @@
       data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <input class="form-control form-control-dark w-100" type="text" placeholder="Поиск..." aria-label="Search">
-    <ul class="navbar-nav px-3">
-      <li class="nav-item text-nowrap">
-        <a class="nav-link" [routerLink]="['/auth']">Выйти</a>
-      </li>
-    </ul>
+
+    <!--<input class="form-control form-control-dark w-100" type="text" placeholder="Поиск..." aria-label="Search">-->
+    <div class="d-flex justify-content-end align-items-center">
+      <app-indicator></app-indicator>
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+          <a class="nav-link" [routerLink]="['/auth']">Выйти</a>
+        </li>
+      </ul>
+    </div>
   </nav>
 
   <div class="container-fluid">

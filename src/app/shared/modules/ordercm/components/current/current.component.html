@@ -1,0 +1,48 @@
+<form [formGroup]="formTable" *ngIf="formTable">
+    <table class="table table-fit table-bordered table-striped table-sm">
+      <thead>
+        <th>№</th>
+        <th class="width-th-title">Наименование</th>
+        <th>Артикул</th>
+        <th>Кол-во</th>
+        <th>Ед.изм.</th>
+        <th>Доп-но</th>
+        <th></th>
+      </thead>
+      <tbody>
+        <ng-container formArrayName="tableRows" *ngFor="let item of formTable.get('tableRows').controls ; let i = index">
+          <tr [formGroupName]="i">
+            <td>
+              {{i+1}}
+            </td>
+            <td>
+              <input type="text" class="form-control" formControlName="title">
+            </td>
+            <td>
+              <input type="number" class="form-control" formControlName="articul">
+            </td>
+            <td>
+              <input type="number" [ngClass]="{'border border-danger' : item.get('quantity').invalid}" class="form-control" formControlName="quantity">
+            </td>
+            <td>
+              <select class="form-control" formControlName="unit">
+                <option *ngFor="let unit of units" [ngValue]="unit.id">
+                  {{ unit.title }}
+                </option>
+              </select>
+            </td>
+            <td>
+              <input type="text" class="form-control" formControlName="description">
+            </td>
+            <td class="text-center">
+              <i class="material-icons" (click)="removeRow(item.value.id, i)" type="button">delete_sweep</i>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    <div *ngIf="sendBtn" class="action-container d-flex justify-content-between">
+      <button class="btn btn-outline-warning" (click)="addRow()" >Добавить строку</button>
+      <button class="btn btn-outline-success mr-1"  [disabled]="formTable.invalid" (click)="send()">Отправить</button>
+    </div>
+  </form>

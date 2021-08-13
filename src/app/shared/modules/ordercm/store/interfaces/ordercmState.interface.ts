@@ -5,7 +5,7 @@ import { OrderCmDataInterface } from "../../interfaces/ordercmdata.interface";
 export interface OrderCmStateInterface{
 
     orders: OrderCmInterface[],
-    orderData: OrderCmDataInterface
+    currentOrder: OrderCmInterface
     loading: boolean,
     err: ErrorMessageInterface
 }

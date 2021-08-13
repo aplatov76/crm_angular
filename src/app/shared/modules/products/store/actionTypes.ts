@@ -4,6 +4,10 @@ export enum ActionTypes {
     PRODUCTS_LIST_SUCCESS = "[Products list] LOAD SUCCESS",
     PRODUCTS_LIST_FAILED = "[Products list] LOAD FAILED",
 
+    PRODUCTS_WARNING_LIST = "[Products WARNING list] START LOAD",
+    PRODUCTS_WARNING_LIST_SUCCESS = "[Products WARNING list] LOAD SUCCESS",
+    PRODUCTS_WARNING_LIST_FAILED = "[Products WARNING list] LOAD FAILED",
+
     PRODUCT = "[Product ] START LOAD",
     PRODUCTS_SUCCESS = "[Product ] LOAD SUCCESS",
     PRODUCTS_FAILED = "[Product ] LOAD FAILED",

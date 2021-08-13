@@ -12,7 +12,10 @@ import {
      productInsertUpdateFailed,
      productGroups,
      productGroupsSuccess,
-     productGroupsFailed
+     productGroupsFailed,
+     productsWarningAction,
+     productsWarningActionSuccess,
+     productsWarningActionFailed
     } from "../actions/action";
 import {switchMap, map, tap, catchError} from "rxjs/operators";
 import {of} from "rxjs";
@@ -56,6 +59,24 @@ export class ProductsEffect {
       )
     )
 
+    warning_products$ = createEffect(() => this.actions$.pipe(
+        ofType(productsWarningAction),
+        switchMap((query) => {
+            console.log(query)
+            return this.productsService.getAllProducts(query.query).pipe(
+                map((products: ProductsInterface[]) => {
+
+                    return productsWarningActionSuccess({products})
+                } ),
+                catchError((errorResponse: HttpErrorResponse) => {
+                    return of(productsWarningActionFailed({err: errorResponse}))
+                })
+            )
+        } )
+      )
+    )
+
+
     product$ = createEffect(() => this.actions$.pipe(
         ofType(productAction),
         switchMap(({id}) => {
@@ -80,6 +101,7 @@ export class ProductsEffect {
                 map((res: any) => {
                     //console.log(product)
                     this.store.dispatch(productsAction({query: {view: 'tree'}}))
+                    this.store.dispatch(productsWarningAction({query: {warning: true}}))
                     return productInsertUpdateSuccess({res})
                 } ),
                 catchError((errorResponse: HttpErrorResponse) => {

@@ -1,0 +1,2 @@
+<button type="button" *ngIf="orderCmData$ | async as order" class="btn btn-sm btn-outline-secondary mr-1">Заявка <span class="badge badge-light">{{order.orderdata.length}}</span></button>
+<button type="button" *ngIf="productWarning$ | async as warning" class="btn btn-sm btn-outline-danger">Цены <span class="badge badge-light">{{warning.length}}</span></button>

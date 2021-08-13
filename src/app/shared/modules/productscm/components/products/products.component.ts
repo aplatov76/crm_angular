@@ -120,7 +120,7 @@ export class ProductsCmComponent implements OnInit, OnDestroy{
           distinctUntilChanged())
           .subscribe(model => {
             this.searchValue = model
-            this.nodes = this.nodes.map(item => ((item.title.toLowerCase()).includes(this.searchValue)) ? ({...item, visible: true}) : ({...item, visible: false}))
+            if(this.nodes)this.nodes = this.nodes.map(item => ((item.title.toLowerCase()).includes(this.searchValue)) ? ({...item, visible: true}) : ({...item, visible: false}))
           });
       
     }

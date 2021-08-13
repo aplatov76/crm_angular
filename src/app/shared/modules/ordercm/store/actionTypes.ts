@@ -9,5 +9,13 @@ export enum ActionTypes {
 
     ORDERS_CM_INSERT = "[Orders cm insert] START LOAD",
     ORDERS_CM_INSERT_SUCCESS = "[Orders cm insert] LOAD SUCCESS",
-    ORDERS_CM_INSERT_FAILED = "[Orders cm insert] LOAD FAILED"
+    ORDERS_CM_INSERT_FAILED = "[Orders cm insert] LOAD FAILED",
+
+    ORDER_DATA_CM_REMOVE = "[Order data cm remove] START LOAD",
+    ORDER_DATA_CM_REMOVE_SUCCESS = "[Order data cm remove] LOAD SUCCESS",
+    ORDER_DATA_CM_REMOVE_FAILED = "[Order data cm remove] LOAD FAILED",
+
+    ORDER_DATA_CM_SEND = "[Order data cm send] START LOAD",
+    ORDER_DATA_CM_SEND_SUCCESS = "[Order data cm send] LOAD SUCCESS",
+    ORDER_DATA_CM_SEND_FAILED = "[Order data cm send] LOAD FAILED"
 }

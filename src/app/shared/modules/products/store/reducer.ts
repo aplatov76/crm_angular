@@ -12,13 +12,17 @@ import {
          productInsertUpdateFailed,
          productGroups,
          productGroupsSuccess,
-         productGroupsFailed
+         productGroupsFailed,
+         productsWarningAction,
+         productsWarningActionSuccess,
+         productsWarningActionFailed
         } from "./actions/action";
 
 
 const initialState: ProductsStateInterface = {
     data: null,
     currentProduct: null,
+    warning: null,
     groups: null,
     loading: false,
     error: false
@@ -83,7 +87,19 @@ const productReducer = createReducer(
         ...state,
         loading: false,
         error: action.err
-    }))
+    })),
+
+    on(productsWarningAction, (state, action): ProductsStateInterface => ({
+        ...state
+    })),
+    on(productsWarningActionSuccess, (state, action): ProductsStateInterface => ({
+        ...state,
+        warning: action.products
+    })),
+    on(productsWarningActionFailed, (state, action): ProductsStateInterface => ({
+        ...state,
+        warning: null
+    })),
 
 )
 

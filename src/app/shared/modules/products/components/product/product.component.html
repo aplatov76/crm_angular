@@ -73,7 +73,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text cw">Склад см: </span>
             </div>
-                <input *ngIf="currentProductCountCm$ | async as count" type="number" class="form-control" value="{{count}}" placeholder="склад см" [disabled]="true">
+                <input *ngIf="currentProductCountCm$ | async as count" type="text" class="form-control" value="{{count.count}}" placeholder="склад см" [disabled]="true">
         </div>
         <div class=" btn-group mt-2">
             <button type="submit" [disabled]="form.controls.invalid" class="btn btn-outline-success mr-1">Сохранить</button>

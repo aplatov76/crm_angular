@@ -21,7 +21,7 @@ export class ProductsService{
             if(query.view)queryParams = queryParams + `view=${query.view}`;
             if(query.parent === null)queryParams = queryParams + `parent=${query.parent}`;
             if(query.parent)queryParams = queryParams + `parent=${query.parent}`;
-
+            if(query.warning)queryParams = queryParams + `warning=${query.warning}`;
 
         return this.http.get<ProductsInterface[]>(`${environment.url}/product?${queryParams}`,);
     }
@@ -39,7 +39,7 @@ export class ProductsService{
     }
 
     getCountCm(query: any): Observable<number>{
-        console.log('query product count cm: ',query)
+        //console.log('query product count cm: ',query)
 
         return this.http.get<number>(`${environment.url}/cm/count?articul=${query.articul}`);
     }

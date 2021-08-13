@@ -18,3 +18,8 @@ export const isGroupsProduct = createSelector(
     productsFeatureSelectors,
     (productsState: ProductsStateInterface) => productsState.groups
 )
+
+export const isWarningProducts = createSelector(
+    productsFeatureSelectors,
+    (productsState: ProductsStateInterface) => productsState.warning
+)

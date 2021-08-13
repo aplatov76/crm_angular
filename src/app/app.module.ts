@@ -3,16 +3,19 @@ import { NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
 import { HttpClientModule, HTTP_INTERCEPTORS  } from '@angular/common/http';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment'; // Angular CLI environment
 import { routerReducer } from '@ngrx/router-store';
 import { EffectsModule } from '@ngrx/effects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { ToastrModule } from 'ngx-toastr';
-
 import { AppRoutingModule } from './app-routing.module';
+
+import { environment } from '../environments/environment'; // Angular CLI environment
+
 import { AppComponent } from './app.component';
 import { LeftNav } from './shared/components/LeftNav/leftNav.component';
+import {AppIndicatorComponent} from './shared/components/app-indicator/app-indicator.component'
+
+
 import { SalesModule } from './shared/modules/sales/sales.module';
 import { OrdersModule } from './shared/modules/orders/orders.module';
 import {WebOrdersModule} from './shared/modules/webOrders/webOrders.module';
@@ -30,7 +33,8 @@ import {ProductsCmModule} from './shared/modules/productscm/productscm.module';
 @NgModule({
   declarations: [
     AppComponent,
-    LeftNav
+    LeftNav,
+    AppIndicatorComponent
   ],
   imports: [
     BrowserModule,

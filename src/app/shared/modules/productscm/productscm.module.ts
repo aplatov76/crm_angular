@@ -47,7 +47,7 @@ const antDesignIcons = AllIcons as {
         ReactiveFormsModule,
         //nz modules
         NzTreeModule,
-        NzTreeSelectModule,
+        //NzTreeSelectModule,
         NzModalModule,
         NzIconModule,
         NgSelectModule,
