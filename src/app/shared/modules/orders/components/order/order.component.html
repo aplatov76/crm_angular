@@ -3,36 +3,42 @@
   <h1 class="h2"></h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-      <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-      <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+      <button type="button" (click)="isVisibleModal = !isVisibleModal" class="btn btn-sm btn-outline-secondary">Внести оплату</button>
+      <a [routerLink]="['/orders']" class="btn btn-sm btn-outline-secondary">Закрыть</a>
+      <button type="button" (click)="createPDF()" class="btn btn-sm btn-outline-secondary">Печать</button>
     </div>
-    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        class="feather feather-calendar">
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-        <line x1="16" y1="2" x2="16" y2="6"></line>
-        <line x1="8" y1="2" x2="8" y2="6"></line>
-        <line x1="3" y1="10" x2="21" y2="10"></line>
-      </svg>
-      This week
-    </button>
   </div>
 </div>
-  <div class="d-flex header-dashboard">
-    <a [routerLink]="['/orders']"><i class="material-icons" >undo</i></a>
-    <i class="material-icons" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">filter_list</i>
-  </div>
-  <div class="collapse" id="collapseExample">
-    <div class="card card-body">
-        <div class="btn-group">
-            <button type="button" class="btn btn-outline-warning mb-5">Печать</button>
-        </div>
-          
+<ng-container *ngIf="(currentOrder$ | async) as order">
+  <h4>Заказ № {{order[0].id}} от {{order[0].data | date:'yyyy-MM-dd'}}</h4>
+  <div class="input-group">
+    <div class="input-group-prepend w-10">
+      <span class="input-group-text w-100" id="basic-addon1">Клиент:</span>
     </div>
+    <input type="text" class="form-control" value="{{order[0].client.fullname}}" aria-label="Username" aria-describedby="basic-addon1">
   </div>
+  <div class="input-group">
+    <div class="input-group-prepend w-10">
+      <span class="input-group-text w-100" id="basic-addon1">Сумма заказа:</span>
+    </div>
+    <input type="text" class="form-control" value="{{order[0].total}}" aria-label="Username" aria-describedby="basic-addon1">
+  </div>
+  <div class="input-group">
+    <div class="input-group-prepend w-10">
+      <span class="input-group-text w-100">Оплачено:</span>
+    </div>
+    <input type="text" class="form-control" value="{{order[0].current}}" aria-label="Username" aria-describedby="basic-addon1">
+  </div>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend w-10">
+      <span class="input-group-text w-100">Остаток:</span>
+    </div>
+    <input type="text" class="form-control"  value="{{order[0].total - order[0].current}}" aria-label="Username" aria-describedby="basic-addon1">
+  </div>
+</ng-container>
+
   <h5>Содержимое: </h5>
-  <table class="table table-striped" *ngIf="currentOrder$ | async">
+  <table #htmlData class="table table-striped" *ngIf="currentOrder$ | async">
     <thead>
       <tr>
         <th scope="col">#</th>
@@ -43,10 +49,10 @@
         <th scope="col">Сумма</th>
       </tr>
     </thead>
-    <tbody *ngFor="let item of currentOrder$ | async; let i = index">
+    <tbody *ngFor="let item of (currentOrder$ | async)[0].orderproduct; let i = index">
       <tr *ngIf="item.title">
         <th scope="row">{{i + 1}}</th>
-        <td>{{item.productId}}</td>
+        <td>{{item.id}}</td>
         <td>{{item.title}}</td>
         <td>{{item.quantity}}</td>
         <td>{{item.price}}</td>
@@ -58,18 +64,22 @@
   <table class="table table-striped" *ngIf="currentOrder$ | async">
     <thead>
       <tr>
-        <th scope="col">#</th>
+        <th scope="col">№</th>
         <th scope="col">Внесено</th>
-        <th scope="col">Остаток</th>
         <th scope="col">Дата</th>
       </tr>
     </thead>
-    <tbody *ngFor="let item of currentOrder$ | async; let i = index">
-      <tr *ngIf="!item.title">
+    <tbody *ngFor="let item of (currentOrder$ | async)[0].orderpay; let i = index">
+      <tr>
         <th scope="row">{{i + 1}}</th>
-        <td>{{item.productId}}</td>
-        <td>{{item.sum}}</td>
-        <td>{{item.quantity}}</td>
+        <td>{{item.payed}}</td>
+        <td>{{item.data | date:'yyyy-MM-dd'}}</td>
       </tr>
     </tbody>
   </table>
+
+  <nz-modal [(nzVisible)]="isVisibleModal" [nzAutofocus]="false" nzTitle="Внесение оплаты" (nzOnCancel)="isVisibleModal = !isVisibleModal" (nzOnOk)="handleOk()">
+    <ng-container *nzModalContent>
+      <input type="number" class="form-control" [ngModel] ="sum" (ngModelChange)="sum = $event" placeholder="сумма">
+    </ng-container>
+  </nz-modal>

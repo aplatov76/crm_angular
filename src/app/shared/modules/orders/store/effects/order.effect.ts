@@ -3,14 +3,25 @@ import { Store } from "@ngrx/store";
 import {createEffect, Actions, ofType} from "@ngrx/effects";
 import { OrdersService } from "../services/orders.service";
 import { Router } from "@angular/router";
-import { ordersAction, ordersActionSuccess, ordersActionFailed, ordersIdAction, ordersIdActionSuccess, ordersIdActionFailed } from "../actions/action";
+import { 
+    ordersAction, 
+    ordersActionSuccess, 
+    ordersActionFailed, 
+    orderAction, 
+    orderActionSuccess, 
+    orderActionFailed, 
+    orderPayAction,
+    orderPayActionSuccess,
+    orderPayActionFailed
+} from "../actions/action";
 import {switchMap, map, tap, catchError} from "rxjs/operators";
 import {of} from "rxjs";
 import {HttpErrorResponse} from "@angular/common/http"
 
 
 import {OrderInterface} from '../../interfaces/order.interface';
-import {OrderProductsListInterface} from '../../interfaces/orderProducts.interface';
+import {OrderProductInterface} from '../../interfaces/orderProduct.interface';
+import { ErrorMessageInterface } from "src/app/shared/interfaces/errMessages.interface";
 
 
 @Injectable()
@@ -19,7 +30,6 @@ export class OrderEffect{
     constructor( 
         private action$: Actions,
         private orderService: OrdersService,
-        private router: Router,
         private state: Store){
        
 
@@ -41,15 +51,31 @@ export class OrderEffect{
     ))
 
     currentOrder$ = createEffect(() => this.action$.pipe(
-        ofType(ordersIdAction),
+        ofType(orderAction),
         switchMap((id) => {
-            return this.orderService.getById(id.id)
+            return this.orderService.getOrder(id.id)
                 .pipe(
-                    map((order: OrderProductsListInterface) => {
-                        return ordersIdActionSuccess({order})
+                    map((order: OrderInterface) => {
+                        return orderActionSuccess({order})
                     }),
                     catchError((errorResponse: HttpErrorResponse) => {
-                        return of(ordersIdActionFailed({err: errorResponse}))
+                        return of(orderActionFailed({err: errorResponse}))
+                    })
+                )
+        })
+    ))
+
+    payOrder$ = createEffect(() => this.action$.pipe(
+        ofType(orderPayAction),
+        switchMap(({id, sum}) => {
+            return this.orderService.orderPay(id, sum)
+                .pipe(
+                    map((order: OrderInterface) => {
+                        this.state.dispatch(orderAction({id}))
+                        return orderPayActionSuccess({order})
+                    }),
+                    catchError((errorResponse: HttpErrorResponse) => {
+                        return of(orderPayActionFailed({err: errorResponse.error}))
                     })
                 )
         })

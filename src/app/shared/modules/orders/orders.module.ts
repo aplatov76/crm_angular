@@ -9,6 +9,11 @@ import {OrderEffect} from './store/effects/order.effect'
 import {OrdersService} from './store/services/orders.service'
 
 import {OrderItemComponent} from './components/order/order.component'
+import {CreateOrderComponent} from './components/create/create.component';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
+import { NgSelectModule } from '@ng-select/ng-select';
 const routes = [
     {
         path: 'orders',
@@ -22,12 +27,16 @@ const routes = [
 
 @NgModule({
     imports: [
-        CommonModule, 
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
         RouterModule.forChild(routes),
         StoreModule.forFeature('orders', reducer),
         EffectsModule.forFeature([OrderEffect]),
+        NzModalModule,
+        NgSelectModule
     ],
-    declarations: [OrdersComponent, OrderItemComponent],
+    declarations: [OrdersComponent, OrderItemComponent, CreateOrderComponent],
     exports: [OrdersComponent],
     providers: [OrdersService]
 })

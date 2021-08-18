@@ -1,4 +1,4 @@
-export interface OrderProductsListInterface{
+export interface OrderProductInterface{
     id: number,
     idProduct: number,
     title: string,

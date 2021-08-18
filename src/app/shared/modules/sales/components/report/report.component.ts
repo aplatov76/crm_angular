@@ -12,6 +12,7 @@ import {CassaValueInterface} from '../../interfaces/cassaValue.interface';
 import { DatePipe } from "@angular/common";
 import { ReturnSalesService } from "../../../returnSales/store/services/returnSales.service";
 import { ReturnSalesInterface } from "../../../returnSales/interfaces/returnSales.interface";
+import { OrderInterface } from '../../../orders/interfaces/order.interface';
 
 @Component({
     selector: 'report-sales',
@@ -26,10 +27,12 @@ export class ReportComponent implements OnInit, OnDestroy{
     forkData$: Subscription
     currentSales: SalesInterface[]
     currentReturnSales: ReturnSalesInterface[]
-    currentCassa: CassaValueInterface
+    currentOrdersPayed: OrderInterface[]
+    currentCassa: CassaValueInterface = {id: 0, data: null, sum: 0}
 
-    returnsum: number
-    sum: number
+    orderPayed: number = 0
+    returnsum: number = 0
+    sum: number = 0
     
 
     constructor(
@@ -76,17 +79,20 @@ export class ReportComponent implements OnInit, OnDestroy{
             //this.store.pipe(select(currentSalesSelector), filter(Boolean), first()),
             this.salesService.getSales(currentData, currentData),
             this.salesService.getCassaValue(currentData),
-            this.returnedSalesService.getReturnSales()
+            this.returnedSalesService.getReturnSales(),
+            this.salesService.getOrdersPayed(currentData, currentData)
         ]).subscribe(
-            ([currentSales, cassa, returnsales]: [SalesInterface[], CassaValueInterface, ReturnSalesInterface[]]) => {
+            ([currentSales, cassa, returnsales, orderspayed]: [SalesInterface[], CassaValueInterface, ReturnSalesInterface[], OrderInterface[]]) => {
             
             this.currentSales = currentSales;
             this.currentReturnSales = returnsales;
             this.currentCassa = cassa;
+            this.currentOrdersPayed = orderspayed;
+            //console.log(orderspayed)
             
             this.sum = this.currentSales.reduce((sum, current) => (sum + current.price*current.quantity), 0)
             this.returnsum = this.currentReturnSales.reduce((sum, current) => (sum + current.sale.price*current.quantity), 0)
-            
+            this.orderPayed = this.currentOrdersPayed.reduce((sum, current) => (sum +  current.orderpay.reduce((sum, el) => (sum + el.payed), 0)), 0)
         })          
 
     }

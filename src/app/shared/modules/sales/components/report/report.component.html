@@ -52,6 +52,16 @@
             <td><b>Продажи:</b></td>
             <td>{{sum | currency:'RUB': ' '}}</td>
           </tr>
+          <ng-container *ngFor="let order of currentOrdersPayed">
+            <tr *ngFor="let element of order.orderpay; let i = index">
+              <th scope="row">{{i + 1}}</th>
+              <td>{{element.id}}</td>
+              <td>{{element.data}}</td>
+              <td></td>
+              <td></td>
+              <td>{{element.payed | currency: 'RUB': ' '}}</td>
+            </tr>
+          </ng-container>
           <tr *ngIf="currentCassa">
             <th scope="row"></th>
             <td></td>
@@ -60,13 +70,13 @@
             <td><b>Старт:</b></td>
             <td>{{currentCassa.sum | currency:'RUB': ' '}}</td>
           </tr>
-          <tr *ngIf="currentCassa">
+          <tr >
             <th scope="row"></th>
-            <td></td>
+            <td>{{orderPayed}}</td>
             <td></td>
             <td></td>
             <td><b>Итого:</b></td>
-            <td>{{currentCassa.sum+sum-returnsum | currency:'RUB': ' '}}</td>
+            <td>{{currentCassa.sum+sum-returnsum + orderPayed | currency:'RUB': ' '}}</td>
           </tr>
         </tbody>
       </table>

@@ -32,7 +32,11 @@
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "raf",
+              "@babel/runtime-corejs3"
+             ]
           },
           "configurations": {
             "production": {

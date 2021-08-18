@@ -1,9 +1,9 @@
 import {OrderInterface} from '../../interfaces/order.interface';
-import {OrderProductsListInterface} from '../../interfaces/orderProducts.interface'
+import {OrderProductInterface} from '../../interfaces/orderProduct.interface'
 
 export interface OrderStateInterface {
     orders: OrderInterface[],
-    currentOrder: OrderProductsListInterface,
+    currentOrder: OrderInterface,
     loading: boolean,
     error: string
 }

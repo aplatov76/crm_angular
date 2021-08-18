@@ -1,13 +1,19 @@
 import {PaymentInterface} from './payment.interface';
+import {ClientInterface} from '../../../interfaces/client.interface';
+import {DeliveryInterface} from '../../delivery/interfaces/delivery.interface';
+import { CheckInterface } from 'src/app/shared/interfaces/check.interface';
+import {OrderProductInterface} from './orderProduct.interface';
 
 export interface OrderInterface {
     id: number,
     total: number,
     current: number,
     data: Date,
-    fullname: string,
-    passport_number: string,
-    passport_data: Date,
-    passport_release: string
-    payment?: PaymentInterface[]
+    status: number,
+    client: ClientInterface,
+    orderpay: PaymentInterface[]
+    orderdata: OrderProductInterface | null,
+    /*если к заказу прикреплены продажи*/
+    check?: CheckInterface,
+    delivery?: DeliveryInterface
 }

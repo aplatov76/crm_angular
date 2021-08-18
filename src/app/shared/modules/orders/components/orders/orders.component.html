@@ -3,33 +3,16 @@
   <h1 class="h2"></h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-      <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-      <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+      <button type="button" (click)="showModal()" class="btn btn-sm btn-outline-secondary">Добавить</button>
     </div>
-    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        class="feather feather-calendar">
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-        <line x1="16" y1="2" x2="16" y2="6"></line>
-        <line x1="8" y1="2" x2="8" y2="6"></line>
-        <line x1="3" y1="10" x2="21" y2="10"></line>
-      </svg>
-      This week
-    </button>
   </div>
 </div>
   <div class="d-flex header-dashboard justify-content-between">
     <h2>Заказы</h2>
-    <i class="material-icons" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">filter_list</i>
+    <i class="material-icons" (click)="visible = !visible">filter_list</i>
   </div>
-  <div class="collapse" id="collapseExample">
+  <div *ngIf="visible">
     <div class="card card-body">
-        <div class="btn-group">
-            <button type="button" class="btn btn-outline-primary mr-5 mb-5">Добавить</button>
-            <button type="button" class="btn btn-outline-success mr-5 mb-5">Открыть</button>
-            <button type="button" class="btn btn-outline-warning mb-5">Печать</button>
-        </div>
         
         <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -44,16 +27,11 @@
             </div>
             <input type="text" class="form-control" placeholder="Фамилия Имя Отчество" aria-label="Text input with segmented dropdown button">
           </div>
-          <div class="header-time">
-            <input type="date" name="trip-start" [(value)]="data.start" (change)="setDataStart($event, 0)" min="2018-01-01">
-            <input type="date" name="trip-end" [(value)]="data.end" (change)="setDataStart($event, 1)" min="2018-01-01">
-            <button class="btn btn-secondary btn-sm" (click)="filterOrders()">Показать</button>
-          </div>
           
     </div>
   </div>
 
-  <table class="table table-striped" *ngIf="orders">
+  <table class="table table-hover" *ngIf="orders">
       <thead>
         <tr>
           <th scope="col">#</th>
@@ -67,10 +45,10 @@
       <tbody *ngFor="let item of orders; let i = index">
         <tr [routerLink]="[item.id]">
           <th scope="row">{{i + 1}}</th>
-          <td>{{item.fullname}}</td>
+          <td>{{item.client.fullname}}</td>
           <td>{{item.total}}</td>
           <td>{{item.current}}</td>
-          <td>{{item.total - item.current}}</td>
+          <td [ngClass]="{'bg-success': item.status === 1, 'bg-warning': item.status === 0}">{{item.total - item.current}}</td>
           <td>{{item.data | date}}</td>
         </tr>
       </tbody>

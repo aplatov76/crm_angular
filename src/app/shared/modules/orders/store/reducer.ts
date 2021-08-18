@@ -5,9 +5,11 @@ import { ordersAction,
          addOrderAction, 
          addOrderActionFailed, 
          addOrderActionSuccess,
-         ordersIdAction,
-         ordersIdActionFailed,
-         ordersIdActionSuccess
+         orderAction,
+         orderActionFailed,
+         orderActionSuccess,
+         orderPayActionFailed,
+         orderPayAction
        } from './actions/action';
 import { OrderStateInterface } from './interfaces/orderState.interface';
 import { createReducer, on, Action } from '@ngrx/store';
@@ -24,31 +26,43 @@ const orderReducer = createReducer(
     initialState,
     on(ordersAction, (state, action) => ({
         ...state,
-        loading: true
+        loading: true,
+        error: null
     })),
     on(ordersActionSuccess, (state, action) => ({
         ...state,
         orders: action.orders,
-        loading: false
+        loading: false,
+        error: null
     })),
     on(ordersActionFailed, (state, action) => ({
         ...state,
         loading: false,
         error: action.err
     })),
-    on(ordersIdAction, (state, action) => ({
+    on(orderAction, (state, action) => ({
         ...state,
+        error: null,
         loading: true
     })),
-    on(ordersIdActionSuccess, (state, action) => ({
+    on(orderActionSuccess, (state, action) => ({
         ...state,
         currentOrder: action.order,
-        loading: false
+        loading: false,
+        error: null
     })),
-    on(ordersIdActionFailed, (state, action) => ({
+    on(orderActionFailed, (state, action) => ({
         ...state,
         currentOrder: null,
         loading: false,
+        error: action.err
+    })),
+    on(orderPayAction, (state, action) => ({
+        ...state,
+        error: null
+    })),
+    on(orderPayActionFailed, (state, action) => ({
+        ...state,
         error: action.err
     }))
 )
