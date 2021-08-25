@@ -4,15 +4,17 @@ import { ToastrService } from 'ngx-toastr';
 import { NzModalRef } from "ng-zorro-antd/modal";
 
 import { Observable, of, Subject,  Subscription } from "rxjs";
+
 import { Store, select } from "@ngrx/store";
 import { filter } from 'rxjs/operators';
-import {orderDataCmAction, orderInsertAction, orderDataCmRemoveAction, orderDataCmSendAction} from '../../store/actions/action';
+import {orderDataCmAction, orderInsertAction, orderDataCmRemoveAction, orderDataCmSendAction, ordersCmAction} from '../../store/actions/action';
 
 import { OrderCmService } from "../../store/services/ordercm.service";
-import { isCurrentOrder } from "../../store/selectors";
+import { isCurrentOrder, isOrderSendError, isOrderSendCompleted } from "../../store/selectors";
 import { OrderCmDataInterface } from "../../interfaces/ordercmdata.interface";
 import {OrderCmInterface} from "../../interfaces/ordercm.interface";
 import {units} from '../../../../utilmodules/units/units.data';
+import { ErrorMessageInterface } from "src/app/shared/interfaces/errMessages.interface";
 //import { ProductCmInterface } from "../../interfaces/productcm.interface";
 
 @Component({
@@ -27,6 +29,8 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
     @Input() id: number
 
     currentOrderData$: Subscription
+    currentOrderSendCompleted$: Subscription
+    currentOrderSendError$: Subscription
     sendBtn: boolean = true
 
     units = units;
@@ -35,7 +39,8 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
         private store: Store,
         private fb: FormBuilder,
         private modal: NzModalRef,
-        private orderService: OrderCmService
+        private orderService: OrderCmService,
+        private toastr: ToastrService
     ){}
 
     ngOnInit(): void {
@@ -45,6 +50,8 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
 
     ngOnDestroy(): void{
       this.currentOrderData$.unsubscribe();
+      this.currentOrderSendCompleted$.unsubscribe();
+      this.currentOrderSendError$.unsubscribe();
     }
 
     initializeSubscription(){
@@ -53,27 +60,38 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
             (item: OrderCmInterface) => this.initializeForm(item)
         )
 
-        //this.currentProductCountCm$ = this.productService.getCountCm({articul: this.product.articul});
-        //this.initializeForm();
+        this.currentOrderSendError$ = this.store.pipe(select(isOrderSendError),  filter(Boolean)).subscribe(
+            (err: ErrorMessageInterface) => {
+                this.toastr.error(err.message);
+            }
+        )
+
+        this.currentOrderSendCompleted$ = this.store.pipe(select(isOrderSendCompleted), filter(Boolean)).subscribe(
+            () => {
+                this.toastr.success("Заявка успешно отправлена");
+                this.store.dispatch(ordersCmAction({}))
+                this.modal.close();
+            }
+        )
+
     }
 
-    //trade_price: new FormControl({value: `${this.product.price} ${this.product.unit}`, disabled: true}, Validators.required),
-    //count: [0, [Validators.required, Validators.min(1)]],
-    // articul: [{value: this.product.articul, disabled: true}, [Validators.required]]
     initializeForm(order: OrderCmInterface){
 
-         if(order.status === 1)this.sendBtn = false;
+        if(order.status === 1)this.sendBtn = false;
+
+        const disable = (order.status === 1) ? true : false;
 
         this.formTable = this.fb.group({
             tableRows: this.fb.array(order.orderdata.map(item => {
                 //console.log(item)
                 return this.fb.group({
                     id: [item.id],
-                    articul: [item.articul],
-                    title: [item.title],
-                    quantity: [item.quantity, [Validators.required, Validators.min(1)]],
-                    unit: [item.unit.id, [ Validators.required]],
-                    description: ['']
+                    articul: [{value: item.articul, disabled: disable}],
+                    title: [{value: item.title, disabled: disable}],
+                    quantity: [{value: item.quantity, disabled: disable}, [Validators.required, Validators.min(1)]],
+                    unit: [{value: item.unit.id, disabled: disable}, [ Validators.required]],
+                    description: [{value: item.description, disabled: disable}]
                   })
             }))
         })
@@ -83,7 +101,7 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
     send(){
         //console.log('form data: ', (this.formTable.value.tableRows))
         this.store.dispatch(orderDataCmSendAction({orderdata: this.formTable.value.tableRows}));
-        this.modal.close();
+        //this.modal.close();
     }
 
     addRow(){

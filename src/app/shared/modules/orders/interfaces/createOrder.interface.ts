@@ -3,6 +3,8 @@ import {OrderProductInterface} from './orderProduct.interface';
 
 export interface CreateOrderInterface{
 
-    client?: ClientInterface,
-    orderData: OrderProductInterface[]
+    clientId?: number,
+    products: OrderProductInterface[]
+    total: number,
+    current: number
 }

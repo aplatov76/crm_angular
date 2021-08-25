@@ -44,7 +44,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text">Количество: </span>
           </div>
-          <input type="number" [ngClass]="{'border border-danger' : formData.get('quantity').invalid && formData.get('quantity').touched}" class="form-control" formControlName="quantity">
+          <input type="number" [ngClass]="{'border border-danger' : formData.get('quantity').invalid && formData.get('quantity').touched}" class="form-control" (input)="onInput()" formControlName="quantity">
         </div>
 
         <div class="d-flex input-group mb-1">
@@ -52,7 +52,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text">$</span>
             </div>
-            <input type="text" class="form-control mr-1" [ngClass]="{'border border-danger' : formData.get('price').invalid && formData.get('price').touched}" formControlName="price" type="number" placeholder="Цена">
+            <input type="text" class="form-control mr-1" [ngClass]="{'border border-danger' : formData.get('price').invalid && formData.get('price').touched}" (input)="onInput()" formControlName="price" type="number" placeholder="Цена">
 
             <div class="input-group-prepend">
               <span class="input-group-text">Сумма: </span>
@@ -66,7 +66,7 @@
       </form>
 
 
-      <table class="table table-striped" *ngIf="createOrder.orderData">
+      <table class="table table-striped" *ngIf="createOrder.products">
         <thead>
           <tr>
             <th scope="col">№</th>
@@ -77,20 +77,31 @@
             <th></th>
           </tr>
         </thead>
-        <tbody *ngFor="let element of createOrder.orderData; let i = index">
+        <tbody *ngFor="let element of createOrder.products; let i = index">
           <tr [ngClass]="{'table-danger' : element.err}">
             <th scope="row">{{i + 1}}</th>
             <td>{{element.title}}</td>
             <td>{{element.quantity}}</td>
             <td>{{element.price | currency:'RUB': ' '}}</td>
             <td>{{element.price*element.quantity | currency:'RUB': ' '}}</td>
-            <td><i class="material-icons" (click)=deletItemCurrentSales(element.id)>delete</i></td>
+            <td><i class="material-icons" (click)=deletItemCurrentOrder(i)>delete</i></td>
           </tr>
         </tbody>
       </table>
-      <input type="text" placeholder="Итого: " class="form-control border border-success" value="{{currentSum | currency:'RUB': ' '}}" disabled>
+      <form [formGroup]="formPayed" class="mb-3" *ngIf="formPayed">
+        <div class="d-flex input-group mb-1">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Предоплата: </span>
+        </div>
+          <input type="number" class="form-control border border-success" step="0.01" formControlName="current">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Итого: </span>
+          </div>
+          <input type="number" class="form-control border border-success" step="0.01" formControlName="total">
+        </div>
+      </form>
       <div class="d-flex btn-group">
-          <button type="button" (click)="saleDispatch()" class="btn btn-outline-warning mb-5">Готово</button>
+          <button type="button" (click)="orderDispatch()" [disabled]="formPayed.invalid || createOrder.products.length < 1 || !formClient" class="btn btn-outline-warning mb-5">Готово</button>
       </div>
     </div>
 </div>

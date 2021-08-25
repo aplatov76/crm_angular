@@ -7,4 +7,5 @@ export const units: UnitInterface[] = [
     {id: 4, title: 'м.п.'},
     {id: 5, title: 'палет.'},
     {id: 6, title: 'поддон.'},
+    {id: 7, title: 'м3.'},
 ]

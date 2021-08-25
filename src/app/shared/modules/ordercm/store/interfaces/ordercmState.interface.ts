@@ -7,5 +7,7 @@ export interface OrderCmStateInterface{
     orders: OrderCmInterface[],
     currentOrder: OrderCmInterface
     loading: boolean,
-    err: ErrorMessageInterface
+    err: ErrorMessageInterface,
+    sendComplited: any,
+    sendError: ErrorMessageInterface
 }

@@ -12,7 +12,10 @@ import {
     orderActionFailed, 
     orderPayAction,
     orderPayActionSuccess,
-    orderPayActionFailed
+    orderPayActionFailed,
+    addOrderAction,
+    addOrderActionSuccess,
+    addOrderActionFailed
 } from "../actions/action";
 import {switchMap, map, tap, catchError} from "rxjs/operators";
 import {of} from "rxjs";
@@ -76,6 +79,24 @@ export class OrderEffect{
                     }),
                     catchError((errorResponse: HttpErrorResponse) => {
                         return of(orderPayActionFailed({err: errorResponse.error}))
+                    })
+                )
+        })
+    ))
+
+
+    createOrder$ = createEffect(() => this.action$.pipe(
+        ofType(addOrderAction),
+        switchMap(({createOrder}) => {
+            return this.orderService.createOrder(createOrder)
+                .pipe(
+                    map((order: OrderInterface) => {
+                        //this.state.dispatch(orderAction({id}))
+                        this.state.dispatch(ordersAction())
+                        return addOrderActionSuccess({order})
+                    }),
+                    catchError((errorResponse: HttpErrorResponse) => {
+                        return of(addOrderActionFailed({err: errorResponse.error}))
                     })
                 )
         })

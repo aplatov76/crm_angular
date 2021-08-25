@@ -37,6 +37,30 @@
                 <button type="button" (click)="close()" class="btn btn-outline-danger mr-1">Отмена</button>
             </div>
           </form>
+          <h5>Добавить в заказ</h5>
+          <form [formGroup]="toOrderForm" class="mb-1" *ngIf="toOrderForm" (ngSubmit)="toOrderSubmit()">
+
+            <div class="d-flex input-group mb-1">
+                    <div class="input-group-prepend ">
+                        <span class="input-group-text cw">Количество:</span>
+                    </div>
+                    <input type="number" class="form-control mr-1" formControlName="quantity" placeholder="0">
+                    <div class="input-group-prepend ">
+                        <span class="input-group-text cw">Процент:</span>
+                    </div>
+                    <input type="number" class="form-control mr-1" (input)="setPrice()" formControlName="percent" placeholder="0">
+                    <div class="input-group-prepend ">
+                        <span class="input-group-text cw">Цена:</span>
+                    </div>
+                    <input type="number" class="form-control mr-1"  formControlName="price" placeholder="0">
+
+            </div>
+            <div class=" btn-group mt-2">
+                <button type="submit" [disabled]="toOrderForm.invalid" class="btn btn-outline-success mr-1">Добавить в заказ</button>
+                <button type="button" (click)="close()" class="btn btn-outline-danger mr-1">Отмена</button>
+            </div>
+          </form>
+
     </div>
 
 </div>

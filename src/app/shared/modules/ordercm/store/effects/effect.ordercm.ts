@@ -119,7 +119,7 @@ export class CmOrderEffect {
       )
     )    
 
-    
+    /*
     orderUpdate$ = createEffect(() => this.actions$.pipe(
         ofType(orderDataCmRemoveActionSuccess),
         tap((response: any) => {
@@ -129,5 +129,6 @@ export class CmOrderEffect {
     ),
         {dispatch: false}
     )
+    */
     
 }

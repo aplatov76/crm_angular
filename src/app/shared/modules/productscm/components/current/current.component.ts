@@ -11,6 +11,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
 import { ProductsCmService } from "../../store/services/productscm.service";
 import { ProductCmInterface } from "../../interfaces/productcm.interface";
 import { orderInsertAction } from "../../../ordercm/store/actions/action";
+import { PersistanceService } from "src/app/shared/services/persistence.service";
 
 @Component({
     selector: 'productcm-component',
@@ -20,6 +21,7 @@ import { orderInsertAction } from "../../../ordercm/store/actions/action";
 export class CurrentCmProductComponent implements OnInit, OnDestroy{
 
     form: FormGroup
+    toOrderForm: FormGroup
 
     @Input() product: ProductCmInterface
     url: string
@@ -35,7 +37,8 @@ export class CurrentCmProductComponent implements OnInit, OnDestroy{
         private store: Store,
         private fb: FormBuilder,
         private modal: NzModalRef,
-        private productService: ProductsCmService
+        private productService: ProductsCmService,
+        private persistanceService: PersistanceService
     ){}
 
     ngOnInit(): void {
@@ -59,6 +62,12 @@ export class CurrentCmProductComponent implements OnInit, OnDestroy{
             trade_price: new FormControl({value: `${this.product.price} ${this.product.unit}`, disabled: true}, Validators.required),
             count: [0, [Validators.required, Validators.min(1)]],
             articul: [{value: this.product.articul, disabled: true}, [Validators.required]]
+        });
+
+        this.toOrderForm = this.fb.group({
+            quantity:  [0, [Validators.required, Validators.min(1)]],
+            percent:  [1.3, [Validators.required, Validators.min(1)]],
+            price:  [ Math.floor(this.product.price*1.3), [Validators.required, Validators.min(1)]]
         })
     }
 
@@ -67,6 +76,24 @@ export class CurrentCmProductComponent implements OnInit, OnDestroy{
       this.store.dispatch(orderInsertAction({orderdata: [{id: 0, unit: 1, cmorderid: null, title: this.product.title, articul: this.product.articul, quantity: this.form.value.count}]}))
       this.modal.close();
       
+    }
+
+    setPrice(){
+
+        const price = Math.floor((this.product.price*this.toOrderForm.controls.percent.value));
+
+        this.toOrderForm.controls.price.setValue(price);
+    }
+
+    toOrderSubmit(){
+    
+        const array = this.persistanceService.get('orderdata') || [];
+
+        array.push({title: this.product.title, quantity: this.toOrderForm.controls.quantity.value, price: this.toOrderForm.controls.price.value })
+
+        this.persistanceService.set('orderdata', array )
+
+        console.log(this.persistanceService.get('orderdata'));
     }
 
     close(){

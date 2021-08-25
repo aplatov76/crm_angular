@@ -5,6 +5,8 @@ import { Observable } from "rxjs";
 import {OrderInterface} from '../../interfaces/order.interface';
 import {environment} from '../../../../../../environments/environment';
 import { ClientInterface } from "src/app/shared/interfaces/client.interface";
+import { CreateOrderInterface } from "../../interfaces/createOrder.interface";
+import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 
 @Injectable()
@@ -30,5 +32,10 @@ export class OrdersService{
 
     getClients(): Observable<ClientInterface[]>{
        return this.http.get<ClientInterface[]>(`${environment.url}/client`);
+    }
+
+    createOrder(order: CreateOrderInterface): Observable<OrderInterface>{
+
+        return this.http.post<OrderInterface>(`${environment.url}/order`, {order})
     }
 }

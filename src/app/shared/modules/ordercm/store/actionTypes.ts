@@ -15,7 +15,7 @@ export enum ActionTypes {
     ORDER_DATA_CM_REMOVE_SUCCESS = "[Order data cm remove] LOAD SUCCESS",
     ORDER_DATA_CM_REMOVE_FAILED = "[Order data cm remove] LOAD FAILED",
 
-    ORDER_DATA_CM_SEND = "[Order data cm send] START LOAD",
-    ORDER_DATA_CM_SEND_SUCCESS = "[Order data cm send] LOAD SUCCESS",
-    ORDER_DATA_CM_SEND_FAILED = "[Order data cm send] LOAD FAILED"
+    ORDER_DATA_CM_SEND = "[Order cm send] are sending",
+    ORDER_DATA_CM_SEND_SUCCESS = "[Order cm send] sender success",
+    ORDER_DATA_CM_SEND_FAILED = "[Order cm send] sender failed"
 }

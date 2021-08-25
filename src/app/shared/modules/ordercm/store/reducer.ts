@@ -5,7 +5,10 @@ import {
         ordersCmActionSuccess,
         ordersCmActionFailed, 
         orderDataCmActionSuccess,
-        orderDataCmActionFailed
+        orderDataCmActionFailed,
+        orderDataCmSendAction,
+        orderDataCmSendActionFailed,
+        orderDataCmSendActionSuccess
        } from "./actions/action";
 
 
@@ -13,14 +16,18 @@ const initialState: OrderCmStateInterface = {
     orders: null,
     currentOrder: null,
     loading: false,
-    err: null
+    err: null,
+    sendComplited: false,
+    sendError: null
 }
 
 const ordersCmReducer = createReducer(
     initialState,
     on(ordersCmAction, (state, action): OrderCmStateInterface => ({
         ...state,
-        loading: true
+        loading: true,
+        sendComplited: false,
+        sendError: null
     })),
     on(ordersCmActionSuccess, (state, action): OrderCmStateInterface => ({
         ...state,
@@ -40,6 +47,21 @@ const ordersCmReducer = createReducer(
     on(orderDataCmActionFailed, (state, action): OrderCmStateInterface => ({
         ...state,
         currentOrder: null
+    })),
+    on(orderDataCmSendAction, (state, action): OrderCmStateInterface => ({
+        ...state,
+        sendComplited: null,
+        sendError: null
+    })),
+    on(orderDataCmSendActionSuccess, (state, action): OrderCmStateInterface => ({
+        ...state,
+        sendComplited: true,
+        sendError: null
+    })),
+    on(orderDataCmSendActionFailed, (state, action): OrderCmStateInterface => ({
+        ...state,
+        sendComplited: null,
+        sendError: action.err
     })),
 )
 

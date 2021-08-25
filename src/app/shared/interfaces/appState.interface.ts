@@ -7,6 +7,7 @@ import { ProductsList } from '../interfaces/productsList.interface';
 import {ProductsCmStateInterface} from '../modules/productscm/store/interfaces/productsCmState.interface';
 import {OrderCmStateInterface} from '../modules/ordercm/store/interfaces/ordercmState.interface';
 import {WebProductsStateInterface} from '../modules/webProducts/store/interfaces/productsState.interface';
+import {DebtorStateInterface} from '../modules/debtors/store/interfaces/debtorsState.interface';
 
 export interface AppStateInterface{
     auth: AuthStateInterface,
@@ -17,5 +18,7 @@ export interface AppStateInterface{
     products: ProductsList,
     cmproducts: ProductsCmStateInterface,
     cmorders: OrderCmStateInterface,
+    debtors: DebtorStateInterface
+
     webproducts: WebProductsStateInterface
 }

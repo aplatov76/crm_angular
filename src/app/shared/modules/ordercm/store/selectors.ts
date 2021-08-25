@@ -23,3 +23,13 @@ export const isOrdersLoading = createSelector(
     cmOrdersFeatureSelectors,
     (productsState: OrderCmStateInterface) => productsState.loading
 )
+
+export const isOrderSendError = createSelector(
+    cmOrdersFeatureSelectors,
+    (productsState: OrderCmStateInterface) => productsState.sendError
+)
+
+export const isOrderSendCompleted = createSelector(
+    cmOrdersFeatureSelectors,
+    (productsState: OrderCmStateInterface) => productsState.sendComplited
+)

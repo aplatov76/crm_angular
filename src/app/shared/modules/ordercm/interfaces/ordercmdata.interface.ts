@@ -6,5 +6,6 @@ export interface OrderCmDataInterface{
     title: string,
     quantity: number,
     unit: any,
+    description?: string,
     cmorderid: OrderCmInterface
 }
