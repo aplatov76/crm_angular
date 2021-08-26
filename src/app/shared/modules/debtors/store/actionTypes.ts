@@ -13,5 +13,9 @@ export enum ActionTypes {
 
     DEBTOR_PAY = '[Pay DEBTOR] pay DEBTOR start',
     DEBTOR_PAY_SUCCESS = '[Pay DEBTOR] pay DEBTOR success',
-    DEBTOR_PAY_FAILED = '[Pay DEBTOR] pay DEBTOR failed'
+    DEBTOR_PAY_FAILED = '[Pay DEBTOR] pay DEBTOR failed',
+
+    UPDATE_DEBTOR = '[Update DEBTOR] update DEBTOR start',
+    UPDATE_DEBTOR_SUCCESS = '[Update DEBTOR] update DEBTOR success',
+    UPDATE_DEBTOR_FAILURE = '[Update DEBTOR] update DEBTOR failure'
 }

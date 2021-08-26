@@ -14,4 +14,5 @@ export enum ActionTypes {
     ORDER_PAY = '[Pay order] pay order start',
     ORDER_PAY_SUCCESS = '[Pay order] pay order success',
     ORDER_PAY_FAILED = '[Pay order] pay order failed'
+
 }

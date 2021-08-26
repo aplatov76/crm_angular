@@ -20,3 +20,7 @@ export const debtorPayActionFailed = createAction(ActionTypes.DEBTOR_PAY_FAILED,
 export const addDebtorAction = createAction(ActionTypes.ADD_DEBTOR, props<{createDebtor: CreateDebtorInterface}>());
 export const addDebtorActionSuccess = createAction(ActionTypes.ADD_DEBTOR_SUCCESS, props<{debtor: DebtorInterface}>());
 export const addDebtorActionFailed  = createAction(ActionTypes.ADD_DEBTOR_FAILURE, props<{err: ErrorMessageInterface}>());
+
+export const updateDebtorAction = createAction(ActionTypes.UPDATE_DEBTOR, props<{updateDebtor: CreateDebtorInterface}>());
+export const updateDebtorActionSuccess = createAction(ActionTypes.UPDATE_DEBTOR_SUCCESS, props<{debtor: DebtorInterface}>());
+export const updateDebtorActionFailed  = createAction(ActionTypes.UPDATE_DEBTOR_FAILURE, props<{err: ErrorMessageInterface}>());

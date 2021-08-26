@@ -78,21 +78,6 @@ export class OrderItemComponent implements OnInit, OnDestroy{
     }
 
     createPDF(){
-
-        /*console.log(this.currentOrder$.subscribe((item: any) => {
-            //console.log(item)
-            return item[0].orderproduct.map((el, index) => {
-                //console.log(el)
-                return [
-                    index,
-                    el.title,
-                    el.quantity,
-                    el.price,
-                    el.sum
-                ]
-            })
-        }))
-        */
        const order = {} as any;
        let sum = 0;
 

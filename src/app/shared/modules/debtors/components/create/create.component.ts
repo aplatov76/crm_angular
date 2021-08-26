@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { Observable } from "rxjs";
 import { select, Store } from '@ngrx/store';
-
+import { NzModalRef } from 'ng-zorro-antd/modal';
 
 import { ClientInterface } from "src/app/shared/interfaces/client.interface";
 import { DebtorsService } from '../../store/services/debtors.service';
@@ -11,6 +11,8 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { ProductInterface } from 'src/app/shared/interfaces/product.interface';
 import {currentDataSelector as currentPraisSelector, currentProductSelector} from '../../../../utilmodules/prais/store/selectors';
 import {DebtorDataInterface} from '../../interfaces/debtorData.interface';
+import { addDebtorAction } from '../../store/actions/actions';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'create-debtor-component',
@@ -25,11 +27,15 @@ export class CreateDebtorComponent implements OnInit{
     form: FormGroup
     currentDebtorData: DebtorDataInterface[] = []
     currentSum: number = 0
+    currentPay: number = 0
+    currentClient: ClientInterface
 
     constructor(
         private store: Store,
         private debtorService: DebtorsService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private toastr: ToastrService,
+        private modalRef: NzModalRef
         ){
 
     }
@@ -62,6 +68,8 @@ export class CreateDebtorComponent implements OnInit{
 
     onClient($event){
 
+        this.currentClient = $event;
+
     }
 
     onInput(){
@@ -79,29 +87,50 @@ export class CreateDebtorComponent implements OnInit{
 
     deletItem(id: number): void{
 
-        const tmp = this.currentDebtorData.find(item => item.product.id === id);
+        const tmp = this.currentDebtorData.find(item => item.id === id);
+
+        console.log(tmp)
         this.currentSum -= tmp.price*tmp.quantity;
 
-        this.currentDebtorData = this.currentDebtorData.filter(item => item.product.id === id);
+        this.currentDebtorData = this.currentDebtorData.filter(item => item.id !== id);
     }
 
     debtorDispatch(){
 
-        console.log(this.currentDebtorData)
+        /*
+            cliendId: number,
+            total: number,
+            current: number,
+            debtordata: DebtorDataInterface[]
+        */
 
+        const createDebtor: any = {
+            clientId: this.currentClient.id,
+            total: this.currentSum,
+            current: this.currentPay,
+            debtordata: this.currentDebtorData.map(item => ({id: item.product.id, quantity: item.quantity}))
+        }
+
+        this.store.dispatch(addDebtorAction({createDebtor}));
+        this.modalRef.close();
     }
 
     submit(){
-
         const tmp = this.form.controls;
-        /**
-         *  
-            id: number,
-            product: {id: number, title: string},
-            quantity: number,
-            price: number
-         */
-        //console.log(this.form.controls.id.value)
+
+        const searchDublicate =  this.currentDebtorData.find(res => res.product.id === tmp.id.value) || null;
+
+        console.log(searchDublicate)
+
+        if(searchDublicate){
+            this.toastr.warning(`"${tmp.title.value}" уже есть в списке`);
+            return;
+        }
+        
+        if(this.form.controls.quantity.invalid){
+            this.toastr.error(`"${tmp.title.value}" недостаточно на складе!`);
+            return
+        }
     
         this.currentDebtorData.push({id: 0, product: {id: tmp.id.value, title: tmp.title.value}, quantity: tmp.quantity.value, price: tmp.price.value});
         this.currentSum += tmp.quantity.value*tmp.price.value;

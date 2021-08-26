@@ -48,9 +48,9 @@
         <tr *ngFor="let debtor of debtors$ | async;let i = index" [routerLink]="[debtor.id]">
           <th scope="row">{{i + 1}}</th>
           <td>{{debtor.client.fullname}}</td>
-          <td>{{debtor.total}}</td>
+          <td >{{debtor.total}}</td>
           <td>{{debtor.current}}</td>
-          <td>{{debtor.total - debtor.current}}</td>
+          <td [ngClass]="{'bg-success': debtor.status === 1, 'bg-warning': debtor.status === 0}">{{debtor.total - debtor.current}}</td>
           <td>{{debtor.data | date: 'yyy-MM-dd hh:mm a'}}</td>
         </tr>
 

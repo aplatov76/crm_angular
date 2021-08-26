@@ -18,7 +18,11 @@ import {
     
     addDebtorAction,
     addDebtorActionSuccess,
-    addDebtorActionFailed
+    addDebtorActionFailed,
+
+    updateDebtorAction,
+    updateDebtorActionSuccess,
+    updateDebtorActionFailed
 } from "../actions/actions";
 import {switchMap, map, tap, catchError} from "rxjs/operators";
 import {of} from "rxjs";
@@ -96,11 +100,29 @@ export class DebtorEffect{
                 .pipe(
                     map((debtor: DebtorInterface) => {
                         //this.state.dispatch(orderAction({id}))
-                        //this.state.dispatch(ordersAction())
+                        this.state.dispatch(debtorsAction())
                         return addDebtorActionSuccess({debtor})
                     }),
                     catchError((errorResponse: HttpErrorResponse) => {
                         return of(addDebtorActionFailed({err: errorResponse.error}))
+                    })
+                )
+        })
+    ))
+
+    updateDebtor$ = createEffect(() => this.action$.pipe(
+        ofType(updateDebtorAction),
+        switchMap(({updateDebtor}) => {
+            return this.debtorService.updateDebtor(updateDebtor)
+                .pipe(
+                    map((debtor: DebtorInterface) => {
+                        //this.state.dispatch(orderAction({id}))
+                        //this.state.dispatch(ordersAction())
+                        this.state.dispatch(debtorAction({id: debtor.id}))
+                        return updateDebtorActionSuccess({debtor})
+                    }),
+                    catchError((errorResponse: HttpErrorResponse) => {
+                        return of(updateDebtorActionFailed({err: errorResponse.error}))
                     })
                 )
         })

@@ -31,6 +31,14 @@ export class DebtorsService{
     }
 
     createDebtor(debtor: CreateDebtorInterface): Observable<DebtorInterface>{
-        return this.http.post<DebtorInterface>(`${environment.url}/debtor`, {debtor})
+        console.log(debtor);
+
+        return this.http.post<DebtorInterface>(`${environment.url}/debtors`, {debtor})
+    }
+
+    updateDebtor(debtor: CreateDebtorInterface): Observable<DebtorInterface>{
+        console.log(debtor);
+
+        return this.http.put<DebtorInterface>(`${environment.url}/debtors/update`, {debtor})
     }
 }

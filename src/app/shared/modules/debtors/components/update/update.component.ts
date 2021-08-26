@@ -1,11 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { NzModalRef } from 'ng-zorro-antd/modal';
+
 import { PraisInterface } from 'src/app/shared/interfaces/prais.interface';
 import { praisAction } from 'src/app/shared/utilmodules/prais/store/actions/action';
 import { DebtorDataInterface } from '../../interfaces/debtorData.interface';
 import {currentDataSelector as currentPraisSelector} from '../../../../utilmodules/prais/store/selectors';
+import { updateDebtorAction } from '../../store/actions/actions';
 
 @Component({
     selector: 'update-debtor-component',
@@ -14,6 +17,7 @@ import {currentDataSelector as currentPraisSelector} from '../../../../utilmodul
 })
 export class UpdateComponent implements OnInit{
 
+    @Input('id') id: number
     form: FormGroup
     currentSum: number = 0
     currentDebtorData: DebtorDataInterface[] = []
@@ -21,7 +25,8 @@ export class UpdateComponent implements OnInit{
 
     constructor(
         private store: Store,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private modalRef: NzModalRef
     ){
 
 
@@ -77,8 +82,10 @@ export class UpdateComponent implements OnInit{
 
     debtorUpdateDispatch(){
 
+        const debtordata = <any>this.currentDebtorData.map(item => ({id: item.product.id, quantity: item.quantity}))
 
-
+        this.store.dispatch(updateDebtorAction({updateDebtor: {clientId: this.id, total: 0, current: 0, debtordata: debtordata}}));
+        this.modalRef.close();
     }
 
     submit(){
