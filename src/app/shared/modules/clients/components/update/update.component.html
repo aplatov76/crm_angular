@@ -1,0 +1,53 @@
+<form [formGroup]="form" class="mb-3" *ngIf="form" (ngSubmit)="submit()">
+    <div class="input-group mb-1">
+    <div class="input-group-prepend">
+        <span class="input-group-text">ФИО: </span>
+    </div>
+    <input type="text"  [ngClass]="{'border border-danger' : form.get('fullname').invalid}" placeholder="фамилия имя Отчество" class="form-control" formControlName="fullname">
+    </div>
+    <div class="d-flex input-group mb-3">
+        <div class="input-group-prepend">
+        <span class="input-group-text">Телефон: </span>
+        </div>
+        <input type="text" [ngClass]="{'border border-danger' : form.get('phone').invalid}" class="form-control mr-1" formControlName="phone" placeholder="телефон">
+    </div>
+    <div class="d-flex input-group mb-1">
+        <div class="input-group-prepend">
+        <span class="input-group-text">Паспорт: </span>
+        </div>
+        <input type="text" class="form-control mr-1" formControlName="passport_number" placeholder="серия и номер">
+    </div>
+    <div class="d-flex input-group mb-1">    
+        <div class="input-group-prepend">
+        <span class="input-group-text">Дата выдачи: </span>
+        </div>
+        <input type="date" class="form-control" formControlName="passport_data" placeholder="когда выдан паспорт">
+    </div>
+    <div class="d-flex input-group mb-1">    
+        <div class="input-group-prepend">
+        <span class="input-group-text">Кем выдан: </span>
+        </div>
+        <input type="text" class="form-control" formControlName="passport_release" placeholder="кем выдан паспорт">
+    </div>
+    <div class="d-flex input-group mb-1">    
+        <div class="input-group-prepend">
+            <span class="input-group-text">Регистрация: </span>
+        </div>
+        <input type="text" class="form-control" formControlName="register_address" placeholder="адрес регистрации">
+    </div>
+    <div class="d-flex input-group mb-1">   
+        <div class="input-group-prepend">
+            <span class="input-group-text">Место жит-ва: </span>
+        </div>
+        <input type="text" class="form-control" formControlName="residence_address" placeholder="адрес проживания">
+    </div>
+    <div class="d-flex input-group mb-1">   
+        <div class="input-group-prepend">
+            <span class="input-group-text">Дополнительно: </span>
+        </div>
+        <textarea type="text" class="form-control" formControlName="description"></textarea>
+    </div>
+    <div class="d-flex btn-group ">
+        <button type="submit" [disabled]="form.invalid" class="btn btn-outline-success mb-5">Добавить</button>
+    </div>
+</form>

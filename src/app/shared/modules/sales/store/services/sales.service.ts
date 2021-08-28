@@ -7,6 +7,8 @@ import { PraisInterface } from '../../../../interfaces/prais.interface';
 import {CurrentSaleInterface} from '../../interfaces/currentSale.interface';
 import {CassaValueInterface} from '../../interfaces/cassaValue.interface';
 import { OrderInterface } from '../../../orders/interfaces/order.interface';
+import { DebtorInterface } from '../../../debtors/interfaces/debtor.interface';
+import { DebtorPayedInterface } from '../../../debtors/interfaces/debtorPayed.interface';
 
 @Injectable()
 export class SalesService{
@@ -51,6 +53,11 @@ export class SalesService{
     getOrdersPayed(databegin: string = new Date().toISOString().slice(0, 10), dataend: string = new Date().toISOString().slice(0, 10)): Observable<OrderInterface[]>{
 
         return this.http.get<OrderInterface[]>(`${environment.url}/order/payed?databegin=${databegin}&dataend=${dataend} 23:59`);
+    }
+
+    getDebtorPayed(databegin: string = new Date().toISOString().slice(0, 10), dataend: string = new Date().toISOString().slice(0, 10)): Observable<DebtorInterface[]>{
+
+        return this.http.get<DebtorInterface[]>(`${environment.url}/debtors/payed?databegin=${databegin}&dataend=${dataend} 23:59`)
     }
 
     setCassaValue(sum: number): Observable<CassaValueInterface>{

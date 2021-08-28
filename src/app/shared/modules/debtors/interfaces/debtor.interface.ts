@@ -8,5 +8,5 @@ export interface DebtorInterface{
     total: number,
     current: number,
     products: DebtorDataInterface[],
-    payed: DebtorPayedInterface[]
+    debtorpayed: DebtorPayedInterface[]
 }

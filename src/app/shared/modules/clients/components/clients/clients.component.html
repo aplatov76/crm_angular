@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"></h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <button type="button" (click)="openCreateClient()" class="btn btn-sm btn-outline-secondary">Добавить</button>
+      </div>
+    </div>
+  </div>
+    <div class="d-flex header-dashboard justify-content-between">
+      <h2>Клиенты</h2>
+      <i class="material-icons" (click)="visible = !visible">filter_list</i>
+    </div>
+    <div *ngIf="visible">
+      <div class="card card-body">
+        
+          <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <button type="button" class="btn btn-outline-secondary">Поиск</button>
+                <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="sr-only">Статус</span>
+                </button>
+              </div>
+              <input type="text" class="form-control" placeholder="Фамилия Имя Отчество">
+            </div>
+            
+      </div>
+    </div>
+  
+    <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th scope="col">№</th>
+            <th scope="col">ФИО</th>
+            <th scope="col">Телефон</th>
+            <th scope="col">Адрес</th>
+          </tr>
+        </thead>
+        <tbody>
+  
+          <tr *ngFor="let client of customSubject$ | async;let i = index" (click)="openUpdateClient(client)">
+            <th scope="row">{{i + 1}}</th>
+            <td>{{client.fullname}}</td>
+            <td>{{client.phone}}</td>
+            <td>{{client.residence_address}}</td>
+          </tr>
+  
+        </tbody>
+      </table>
