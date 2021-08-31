@@ -29,6 +29,7 @@ import {AuthInterceptor} from './shared/services/auth.interceptor';
 import { ProductsModule } from './shared/modules/products/products.module';
 import {ProductsCmModule} from './shared/modules/productscm/productscm.module';
 import {ClientsModule} from './shared/modules/clients/clients.module';
+import {DeliveryModule} from './shared/modules/delivery/delivery.module';
 //import {WebProductsModule} from './shared/modules/webProducts/webProducts.module';
 
 @NgModule({
@@ -70,7 +71,8 @@ import {ClientsModule} from './shared/modules/clients/clients.module';
     SalesModule,
     ProductsModule,
     ProductsCmModule,
-    ClientsModule
+    ClientsModule,
+    DeliveryModule
     //WebProductsModule
   ],
   providers: [

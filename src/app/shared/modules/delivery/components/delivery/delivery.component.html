@@ -1,0 +1,42 @@
+<div
+  class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2"></h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group mr-2">
+      <button type="button" *ngIf="status === 0" (click)="closeDelivery()" class="btn btn-sm btn-outline-secondary border border-success">Доставлено</button>
+      <a [routerLink]="['/delivery']" class="btn btn-sm btn-outline-secondary">Закрыть</a>
+    </div>
+  </div>
+</div>
+
+<form [formGroup]="form" class="mb-3" *ngIf="form">
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Заказчик: </span>
+      </div>
+      <input type="text" class="form-control" formControlName="client">
+    </div>
+
+    <div class="d-flex input-group mb-1">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Адрес: </span>
+        </div>
+        <input type="text" class="form-control mr-1" formControlName="address">
+    </div>
+
+    <div class="d-flex input-group mb-1">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Доставить: </span>
+        </div>
+        <input type="text" class="form-control mr-1" formControlName="data">
+    </div>
+
+    <div class="d-flex input-group mb-1">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Информация: </span>
+        </div>
+        <input type="text" class="form-control mr-1" formControlName="description">
+    </div>
+
+  </form>

@@ -59,7 +59,7 @@ export class CurrentCmProductComponent implements OnInit, OnDestroy{
     initializeForm(){
 
         this.form = this.fb.group({
-            trade_price: new FormControl({value: `${this.product.price} ${this.product.unit}`, disabled: true}, Validators.required),
+            trade_price: new FormControl({value: `${this.product.price} за ${this.product.unit}`, disabled: true}, Validators.required),
             count: [0, [Validators.required, Validators.min(1)]],
             articul: [{value: this.product.articul, disabled: true}, [Validators.required]]
         });
