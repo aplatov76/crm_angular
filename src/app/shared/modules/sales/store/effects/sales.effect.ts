@@ -22,6 +22,7 @@ import {
 import { ErrorMessageInterface } from "src/app/shared/interfaces/errMessages.interface";
 import { SalesService } from "../services/sales.service";
 import { SalesInterface } from "../../interfaces/sales.interface";
+import {CurrentDelivery} from '../../interfaces/currentDelivery.interface';
 
 @Injectable()
 export class SalesEffect {
@@ -53,8 +54,8 @@ export class SalesEffect {
 
     addSales$ = createEffect(() => this.actions$.pipe(
         ofType(addSaleAction),
-        switchMap(({sale}) => {
-            return this.salesService.setSale(sale).pipe(
+        switchMap(({sale, delivery}) => {
+            return this.salesService.setSale(sale, delivery).pipe(
                 map((res) => {
                     //console.log('res: ', res[0][0])
                     console.log('res', res)

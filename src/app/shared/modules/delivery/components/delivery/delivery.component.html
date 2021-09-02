@@ -40,3 +40,28 @@
     </div>
 
   </form>
+
+  <table class="table table-striped" *ngIf="sale">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Код</th>
+        <th scope="col">Наименование</th>
+        <th scope="col">Количество</th>
+        <th scope="col">Цена</th>
+        <th scope="col">Сумма</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let element of sale; let i = index">
+      <tr [ngClass]="{'table-danger' : element.err}">
+        <th scope="row">{{i + 1}}</th>
+        <td>{{element.id}}</td>
+        <td>{{element.product.title}}</td>
+        <td>{{element.quantity}}</td>
+        <td>{{element.price | currency:'RUB': ' '}}</td>
+        <td>{{element.price*element.quantity | currency:'RUB': ' '}}</td>
+        <td><i class="material-icons" (click)=deletItemCurrentSales(element.id)>delete</i></td>
+      </tr>
+    </tbody>
+  </table>

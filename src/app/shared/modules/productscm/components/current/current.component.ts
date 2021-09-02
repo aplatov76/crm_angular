@@ -73,7 +73,7 @@ export class CurrentCmProductComponent implements OnInit, OnDestroy{
 
     submit(){
       //console.log(this.form)
-      this.store.dispatch(orderInsertAction({orderdata: [{id: 0, unit: 1, cmorderid: null, title: this.product.title, articul: this.product.articul, quantity: this.form.value.count}]}))
+      this.store.dispatch(orderInsertAction({orderdata: [{id: 0, unit: 1,/* cmorderid: null,*/ title: this.product.title, articul: this.product.articul, quantity: this.form.value.count}]}))
       this.modal.close();
       
     }

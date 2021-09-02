@@ -5,6 +5,7 @@ import {Store, select} from '@ngrx/store';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { ToastrService } from 'ngx-toastr';
 
+import { ClientService } from '../../../clients/store/services/clients.service';
 import { salesAction, addSaleAction } from '../../store/actions/action';
 import {isLoadingSelector, isSubmittingSelector, currentSalesSelector, currentError } from '../../store/selectors';
 import {currentDataSelector as currentPraisSelector, currentProductSelector} from '../../../../utilmodules/prais/store/selectors';
@@ -12,6 +13,7 @@ import {CurrentSaleInterface} from '../../interfaces/currentSale.interface';
 import { PraisInterface } from '../../../../interfaces/prais.interface';
 import { praisAction, productAction } from '../../../../utilmodules/prais/store/actions/action';
 import { ProductInterface } from '../../../../interfaces/product.interface';
+import { ClientInterface } from 'src/app/shared/interfaces/client.interface';
 import { filter } from 'rxjs/operators';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
@@ -25,8 +27,10 @@ export class CurrentSaleComponent{
 
     errorSubscription : Subscription
     currentSum: number =  0
+    delivery: boolean = false
     
     isLoading$ : Observable<boolean>
+    clients$: Observable<ClientInterface[]>
     praisList$: Observable<PraisInterface[]>
 
     isType: number = 0
@@ -36,20 +40,18 @@ export class CurrentSaleComponent{
     praisList: PraisInterface[] = null
 
     form: FormGroup
+    deliveryForm: FormGroup
 
-    constructor(private store: Store, private fb: FormBuilder, private toastr: ToastrService, public modal: NzModalRef){
+    constructor(private store: Store, private clientService: ClientService, private fb: FormBuilder,  private toastr: ToastrService, public modal: NzModalRef){
 
     }
 
     ngOnInit(): void {
 
         this.store.dispatch(praisAction())
-        
-        this.praisList$ = this.store.pipe(select(currentPraisSelector))
 
         this.initializeListeners()
-        this.errorSubscription = this.store.pipe(select(currentError), filter(Boolean)).subscribe((res: any) => this.toastr.error(`Произошла ошибка ${res.error.message}`))
-
+        
     }
 
 
@@ -59,15 +61,20 @@ export class CurrentSaleComponent{
     }
 
     initializeListeners(): void{
+
+        this.praisList$ = this.store.pipe(select(currentPraisSelector));
+        this.clients$ = this.clientService.getClients();
     
         this.isCurrentProduct$ = this.store.pipe(select(currentProductSelector), filter(Boolean))
             .subscribe((res: ProductInterface[]) => {
-                console.log('Загрузка позиции: ', res)
+                //console.log('Загрузка позиции: ', res)
                 if(res){
                     this.isCurrentProduct = res[0];
                     this.initializeForm()
                 }
         })
+
+        this.errorSubscription = this.store.pipe(select(currentError), filter(Boolean)).subscribe((res: any) => this.toastr.error(`Произошла ошибка ${res.error.message}`))
     }
 
     initializeForm(){
@@ -81,12 +88,17 @@ export class CurrentSaleComponent{
         })
     }
 
-    getTypeSearch(): string {
-        switch(this.isType){
-            case 0: return 'наименованию'
-            case 1: return 'коду'
-            case 2: return 'артикулу'
-        }
+    initializeDeliveryForm(client: ClientInterface){
+        console.log(client)
+        this.deliveryForm = this.fb.group({
+            residence_address: [{value: client.residence_address, disabled: true}, [Validators.required]],
+            clientid: [client.id, Validators.required],
+            phone: [{value: client.phone, disabled: true}, [Validators.required]],
+            data: [null, [Validators.required]],
+            price: [350, Validators.required],
+            description: ['', Validators.required],
+        })
+
     }
 
     onInput(){
@@ -144,8 +156,27 @@ export class CurrentSaleComponent{
     }
 
     saleDispatch(){
-        this.store.dispatch(addSaleAction({sale: this.currentSale}));
+        this.store.dispatch(addSaleAction({
+            sale: this.currentSale, 
+            delivery: (this.delivery && this.deliveryForm) ? this.deliveryForm.value : null
+        }));
         
         this.currentSaleClose();
+    }
+
+    validateDelivery(): boolean{
+        if(this.delivery){
+            if(!this.deliveryForm)return true;
+            if(this.deliveryForm.invalid)return true;
+
+        }
+        else return false;
+    }
+
+    setClient($event){
+
+       // console.log($event);
+        this.initializeDeliveryForm($event)
+
     }
 }

@@ -51,6 +51,11 @@ const deliveryReducer = createReducer(
         loading: false,
         error: action.err
     })),
+    //addDeliveryActionFailed
+    on(addDeliveryActionFailed, (state, action) => ({
+        ...state,
+        error: action.err
+    })),
 )
 
 export function reducer(state: DeliverysStateInterface, action: Action){

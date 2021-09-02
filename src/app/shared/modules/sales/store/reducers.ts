@@ -15,6 +15,7 @@ const salesReducer = createReducer(
     initialState,
         on(salesAction, (state, action): SalesStateInterface => ({
             ...state,
+            err: null,
             isLoading: true,
             isSubmiting: true
         })),

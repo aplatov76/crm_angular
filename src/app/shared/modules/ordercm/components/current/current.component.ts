@@ -8,14 +8,15 @@ import { Observable, of, Subject,  Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { filter } from 'rxjs/operators';
 import {orderDataCmAction, orderInsertAction, orderDataCmRemoveAction, orderDataCmSendAction, ordersCmAction} from '../../store/actions/action';
+import {currentDataSelector as currentPraisSelector} from '../../../../utilmodules/prais/store/selectors';
 
 import { OrderCmService } from "../../store/services/ordercm.service";
 import { isCurrentOrder, isOrderSendError, isOrderSendCompleted } from "../../store/selectors";
-import { OrderCmDataInterface } from "../../interfaces/ordercmdata.interface";
 import {OrderCmInterface} from "../../interfaces/ordercm.interface";
 import {units} from '../../../../utilmodules/units/units.data';
 import { ErrorMessageInterface } from "src/app/shared/interfaces/errMessages.interface";
-//import { ProductCmInterface } from "../../interfaces/productcm.interface";
+import { PraisInterface } from '../../../../interfaces/prais.interface';
+import { praisAction } from '../../../../utilmodules/prais/store/actions/action';
 
 @Component({
     selector: 'current-cm-order-component',
@@ -28,10 +29,12 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
 
     @Input() id: number
 
+    praisList$: Observable<PraisInterface[]>
     currentOrderData$: Subscription
     currentOrderSendCompleted$: Subscription
     currentOrderSendError$: Subscription
     sendBtn: boolean = true
+
 
     units = units;
 
@@ -44,17 +47,31 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
     ){}
 
     ngOnInit(): void {
-        this.store.dispatch(orderDataCmAction({id: this.id}))
+
+        this.store.dispatch(praisAction())
+        this.praisList$ = this.store.pipe(select(currentPraisSelector))
+
+
+        if(this.id){
+            this.store.dispatch(orderDataCmAction({id: this.id}))
+        } else {
+            this.initializeEmptyForm();
+        }
+
         this.initializeSubscription();
+        
     }
 
     ngOnDestroy(): void{
-      this.currentOrderData$.unsubscribe();
-      this.currentOrderSendCompleted$.unsubscribe();
-      this.currentOrderSendError$.unsubscribe();
+
+      if(this.currentOrderData$)this.currentOrderData$.unsubscribe();
+      if(this.currentOrderSendCompleted$)this.currentOrderSendCompleted$.unsubscribe();
+      if(this.currentOrderSendError$)this.currentOrderSendError$.unsubscribe();
+
     }
 
     initializeSubscription(){
+
 
         this.currentOrderData$ = this.store.pipe(select(isCurrentOrder),  filter(Boolean)).subscribe(
             (item: OrderCmInterface) => this.initializeForm(item)
@@ -98,18 +115,26 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
 
     }
 
+    initializeEmptyForm(){
+
+        this.formTable = this.fb.group({
+            tableRows: this.fb.array([])
+        })
+
+    }
+
     send(){
         //console.log('form data: ', (this.formTable.value.tableRows))
         this.store.dispatch(orderDataCmSendAction({orderdata: this.formTable.value.tableRows}));
         //this.modal.close();
     }
 
-    addRow(){
+    addRow(item?: PraisInterface){
         (<FormArray>this.formTable.get('tableRows')).push(
             this.fb.group({
                 id: [0],
-                articul: [null],
-                title: [''],
+                articul: [item ? item.articul : null],
+                title: [item ? item.title : ''],
                 quantity: [0, [Validators.required, Validators.min(1)]],
                 unit: [1, [ Validators.required]],
                 description: ['']
@@ -124,7 +149,13 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
         //т.к. не делаею dispatch (он удалит все поля которые добавлены но не отправлены в БД)
         (<FormArray>this.formTable.get('tableRows')).removeAt(index);
 
-        console.log(this.formTable)
+        console.log(this.formTable);
+    }
+
+    onChange($event){
+        //console.log($event)
+        this.addRow($event)
+
     }
 
     submit(){

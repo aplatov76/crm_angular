@@ -1,8 +1,10 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { DatePipe } from '@angular/common';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+
 
 import {OrderCmInterface} from '../../interfaces/ordercm.interface';
 import {ordersCmAction} from '../../store/actions/action';
@@ -16,12 +18,19 @@ import { CurrentCmOrderComponent } from '../current/current.component';
 })
 export class OrderCmComponent implements OnInit{
 
-    orders$: Observable<OrderCmInterface[]>
+    orders$: Subscription
+    orders: OrderCmInterface[]
+    dateFormat = 'yyyy/MM/dd';
+    daterangepickerModel: Date[] = []
+    lastOrder: number = null
 
     constructor(
         private store: Store,
         private modalService: NzModalService,
-        private viewContainerRef: ViewContainerRef){
+        private viewContainerRef: ViewContainerRef,
+        
+        private datepipe: DatePipe
+        ){
 
     }
 
@@ -33,7 +42,11 @@ export class OrderCmComponent implements OnInit{
 
     initializeSubscription(): void{
 
-        this.orders$ = this.store.pipe(select(isOrdersList));
+        this.orders$ = this.store.pipe(select(isOrdersList), filter(Boolean)).subscribe((item: OrderCmInterface[]) => {
+            this.orders = item;
+            //console.log('item: ',item)
+            if(item.length > 1)this.lastOrder = (item[0].status === 0) ? item[0].id : null;
+        })
     }
 
     onClick(id: number, data: string): void{
@@ -49,8 +62,28 @@ export class OrderCmComponent implements OnInit{
             nzAutofocus: null,
             nzContent: CurrentCmOrderComponent
           });
-    
 
+    }
+
+    createEmptyOrder(): void{
+
+        this.modalService.create({
+            nzTitle: `Cоздание новой заявки`,
+            nzViewContainerRef: this.viewContainerRef,
+            nzComponentParams: {
+              id: this.lastOrder
+            },
+            nzFooter: [],
+            nzStyle: { width: '80%' },
+            nzAutofocus: null,
+            nzContent: CurrentCmOrderComponent
+          });
+
+    }
+
+    showWithInperiod(){
+
+        this.store.dispatch(ordersCmAction({query: {databegin: this.datepipe.transform(this.daterangepickerModel[0], 'yyyy-MM-dd'), dataend: this.datepipe.transform(this.daterangepickerModel[1], 'yyyy-MM-dd')}}))
     }
     
 }

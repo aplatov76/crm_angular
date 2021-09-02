@@ -16,7 +16,17 @@ export class OrderCmService{
 
     getOrders(query?: any): Observable<OrderCmInterface[]>{
 
-        return this.http.get<OrderCmInterface[]>(`${environment.url}/cm/orders/`)
+        let query_request = '';
+
+        //console.log('query: ', query)
+
+        if(query){
+
+            if(query.databegin && query.dataend)query_request = `databegin=${query.databegin}&dataend=${query.dataend} 23:59`;
+
+        }
+
+        return this.http.get<OrderCmInterface[]>(`${environment.url}/cm/orders/?${query_request}`)
     }
 
     getOrder(id: number): Observable<OrderCmInterface>{

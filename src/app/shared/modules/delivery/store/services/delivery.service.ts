@@ -41,4 +41,9 @@ export class DeliveryService{
         return this.http.get<CheckInterface[]>(`${environment.url}/check?limit=10`)
     }
 
+    addDelivery(delivery: DeliveryInterface): Observable<DeliveryInterface>{
+
+        return this.http.post<DeliveryInterface>(`${environment.url}/delivery`, {delivery})
+    }
+
 }

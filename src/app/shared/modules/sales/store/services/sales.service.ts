@@ -9,6 +9,7 @@ import {CassaValueInterface} from '../../interfaces/cassaValue.interface';
 import { OrderInterface } from '../../../orders/interfaces/order.interface';
 import { DebtorInterface } from '../../../debtors/interfaces/debtor.interface';
 import { DebtorPayedInterface } from '../../../debtors/interfaces/debtorPayed.interface';
+import { CurrentDelivery } from '../../interfaces/currentDelivery.interface';
 
 @Injectable()
 export class SalesService{
@@ -20,7 +21,7 @@ export class SalesService{
     getSales(databegin: string = new Date().toISOString().slice(0, 10), dataend: string = new Date().toISOString().slice(0, 10), productId?: number, order?: string): Observable<SalesInterface[]> {
 
         //const currentData = new Date().toISOString().slice(0, 10);
-        console.log(databegin)
+        //console.log(databegin)
 
         let query = `databegin=${databegin}&dataend=${dataend} 23:59`;
 
@@ -38,11 +39,11 @@ export class SalesService{
         return this.http.get<PraisInterface[]>(`${environment.url}/product?type=product`);
     }
 
-    setSale(currentSules: CurrentSaleInterface[]): Observable<any> {
+    setSale(currentSules: CurrentSaleInterface[], delivery: CurrentDelivery ): Observable<any> {
 
         const serviceCurrentSules = currentSules.map(el => ({id: el.id, quantity:  el.quantity}))
         
-        return this.http.post<any>(`${environment.url}/sales`, {sale: serviceCurrentSules});
+        return this.http.post<any>(`${environment.url}/sales`, {sale: serviceCurrentSules, delivery: delivery});
     }
 
     getCassaValue(data: string = new Date().toISOString().slice(0, 10)): Observable<CassaValueInterface>{

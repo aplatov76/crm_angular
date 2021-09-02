@@ -33,7 +33,7 @@
             <td>{{deliv.client.fullname}}</td>
             <td>{{deliv.price}}</td>
             <td>{{deliv.client.residence_address}}</td>
-            <td>{{deliv.data | date: 'yyy-MM-dd hh:mm a'}}</td>
+            <td>{{deliv.data | date: 'yyy-MM-dd'}}</td>
             <td [ngClass]="{'bg-success': deliv.status === 1, 'bg-warning': deliv.status === 0}">{{deliv.description}}</td>
           </tr>
   

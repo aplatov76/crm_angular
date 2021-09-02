@@ -13,6 +13,8 @@ import { filter, map } from 'rxjs/operators';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";  
 import { DatePipe } from '@angular/common';
+import { orderInsertAction, ordersCmAction } from '../../../ordercm/store/actions/action';
+import { ItemsList } from '@ng-select/ng-select/lib/items-list';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;   
 
@@ -27,6 +29,7 @@ export class OrderItemComponent implements OnInit, OnDestroy{
     //orders$: Observable<OrderInterface[]>
     currentOrder$: Observable<OrderInterface>
     currentOrderError$: Subscription
+    createCmOrder$: Subscription
     id: number
 
     isVisibleModal = false;
@@ -52,6 +55,7 @@ export class OrderItemComponent implements OnInit, OnDestroy{
 
     ngOnDestroy(){
         this.currentOrderError$.unsubscribe();
+        if(this.createCmOrder$)this.createCmOrder$.unsubscribe();
     }
 
     initializeListener(): void{
@@ -75,6 +79,19 @@ export class OrderItemComponent implements OnInit, OnDestroy{
         //console.log(this.sum)
         this.store.dispatch(orderPayAction({id: this.id, sum: this.sum}))
         this.isVisibleModal = false;
+    }
+
+    createCmOrder(){
+
+        this.createCmOrder$ = this.currentOrder$.pipe().subscribe(
+            order => {
+                //console.log(order)
+                const orderdata = order[0].orderproduct.map(item => ({...item, id: null, articul: null, unit: 1}));
+                this.store.dispatch(orderInsertAction({orderdata}));
+                this.toastService.success('Заявка создана')
+            }
+        )
+
     }
 
     createPDF(){

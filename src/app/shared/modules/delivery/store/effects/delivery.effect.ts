@@ -13,7 +13,10 @@ import {
     deliveryActionFailed, 
     closeDeliveryAction,
     closeDeliveryActionSuccess,
-    closeDeliveryActionFailed} from "../actions/actions";
+    closeDeliveryActionFailed,
+    addDeliveryAction,
+    addDeliveryActionSuccess,
+    addDeliveryActionFailed} from "../actions/actions";
 import { DeliveryService } from "../services/delivery.service";
 import {DeliveryInterface} from '../../interfaces/delivery.interface';
 import { ErrorMessageInterface } from "src/app/shared/interfaces/errMessages.interface";
@@ -80,9 +83,24 @@ export class DeliveryEffect{
         })
     ))
 
+    addDelivery$ = createEffect(() => this.action$.pipe(
+        ofType(addDeliveryAction),
+        switchMap(({createDelivery}) => {
+            return this.deliveryService.addDelivery(createDelivery)
+                .pipe(
+                    map((delivery: DeliveryInterface) => {
+                        
+                        return addDeliveryActionSuccess({delivery})
+                    }),
+                    catchError((errorResponse: any) => {
+                        return of(addDeliveryActionFailed({err: errorResponse.error}))
+                    })
+                )
+        })
+    ))
 
     closeCompleted$ = createEffect(() => this.action$.pipe(
-        ofType(closeDeliveryActionSuccess),
+        ofType(closeDeliveryActionSuccess, addDeliveryActionSuccess),
         // download current list sales
         tap(() => {
             this.store.dispatch(deliverysAction());

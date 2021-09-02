@@ -1,15 +1,21 @@
 import { DatePipe } from '@angular/common';
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import {map} from 'rxjs/operators';
+import { select, Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
+import {filter, map} from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
+import { NzModalRef } from 'ng-zorro-antd/modal';
+
 import { ClientInterface } from 'src/app/shared/interfaces/client.interface';
 import { ClientService } from '../../../clients/store/services/clients.service';
 
 import {DeliveryInterface} from '../../interfaces/delivery.interface';
 import { CheckInterface } from "src/app/shared/interfaces/check.interface";
 import { DeliveryService } from '../../store/services/delivery.service';
+import { addDeliveryAction } from '../../store/actions/actions';
+import {currentError} from '../../store/selectors';
+import { ErrorMessageInterface } from 'src/app/shared/interfaces/errMessages.interface';
 
 
 @Component({
@@ -17,50 +23,36 @@ import { DeliveryService } from '../../store/services/delivery.service';
     templateUrl: './create.template.html',
     styleUrls: ['./create.delivery.css']
 })
-export class CreateDeliveryComponent{
+export class CreateDeliveryComponent implements OnInit, OnDestroy{
 
 
     form: FormGroup
     clients$: Observable<ClientInterface[]>
     checks$: Observable<CheckInterface[]>
     checks: CheckInterface[]
+    errSub$: Subscription
 
     constructor(
         private datepipe: DatePipe,
         private store: Store,
         private fb: FormBuilder,
         private clientService: ClientService,
-        private deliveryService: DeliveryService
+        private deliveryService: DeliveryService,
+        private toastr: ToastrService,
+        public modal: NzModalRef
     ){
 
     }
 
-    nodes = [
-        {
-          title: 'Node1',
-          value: '0-0',
-          key: '0-0',
-          children: [
-            {
-              title: 'Child Node1',
-              value: '0-0-1',
-              key: '0-0-1'
-            },
-            {
-              title: 'Child Node2',
-              value: '0-0-2',
-              key: '0-0-2'
-            }
-          ]
-        },
-        {
-          title: 'Node2',
-          value: '0-1',
-          key: '0-1'
-        }
-      ];
-
     ngOnInit(): void{
+        this.initializeSubscription()
+    }
+
+    ngOnDestroy(): void{
+        this.errSub$.unsubscribe();
+    }
+
+    initializeSubscription(){
         //this.store.dispatch(client)
         this.clients$ = this.clientService.getClients();
 
@@ -69,8 +61,7 @@ export class CreateDeliveryComponent{
             this.checks = items.map((item: any) => ({
                 ...item, 
                 key: item.id, 
-                title: item.id, 
-                value: item.id, 
+                title: `id: ${item.id} дата: ${this.datepipe.transform(item.data, 'yyyy-MM-dd HH:mm a')}`, 
                 children: [
                     ...item.sale.map(el => ({
                         id: el.id,
@@ -81,18 +72,20 @@ export class CreateDeliveryComponent{
                 ]
             }));
 
-            return items.map(item => ({...item, key: item.id, title: item.id, value: item.id, children: []}))
+            return items;//.map(item => ({...item, key: item.id, title: item.id, value: item.id, children: []}))
         }));
+
+        this.errSub$ = this.store.pipe(select(currentError), filter(Boolean)).subscribe((err: ErrorMessageInterface) => this.toastr.error(err.message))
+        
     }
 
     setClient(event$){
 
 
         console.log(event$);
-        this.initializeForm(event$.id);
+        this.initializeForm(event$);
 
     }
-
 
     initializeForm(item: ClientInterface){
 
@@ -105,6 +98,13 @@ export class CreateDeliveryComponent{
             status: [0]
         })
 
+    }
+
+    submit(){
+        console.log(this.form.value);
+
+        this.store.dispatch(addDeliveryAction({createDelivery: this.form.value}));
+        this.modal.close()
     }
 
 }

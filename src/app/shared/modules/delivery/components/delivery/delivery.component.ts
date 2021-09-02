@@ -10,6 +10,7 @@ import {closeDeliveryAction, deliveryAction} from '../../store/actions/actions';
 import {DeliveryInterface} from '../../interfaces/delivery.interface';
 import {currentDelivery} from '../../store/selectors';
 import { ActivatedRoute } from '@angular/router';
+import { SalesInterface } from '../../../sales/interfaces/sales.interface';
 
 @Component({
     selector: 'currentdelivery-component',
@@ -19,6 +20,7 @@ export class DeliveryComponent implements OnInit{
 
     id: number
     status: number = 0
+    sale: SalesInterface[]
     form: FormGroup
     currentDelivery: Subscription
 
@@ -52,6 +54,7 @@ export class DeliveryComponent implements OnInit{
         this.currentDelivery = this.store.pipe(select(currentDelivery), filter(Boolean)).subscribe((item: DeliveryInterface) => {
             this.initializeForm(item[0])
             this.status = item[0].status;
+            this.sale = item[0].check.sale;
         })
 
     }
@@ -68,7 +71,7 @@ export class DeliveryComponent implements OnInit{
 
         this.form = this.fb.group({
             id: [item.id, Validators.required],
-            data: [this.datepipe.transform(item.data, 'yyyy-mm-dd HH:MM a'), Validators.required],
+            data: [this.datepipe.transform(item.data, 'yyyy-MM-dd'), Validators.required],
             address: [item.client.residence_address],
             description: [item.description],
             price: [item.price],

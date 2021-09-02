@@ -5,3 +5,11 @@
 .width-th-title{
     width: 50%;
 }
+
+.custom-search{
+    flex: auto;
+}
+
+.modal-dialog{
+    min-width: 80%;
+}

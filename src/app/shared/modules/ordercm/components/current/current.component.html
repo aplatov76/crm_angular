@@ -1,3 +1,25 @@
+<div class="d-flex input-group mb-3">
+  <div class="input-group-prepend">
+    <button type="button" class="btn btn-outline-secondary">Поиск</button>
+    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span class="sr-only">Поиск</span>
+    </button>
+    <div class="dropdown-menu">
+      <a class="dropdown-item">Наименование</a>
+      <a class="dropdown-item">Код</a>
+      <a class="dropdown-item">Артикул</a>
+    </div>
+  </div>
+  
+  <ng-select [items]="praisList$ | async"
+    placeholder="Поиск и выбор товара"
+    class="custom-search"
+    bindLabel="title" 
+    bindValue="id" 
+    (change)="onChange($event)">
+  </ng-select>
+</div>
+
 <form [formGroup]="formTable" *ngIf="formTable">
     <table class="table table-fit table-bordered table-striped table-sm">
       <thead>

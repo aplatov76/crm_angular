@@ -14,7 +14,7 @@
             </div>
             
             <ng-select [items]="praisList$ | async"
-              placeholder="Поиск и выбор товара по {{getTypeSearch()}}"
+              placeholder="Поиск и выбор товара"
               class="custom-search"
               bindLabel="title" 
               bindValue="id" 
@@ -51,7 +51,7 @@
             <button type="submit" [disabled]="form.invalid || form.controls.stock.value < form.controls.quantity.value" class="btn btn-outline-success mb-5">Добавить</button>
           </div>
           </form>
-          <table class="table table-striped" *ngIf="currentSale">
+          <table class="table table-striped table-sm" *ngIf="currentSale">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -75,9 +75,63 @@
               </tr>
             </tbody>
           </table>
-          <input type="text" placeholder="Итого: " class="form-control border border-success" value="{{currentSum | currency:'RUB': ' '}}" disabled>
+          <input type="text" placeholder="Итого: " class="form-control border border-success mb-3" value="{{currentSum | currency:'RUB': ' '}}" disabled>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Доставка</span>
+              </div>
+              <div class="input-group-text">
+                <input type="checkbox" [(ngModel)]="delivery" aria-label="Checkbox for following text input">
+              </div>
+            </div>
+            <ng-select [items]="clients$ | async"
+              placeholder="Поиск клиента"
+              class="custom-search"
+              bindLabel="fullname" 
+              bindValue="id" 
+              (change)="setClient($event)">
+            </ng-select>
+          </div>
+          <form [formGroup]="deliveryForm " class="" *ngIf="delivery && deliveryForm" (submit)="submit()">
+
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Адрес: </span>
+              </div>
+              <input type="text" class="form-control" formControlName="residence_address">
+            </div>
+
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Телефон: </span>
+              </div>
+              <input type="text" class="form-control" formControlName="phone">
+            </div>
+
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Cтоимость: </span>
+                </div>
+                <input type="number" class="form-control" [ngClass]="{'border border-danger' : deliveryForm.get('price').invalid}" formControlName="price">
+              </div>
+          
+              <div class="d-flex input-group mb-1">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Доставить: </span>
+                  </div>
+                  <input type="date" class="form-control mr-1" [ngClass]="{'border border-danger' : deliveryForm.get('data').invalid}" formControlName="data">
+              </div>
+          
+              <div class="d-flex input-group mb-1">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Информация: </span>
+                  </div>
+                  <input type="text" class="form-control mr-1" [ngClass]="{'border border-danger' : deliveryForm.get('description').invalid}" placeholder="Время доставки, как проехать" formControlName="description">
+              </div>
+            </form>
           <div class="d-flex btn-group" *ngIf="currentSale">
-              <button type="button" (click)="saleDispatch()" class="btn btn-outline-warning mb-5">Готово</button>
+              <button type="button" [disabled]="currentSale.length < 1 || validateDelivery()" (click)="saleDispatch()" class="btn btn-outline-warning mb-5">Готово</button>
           </div>
         </div>
     </div>

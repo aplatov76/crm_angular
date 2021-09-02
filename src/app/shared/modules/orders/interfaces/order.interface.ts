@@ -12,7 +12,7 @@ export interface OrderInterface {
     status: number,
     client: ClientInterface,
     orderpay: PaymentInterface[]
-    orderdata: OrderProductInterface | null,
+    orderdata: OrderProductInterface[] | null,
     /*если к заказу прикреплены продажи*/
     check?: CheckInterface,
     delivery?: DeliveryInterface
