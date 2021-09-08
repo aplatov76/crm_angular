@@ -33,7 +33,7 @@ export class GetUserEffect {
 
             return this.authService.getCurrentUser().pipe(
                 map((user: UserInterface) => {
-                    //console.log('auth get currnet user')
+                    console.log('auth get currnet user')
                     //window.localStorage.setItem('accessToken', currentuser.token)
                     return getCurrentUserSuccessAction({user})
                 } ),
@@ -45,14 +45,15 @@ export class GetUserEffect {
       )
     )
 
-
+    /*
     redirectFailedAuth$ = createEffect(() => this.actions$.pipe(
         ofType(getCurrentUserFailureAction),
         tap(() => {
             //console.log('success redirect')
-            this.router.navigate(['/auth'])
+           // this.router.navigate(['/auth'])
         })
     ),
         {dispatch: false}
     )
+    */
 }

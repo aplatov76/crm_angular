@@ -61,11 +61,11 @@
         </div>
 
         <div class="d-flex btn-group ">
-            <button type="submit" class="btn btn-outline-success mb-5">Добавить</button>
+            <button type="submit" [disabled]="formData.invalid" class="btn btn-outline-success mb-5">Добавить</button>
         </div>
       </form>
 
-
+<!--
       <table class="table table-striped" *ngIf="createOrder.products">
         <thead>
           <tr>
@@ -88,6 +88,53 @@
           </tr>
         </tbody>
       </table>
+    -->
+
+      <form [formGroup]="formTable" *ngIf="formTable">
+        <table class="table table-fit table-bordered table-striped table-sm">
+          <thead>
+            <th>№</th>
+            <th class="width-th-title">Наименование</th>
+            <th>Кол-во</th>
+            <th>Цена</th>
+            <th>Ед.изм.</th>
+            <th>Доп-но</th>
+            <th></th>
+          </thead>
+          <tbody>
+            <ng-container formArrayName="tableRows" *ngFor="let item of formTable.get('tableRows').controls ; let i = index">
+              <tr [formGroupName]="i">
+                <td>
+                  {{i+1}}
+                </td>
+                <td>
+                  <input type="text" class="form-control" formControlName="title">
+                </td>
+                <td>
+                  <input type="number" [ngClass]="{'border border-danger' : item.get('quantity').invalid}" class="form-control" formControlName="quantity">
+                </td>
+                <td>
+                  <input type="number" [ngClass]="{'border border-danger' : item.get('price').invalid}" class="form-control" formControlName="price">
+                </td>
+                <td>
+                  <select class="form-control" formControlName="unit">
+                    <option *ngFor="let unit of units" [ngValue]="unit.id">
+                      {{ unit.title }}
+                    </option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" class="form-control" formControlName="description">
+                </td>
+                <td class="text-center">
+                  <i class="material-icons" (click)="removeRow(item.value.id, i)" type="button">delete_sweep</i>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </form>
+
       <form [formGroup]="formPayed" class="mb-3" *ngIf="formPayed">
         <div class="d-flex input-group mb-1">
         <div class="input-group-prepend">
@@ -101,7 +148,7 @@
         </div>
       </form>
       <div class="d-flex btn-group">
-          <button type="button" (click)="orderDispatch()" [disabled]="formPayed.invalid || createOrder.products.length < 1 || !formClient" class="btn btn-outline-warning mb-5">Готово</button>
+          <button type="button" (click)="orderDispatch()" [disabled]="formPayed.invalid || !formTable || !formClient" class="btn btn-outline-warning mb-5">Готово</button>
       </div>
     </div>
 </div>

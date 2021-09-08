@@ -42,7 +42,6 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
         private store: Store,
         private fb: FormBuilder,
         private modal: NzModalRef,
-        private orderService: OrderCmService,
         private toastr: ToastrService
     ){}
 
@@ -51,7 +50,7 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
         this.store.dispatch(praisAction())
         this.praisList$ = this.store.pipe(select(currentPraisSelector))
 
-
+        console.log('id in modal: ', this.id);
         if(this.id){
             this.store.dispatch(orderDataCmAction({id: this.id}))
         } else {
@@ -74,7 +73,9 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
 
 
         this.currentOrderData$ = this.store.pipe(select(isCurrentOrder),  filter(Boolean)).subscribe(
-            (item: OrderCmInterface) => this.initializeForm(item)
+            (item: OrderCmInterface) => {
+                if(this.id)this.initializeForm(item);
+            }
         )
 
         this.currentOrderSendError$ = this.store.pipe(select(isOrderSendError),  filter(Boolean)).subscribe(

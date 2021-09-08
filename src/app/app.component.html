@@ -13,9 +13,15 @@
     <div class="d-flex justify-content-end align-items-center">
       <app-indicator></app-indicator>
       <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-          <a class="nav-link" [routerLink]="['/auth']">Выйти</a>
+        <li  *ngIf="(currentUser$ | async) as isAnonimus; else auth"  class="nav-item text-nowrap">
+          <a *ngIf="isAnonimus" type="button" (click)="out()" class="nav-link">Выйти</a>
         </li>
+
+        <ng-template #auth>
+          <li  class="nav-item text-nowrap">
+            <a [routerLink]="['/auth']" class="nav-link">Войти</a>
+          </li>
+        </ng-template>
       </ul>
     </div>
   </nav>

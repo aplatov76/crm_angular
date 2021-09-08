@@ -6,6 +6,7 @@ import { createReducer, on, Action } from "@ngrx/store";
 const initialState: SalesStateInterface = {
     err: null,
     currentSales: null,
+    currentSaleCompleted: null,
     cassa: null,
     isLoading: false,
     isSubmiting: false
@@ -17,7 +18,8 @@ const salesReducer = createReducer(
             ...state,
             err: null,
             isLoading: true,
-            isSubmiting: true
+            isSubmiting: true,
+            currentSaleCompleted: null
         })),
         on(salesActionSuccess, (state, action): SalesStateInterface => ({
             ...state,
@@ -32,15 +34,18 @@ const salesReducer = createReducer(
             isSubmiting: false
         })),
         on(addSaleAction, (state, action): SalesStateInterface => ({
-            ...state
+            ...state,
+            currentSaleCompleted: null
         })),
         on(addSaleActionSuccess, (state, action): SalesStateInterface => ({
             ...state,
+            currentSaleCompleted: action.res,
             err: null
         })),
         on(addSaleActionFailed, (state, action): SalesStateInterface => ({
             ...state,
-            err: action.err
+            err: action.err,
+            currentSaleCompleted: null
         })),
         on(addCassaActionSuccess, (state, action): SalesStateInterface => ({
             ...state,

@@ -1,7 +1,8 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { SalesInterface } from '../../../sales/interfaces/sales.interface';
 import { SalesService } from '../../../sales/store/services/sales.service';
+import {CurrentHistorySalesComponent} from '../current/current.component';
 import { DatePipe } from '@angular/common';
 import {PraisInterface} from '../../../../interfaces/prais.interface';
 import { select, Store } from '@ngrx/store';
@@ -11,6 +12,8 @@ import { praisAction } from '../../../../utilmodules/prais/store/actions/action'
 import { returnSalesAction } from '../../../returnSales/store/actions/actions';
 import { ReturnSalesInterface } from '../../../returnSales/interfaces/returnSales.interface';
 import { isReturnSalesSelector } from '../../../returnSales/store/selectors';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { Data } from '@angular/router';
 
 @Component({
     selector: 'history-sales',
@@ -22,11 +25,12 @@ export class HistorySalesComponent implements OnInit, OnDestroy{
     constructor(
         private salesService: SalesService,
         private store: Store,
-        private datepipe: DatePipe
-        )
-    {
+        private datepipe: DatePipe,
+        private viewContainerRef: ViewContainerRef,
+        private modalService: NzModalService)
+        {
 
-    }
+        }
 
     visible = false
     dt: Date = new Date()
@@ -74,6 +78,23 @@ export class HistorySalesComponent implements OnInit, OnDestroy{
                     ))
         )
         */
+    }
+
+    showModal(id: number, data: Data){
+
+            this.modalService.create({
+                nzTitle: `Чек № ${id} от ${data}`,
+                nzViewContainerRef: this.viewContainerRef,
+                nzComponentParams: {
+                    id: id
+                },
+                nzFooter: [],
+                nzStyle: { width: '80%' },
+                nzAutofocus: null,
+                nzContent: CurrentHistorySalesComponent
+            });
+
+        
     }
 
 

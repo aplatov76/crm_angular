@@ -4,10 +4,13 @@ import { Observable, Subscribable, Subscription } from 'rxjs';
 import {Store, select} from '@ngrx/store';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { ToastrService } from 'ngx-toastr';
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import { DatePipe } from '@angular/common';
 
 import { ClientService } from '../../../clients/store/services/clients.service';
 import { salesAction, addSaleAction } from '../../store/actions/action';
-import {isLoadingSelector, isSubmittingSelector, currentSalesSelector, currentError } from '../../store/selectors';
+import {isLoadingSelector, isSubmittingSelector, currentSalesSelector, currentError, currentSaleCompleted } from '../../store/selectors';
 import {currentDataSelector as currentPraisSelector, currentProductSelector} from '../../../../utilmodules/prais/store/selectors';
 import {CurrentSaleInterface} from '../../interfaces/currentSale.interface';
 import { PraisInterface } from '../../../../interfaces/prais.interface';
@@ -16,6 +19,8 @@ import { ProductInterface } from '../../../../interfaces/product.interface';
 import { ClientInterface } from 'src/app/shared/interfaces/client.interface';
 import { filter } from 'rxjs/operators';
 import { NzModalRef } from 'ng-zorro-antd/modal';
+import { CheckInterface } from 'src/app/shared/interfaces/check.interface';
+import { SalesInterface } from '../../interfaces/sales.interface';
 
 
 @Component({
@@ -26,8 +31,10 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 export class CurrentSaleComponent{
 
     errorSubscription : Subscription
+    subCompleted: Subscription
     currentSum: number =  0
     delivery: boolean = false
+    printcheck: boolean = false
     
     isLoading$ : Observable<boolean>
     clients$: Observable<ClientInterface[]>
@@ -42,7 +49,7 @@ export class CurrentSaleComponent{
     form: FormGroup
     deliveryForm: FormGroup
 
-    constructor(private store: Store, private clientService: ClientService, private fb: FormBuilder,  private toastr: ToastrService, public modal: NzModalRef){
+    constructor(private store: Store, private clientService: ClientService, private fb: FormBuilder,  private toastr: ToastrService, public modal: NzModalRef, private datepipe: DatePipe){
 
     }
 
@@ -74,7 +81,19 @@ export class CurrentSaleComponent{
                 }
         })
 
-        this.errorSubscription = this.store.pipe(select(currentError), filter(Boolean)).subscribe((res: any) => this.toastr.error(`Произошла ошибка ${res.error.message}`))
+        this.errorSubscription = this.store.pipe(select(currentError), filter(Boolean)).subscribe((res: any) => this.toastr.error(`Произошла ошибка ${res.error.message}`));
+
+        this.subCompleted = this.store.pipe(select(currentSaleCompleted), filter(Boolean))
+        .subscribe((res: SalesInterface[]) => {
+
+                console.log('created check: ', res);
+                if(this.printcheck)this.createCheck(res)
+                this.currentSale = [];
+                this.currentSum = 0;
+                this.modal.close();
+    })
+
+
     }
 
     initializeForm(){
@@ -150,9 +169,7 @@ export class CurrentSaleComponent{
     }
 
     currentSaleClose(): void{
-        this.currentSale = [];
-        this.currentSum = 0;
-        this.modal.close()
+
     }
 
     saleDispatch(){
@@ -175,8 +192,66 @@ export class CurrentSaleComponent{
 
     setClient($event){
 
-       // console.log($event);
         this.initializeDeliveryForm($event)
+    }
+
+    createCheck(createdSales: SalesInterface[]){
+
+
+         let docDefinition = {
+             pageOrientation: 'landscape',
+             content: [
+                 
+                 {text: `Товарный чек № ${createdSales[0].check.id} от ${this.datepipe.transform(createdSales[0].check.data, 'yyyy-MM-dd')}`, style: 'header' },
+                 '____________________________________________________________________________________________________________________________',
+                 {text: 'Адрес склада: д. Воронцово ул. Профсоюзная 4б'},
+                 '____________________________________________________________________________________________________________________________',
+                 {text: `Перечь товаров:`, style: 'h6' },
+                 {
+                     style: 'tableExample',
+ 
+                     table: {
+                         widths: [20, 500, '*', '*', '*'],
+                         body: [
+                             [{text: '№', bold: true}, {text: 'Наименование', bold: true} , {text: 'Кол-во', bold: true}, {text: 'Цена', bold: true}, {text: 'Cумма', bold: true}],
+                             ...createdSales.map((item, index) => [index+1, item.product.title, item.quantity, item.price.toFixed(2), item.sum.toFixed(2)]),
+                             ['', '', '', 'Итого: ', this.currentSum.toFixed(2)]
+                         ]
+                     }
+                 }
+             ],
+             styles: {
+                 header: {
+                     fontSize: 15,
+                     bold: true,
+                     margin: [0, 0, 0, 2]
+                 },
+                 h6: {
+                     fontSize: 12,
+                     bold: true,
+                     margin: [0, 0, 0, 2]
+                 },
+                 subheader: {
+                     fontSize: 12,
+                     bold: true,
+                     margin: [0, 10, 0, 5]
+                 },
+                 tableExample: {
+                     margin: [0, 5, 0, 15],
+                     width: '100%'
+                 },
+                 tableHeader: {
+                     bold: true,
+                     fontSize: 12,
+                     color: 'black'
+                 }
+             },
+             defaultStyle: {
+                 // alignment: 'justify'
+             }
+           };  
+          
+           pdfMake.createPdf(docDefinition).open() 
 
     }
 }

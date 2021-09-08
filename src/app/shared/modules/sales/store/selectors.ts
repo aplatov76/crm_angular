@@ -1,4 +1,4 @@
-import {createFeatureSelector, createSelector} from '@ngrx/store';
+import {createFeatureSelector,createSelector} from '@ngrx/store';
 import {SalesStateInterface} from './interfaces/salesState.interface';
 import {AppStateInterface} from '../../../interfaces/appState.interface';
 
@@ -12,6 +12,11 @@ export const isSubmittingSelector = createSelector(
 export const isLoadingSelector = createSelector(
     salesFeatureSelectors,
     (salesState: SalesStateInterface) => salesState.isLoading
+)
+
+export const currentSaleCompleted = createSelector(
+    salesFeatureSelectors,
+    (salesState: SalesStateInterface) => salesState.currentSaleCompleted
 )
 
 export const currentSalesSelector = createSelector(

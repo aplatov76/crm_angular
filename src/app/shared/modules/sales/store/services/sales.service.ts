@@ -35,6 +35,15 @@ export class SalesService{
         return this.http.get<SalesInterface[]>(`${environment.url}/sales?${query}`);
     }
 
+    getCheck(checkid: number): Observable<SalesInterface[]> {
+
+        let query = '';
+
+        if(checkid)query = query + `&checkid=${checkid}`;
+
+        return this.http.get<SalesInterface[]>(`${environment.url}/sales?${query}`);
+    }
+
     getPrais():Observable<PraisInterface[]> {
         return this.http.get<PraisInterface[]>(`${environment.url}/product?type=product`);
     }

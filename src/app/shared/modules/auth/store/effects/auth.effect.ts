@@ -6,10 +6,11 @@ import {of} from "rxjs";
 //import {tap} from 'rxjs/internal/operators';
 import {HttpErrorResponse} from "@angular/common/http"
 
-import { AuthService } from "../services/auth.service";
-import { UserInterface } from "../../../../interfaces/user.interface";
+import { AuthService } from "../services/auth.service";//../../modules/products/store/actions/action
+import { productsWarningAction } from '../../../products/store/actions/action';
 import { PersistanceService } from "../../../../services/persistence.service";
 import { Router } from "@angular/router";
+import { Store } from "@ngrx/store";
 
 @Injectable()
 export class LoginEffect {
@@ -18,11 +19,12 @@ export class LoginEffect {
         private actions$: Actions, 
         private authService: AuthService, 
         private persistenceservice: PersistanceService,
+        private store: Store,
         private router: Router){
         
     }
 
-    register$ = createEffect(() => this.actions$.pipe(
+    login$ = createEffect(() => this.actions$.pipe(
         ofType(loginAction),
         switchMap(({request}) => {
             return this.authService.login(request).pipe(
@@ -44,6 +46,7 @@ export class LoginEffect {
         ofType(loginActionSuccess),
         tap(() => {
             //console.log('success redirect')
+            this.store.dispatch(productsWarningAction({query: {warning: true}}))
             this.router.navigate(['/'])
         })
     ),
@@ -53,7 +56,7 @@ export class LoginEffect {
     redirectFailedAuth$ = createEffect(() => this.actions$.pipe(
         ofType(loginActionFailed),
         tap(() => {
-            //console.log('success redirect')
+            this.persistenceservice.set('accessToken', null)
             this.router.navigate(['/auth'])
         })
     ),

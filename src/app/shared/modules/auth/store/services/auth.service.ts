@@ -13,13 +13,11 @@ export class AuthService{
 
     login(data: UserInterface): Observable<UserInterface> {
 
-        console.log('data login: ', data)
-
         return this.http.post<UserInterface>(`${environment.url}/user/login`, {user: data});
     }
 
     getCurrentUser(): Observable<UserInterface>{
-        return this.http.get<UserInterface>(environment.url + '/auth/user')
+        return this.http.get<UserInterface>(environment.url + '/user')
     }
 
 }

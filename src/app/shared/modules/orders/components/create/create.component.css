@@ -1,3 +1,11 @@
 .custom-search{
     flex: auto;
 }
+
+::ng-deep tr:hover{
+    cursor: default;
+}
+
+.width-th-title{
+    width: 50%;
+}

@@ -44,7 +44,7 @@ export class OrderCmComponent implements OnInit{
 
         this.orders$ = this.store.pipe(select(isOrdersList), filter(Boolean)).subscribe((item: OrderCmInterface[]) => {
             this.orders = item;
-            //console.log('item: ',item)
+            console.log('item: ',item[0])
             if(item.length > 1)this.lastOrder = (item[0].status === 0) ? item[0].id : null;
         })
     }
@@ -66,6 +66,8 @@ export class OrderCmComponent implements OnInit{
     }
 
     createEmptyOrder(): void{
+
+        //console.log('last order now: ', this.lastOrder)
 
         this.modalService.create({
             nzTitle: `Cоздание новой заявки`,

@@ -16,5 +16,8 @@ export const isLoadingSelector = createSelector(
 
 export const currentUserSelector = createSelector(
     authFeatureSelectors,
-    (authState: AuthStateInterface) => authState.user
+    (authState: AuthStateInterface) => {
+        console.log('selector: ', (authState.user ? true : false))
+       return (authState.user ? true : false)
+    }
 )

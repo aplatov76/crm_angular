@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core"
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormArray, FormGroup, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { ClientInterface } from "src/app/shared/interfaces/client.interface";
 import {CreateOrderInterface} from '../../interfaces/createOrder.interface'
@@ -11,6 +11,8 @@ import { addOrderAction } from "../../store/actions/action";
 import { PersistanceService } from "src/app/shared/services/persistence.service";
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
+import {units} from '../../../../utilmodules/units/units.data';
+
 @Component({
     selector: 'create-order',
     templateUrl: './create.component.html',
@@ -21,8 +23,11 @@ export class CreateOrderComponent implements OnInit{
     formData: FormGroup
     formClient: FormGroup
     formPayed: FormGroup
-    createOrder: CreateOrderInterface = {clientId: null, products: [], total: null, current: null}
+    formTable: FormGroup
+    createOrder = {clientId: null, total: null, current: null}
     clients$: Observable<ClientInterface[]>
+
+    units = units;
 
     constructor(
         private fb: FormBuilder,
@@ -60,11 +65,33 @@ export class CreateOrderComponent implements OnInit{
 
     initializeLocalStorage(){
 
+        
+
         const orderproducts = this.persistanceService.get('orderdata') || null;
 
-        if(orderproducts){
-            this.createOrder.products = [...orderproducts];
-        }
+        //this.correctTotal();
+        //console.log(orderproducts)
+
+        if(orderproducts !== null){
+
+        const disable: boolean = false;
+
+        this.formTable = this.fb.group({
+            tableRows: this.fb.array(orderproducts.map(item => {
+                //console.log(item)
+                return this.fb.group({
+                    //id: [item.id],
+                    //articul: [{value: item.articul, disabled: disable}],
+                    title: [{value: item.title, disabled: disable}],
+                    quantity: [{value: item.quantity, disabled: disable}, [Validators.required, Validators.min(1)]],
+                    price: [item.price, Validators.required],
+                    unit: [{value: 1, disabled: disable}, [ Validators.required]],
+                    description: [{value: '', disabled: disable}]
+                  })
+            }))
+        })
+
+    }
 
     }
 
@@ -72,12 +99,10 @@ export class CreateOrderComponent implements OnInit{
 
         this.clients$ = this.ordersService.getClients();
 
-
     }
 
     orderDispatch(){
 
-        //this.createOrder.total = this.createOrder.products.reduce((sum, current) => (sum + current.sum), 0)
         this.createOrder.current = this.formPayed.controls.current.value;
 
         //console.log(this.createOrder)
@@ -87,7 +112,7 @@ export class CreateOrderComponent implements OnInit{
             return;
         }
 
-        if(this.createOrder.products.length < 1){
+        if(!this.formTable){
             this.toastr.error('Список товаров пуст');
             return;
         }
@@ -102,16 +127,28 @@ export class CreateOrderComponent implements OnInit{
             return;
         }
 
-        this.store.dispatch(addOrderAction({createOrder: this.createOrder}));
+        //console.log({createOrder: {...this.createOrder, products: this.formTable.value.tableRows}})
+
+        this.store.dispatch(addOrderAction({createOrder: {...this.createOrder, products: this.formTable.value.tableRows}}));
 
         this.persistanceService.set('orderdata', null);
         this.modalRef.close();
+        
 
+        console.log(this.formTable.value)
     }
 
     deletItemCurrentOrder(index: number){
         //console.log(index)
-        this.createOrder.products.splice(index, 1);
+        //this.createOrder.products.splice(index, 1);
+
+
+
+        //т.к. не делаею dispatch (он удалит все поля которые добавлены но не отправлены в БД)
+        (<FormArray>this.formTable.get('tableRows')).removeAt(index);
+
+        //console.log(this.formTable);
+
         this.correctTotal()
 
     }
@@ -123,8 +160,24 @@ export class CreateOrderComponent implements OnInit{
             return;
         }
 
-        //console.log(this.formData.value)
-        this.createOrder.products.push(this.formData.value);
+        if(!this.formTable){
+            this.formTable = this.fb.group({
+                tableRows: this.fb.array([])
+            })
+        }
+
+        (<FormArray>this.formTable.get('tableRows')).push(
+            this.fb.group({
+                //id: [0],
+                //articul: [item ? item.articul : null],
+                title: [this.formData.value.title, Validators.required],
+                quantity: [this.formData.value.quantity, [Validators.required, Validators.min(1)]],
+                price: [this.formData.value.price, Validators.required],
+                unit: [1, [ Validators.required]],
+                description: ['']
+              })
+        )
+
         this.correctTotal()
 
         //console.log(this.createOrder)
@@ -132,9 +185,15 @@ export class CreateOrderComponent implements OnInit{
     }
 
     correctTotal(){
-        //console.log(this.createOrder)
-        this.createOrder.total = (this.createOrder.products.reduce((sum, current) => (sum + current.price*current.quantity), 0));
-        this.formPayed.controls.total.setValue(this.createOrder.total)
+       
+        //this.createOrder.total = (this.createOrder.products.reduce((sum, current) => (sum + current.price*current.quantity), 0));
+        //this.formPayed.controls.total.setValue(this.createOrder.total)
+
+        //this.formTable
+        if(this.formTable){
+            this.createOrder.total = this.formTable.value.tableRows.reduce((sum, current) => (sum + current.price*current.quantity), 0);
+            this.formPayed.controls.total.setValue(this.createOrder.total);
+        }
     }
 
     onInput(){

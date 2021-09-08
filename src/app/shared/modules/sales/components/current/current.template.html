@@ -92,7 +92,16 @@
               bindValue="id" 
               (change)="setClient($event)">
             </ng-select>
+            <div class="input-group-prepend">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Печать чека</span>
+              </div>
+              <div class="input-group-text">
+                <input type="checkbox" [(ngModel)]="printcheck" aria-label="Checkbox for following text input">
+              </div>
+            </div>
           </div>
+
           <form [formGroup]="deliveryForm " class="" *ngIf="delivery && deliveryForm" (submit)="submit()">
 
             <div class="input-group mb-1">

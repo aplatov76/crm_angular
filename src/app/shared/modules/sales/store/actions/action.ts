@@ -6,6 +6,7 @@ import { CassaValueInterface } from "../../interfaces/cassaValue.interface";
 import {ErrorMessageInterface} from 'src/app/shared/interfaces/errMessages.interface'
 import { DeliveryInterface } from "../../../delivery/interfaces/delivery.interface";
 import {CurrentDelivery} from '../../interfaces/currentDelivery.interface';
+import { CheckInterface } from "src/app/shared/interfaces/check.interface";
 
 
 export const salesAction = createAction(ActionTypes.SALES);
@@ -13,7 +14,7 @@ export const salesActionSuccess = createAction(ActionTypes.SALES_SUCCESS, props<
 export const salesActionFailed = createAction(ActionTypes.SALES_FAILURE, props<{err: ErrorMessageInterface}>());
 
 export const addSaleAction = createAction(ActionTypes.ADD_SALE, props<{sale: CurrentSaleInterface[], delivery?: CurrentDelivery}>());
-export const addSaleActionSuccess = createAction(ActionTypes.ADD_SALE_SUCCESS, props<{res: SalesInterface}>());
+export const addSaleActionSuccess = createAction(ActionTypes.ADD_SALE_SUCCESS, props<{res: CheckInterface[]}>());
 export const addSaleActionFailed  = createAction(ActionTypes.ADD_SALE_FAILURE, props<{err: ErrorMessageInterface}>());
 
 export const addCassaAction = createAction(ActionTypes.CREATE_CASSA_VALUE, props<{sum: number}>());
