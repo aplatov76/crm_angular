@@ -127,30 +127,17 @@ export class CreateOrderComponent implements OnInit{
             return;
         }
 
-        //console.log({createOrder: {...this.createOrder, products: this.formTable.value.tableRows}})
-
         this.store.dispatch(addOrderAction({createOrder: {...this.createOrder, products: this.formTable.value.tableRows}}));
 
         this.persistanceService.set('orderdata', null);
         this.modalRef.close();
-        
-
-        console.log(this.formTable.value)
     }
 
     deletItemCurrentOrder(index: number){
-        //console.log(index)
-        //this.createOrder.products.splice(index, 1);
 
-
-
-        //т.к. не делаею dispatch (он удалит все поля которые добавлены но не отправлены в БД)
         (<FormArray>this.formTable.get('tableRows')).removeAt(index);
 
-        //console.log(this.formTable);
-
         this.correctTotal()
-
     }
 
     submit(){
@@ -180,16 +167,10 @@ export class CreateOrderComponent implements OnInit{
 
         this.correctTotal()
 
-        //console.log(this.createOrder)
-
     }
 
     correctTotal(){
-       
-        //this.createOrder.total = (this.createOrder.products.reduce((sum, current) => (sum + current.price*current.quantity), 0));
-        //this.formPayed.controls.total.setValue(this.createOrder.total)
 
-        //this.formTable
         if(this.formTable){
             this.createOrder.total = this.formTable.value.tableRows.reduce((sum, current) => (sum + current.price*current.quantity), 0);
             this.formPayed.controls.total.setValue(this.createOrder.total);
@@ -204,8 +185,6 @@ export class CreateOrderComponent implements OnInit{
 
     onClient($event: ClientInterface){
 
-        //console.log($event);
-
         this.formClient = this.fb.group({
             id: [$event.id, Validators.required],
             fullname: [{value: $event.fullname, disabled: true}, Validators.required],
@@ -213,6 +192,5 @@ export class CreateOrderComponent implements OnInit{
         })
 
         this.createOrder.clientId = $event.id;
-        
     }
 }

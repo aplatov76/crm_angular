@@ -25,7 +25,6 @@ import { ErrorMessageInterface } from 'src/app/shared/interfaces/errMessages.int
 })
 export class CreateDeliveryComponent implements OnInit, OnDestroy{
 
-
     form: FormGroup
     clients$: Observable<ClientInterface[]>
     checks$: Observable<CheckInterface[]>
@@ -81,10 +80,7 @@ export class CreateDeliveryComponent implements OnInit, OnDestroy{
 
     setClient(event$){
 
-
-        console.log(event$);
         this.initializeForm(event$);
-
     }
 
     initializeForm(item: ClientInterface){
@@ -101,7 +97,6 @@ export class CreateDeliveryComponent implements OnInit, OnDestroy{
     }
 
     submit(){
-        console.log(this.form.value);
 
         this.store.dispatch(addDeliveryAction({createDelivery: this.form.value}));
         this.modal.close()

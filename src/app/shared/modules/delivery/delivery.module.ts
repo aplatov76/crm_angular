@@ -17,7 +17,6 @@ import { CreateDeliveryComponent } from './components/create/create.delivery';
 import {DeliveryComponent} from './components/delivery/delivery.component';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 
-
 const routes = [
     {
         path: 'delivery',
@@ -46,6 +45,7 @@ const routes = [
     providers: [DeliveryService],
     exports: []
 })
+
 export class DeliveryModule {
 
 }

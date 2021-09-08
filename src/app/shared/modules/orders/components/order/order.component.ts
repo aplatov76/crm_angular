@@ -104,8 +104,6 @@ export class OrderItemComponent implements OnInit, OnDestroy{
         .subscribe((vl) => Object.assign(order, vl))
         .unsubscribe()
 
-
-
         let docDefinition = {
             pageOrientation: 'landscape',
             content: [

@@ -40,14 +40,12 @@ export class CreateDebtorComponent implements OnInit{
 
     }
 
-
     ngOnInit(): void{
 
         this.clients$ = this.debtorService.getClients();
         this.store.dispatch(praisAction())
 
         this.initializeSuscription();
-
     }
 
     initializeForm(product: ProductInterface){
@@ -69,7 +67,6 @@ export class CreateDebtorComponent implements OnInit{
     onClient($event){
 
         this.currentClient = $event;
-
     }
 
     onInput(){
@@ -80,7 +77,6 @@ export class CreateDebtorComponent implements OnInit{
 
     onChange($event){
         /*Инициализировать форму будем прямо здесь, количество на складе и количество в форму могут отличаться*/
-        console.log($event);
 
         this.initializeForm($event);
     }
@@ -89,7 +85,6 @@ export class CreateDebtorComponent implements OnInit{
 
         const tmp = this.currentDebtorData.find(item => item.id === id);
 
-        console.log(tmp)
         this.currentSum -= tmp.price*tmp.quantity;
 
         this.currentDebtorData = this.currentDebtorData.filter(item => item.id !== id);
@@ -134,8 +129,5 @@ export class CreateDebtorComponent implements OnInit{
     
         this.currentDebtorData.push({id: 0, product: {id: tmp.id.value, title: tmp.title.value}, quantity: tmp.quantity.value, price: tmp.price.value});
         this.currentSum += tmp.quantity.value*tmp.price.value;
-        
     }
-
-
 }

@@ -12,7 +12,6 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
   
-
 import {UpdateComponent} from '../update/update.component';
 
 @Component({
@@ -37,7 +36,6 @@ export class DebtorComponent implements OnInit{
         ){
 
     }
-
 
     ngOnInit(): void{
         this.id = parseInt(this.route.snapshot.paramMap.get('id'));
@@ -77,10 +75,7 @@ export class DebtorComponent implements OnInit{
              map(item => item)
          )
          .subscribe((vl) => Object.assign(order, vl))
-         .unsubscribe()
- 
-         //console.log(order)
- 
+         .unsubscribe();
  
          let docDefinition = {
              pageOrientation: 'landscape',
@@ -184,8 +179,6 @@ export class DebtorComponent implements OnInit{
          .subscribe((vl) => Object.assign(order, vl))
          .unsubscribe();
 
-         //console.log(new Date(order.data.setMonth(order.data.getMonth()+8)))
-
          let endData = new Date(order.data);
 
          endData = new Date(endData.setMonth(endData.getMonth()+2));
@@ -254,7 +247,6 @@ export class DebtorComponent implements OnInit{
                     style: 'text'
                 },
 
-
              ],
              styles: {
                 header: {
@@ -286,8 +278,7 @@ export class DebtorComponent implements OnInit{
              }
            }; 
 
-           pdfMake.createPdf(docDefinition).open()  
-
+           pdfMake.createPdf(docDefinition).open()
     }
 
 }

@@ -48,14 +48,6 @@ export class CreateClientComponent implements OnInit, OnDestroy{
 
     submit(){
 
-        /*
-        this.service.service1().pipe(
-            mergeMap((res1) => this.service.service2(res1)),
-            mergeMap((res2) => this.service.service3(res2))
-            ).subscribe((res3) => {
-            // Do something with res3.
-});
-        */
        this.addSubscribe = this.clientService.createClient(this.form.value).pipe(
            mergeMap((res) => this.clientService.getClients())
        ).subscribe(items => {

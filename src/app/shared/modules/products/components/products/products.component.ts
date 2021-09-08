@@ -48,7 +48,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
   @ViewChild('nzTreeComponent', { static: false }) nzTreeComponent!: NzTreeComponent;
 
   nzClick(event: any): void {
-    console.log('click id',event.node.origin);
 
     const tmp: any = Object.assign({}, event.node.origin);
 
@@ -62,18 +61,13 @@ export class ProductsComponent implements OnInit, OnDestroy {
   // nzSelectedKeys change
   nzSelect(): void {
     const checkedElement: any = this.nzTreeComponent.getCheckedNodeList();
-    //console.log('checkedElement: ', checkedElement)
     
     const checkedProducts = this.detourTreeProducts(checkedElement).flat(Infinity);
     if(checkedProducts.length > 0){
       this.store.dispatch(orderInsertAction({orderdata: checkedProducts}));
       //гарантии конечно нет, но обрабатыввать лень
       this.toastr.info('Заявка обновлена')
-      //console.log(checkedProducts.flat(Infinity))
     }
-
-    //console.log('keys: ', checkedElement.map(item => ({...item.origin})));
-    //console.log()
   }
 
   detourTreeProducts(tree: NzTreeNode[]): any{
@@ -88,43 +82,14 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   nzOpen(event: NzFormatEmitEvent){
     this.expandedNodeList = this.nzTreeComponent.getExpandedNodeList().map(item => parseInt(item.key));
-    console.log(this.expandedNodeList)
+    //console.log(this.expandedNodeList)
   }
   
   ngAfterViewInit(): void {
-    // get node by key: '10011'
-    //console.log(this.nzTreeComponent.getTreeNodeByKey('10011'));
-    // use tree methods
-    /*console.log(
-      this.nzTreeComponent.getTreeNodes(),
-      this.nzTreeComponent.getCheckedNodeList(),
-      this.nzTreeComponent.getSelectedNodeList(),
-      this.nzTreeComponent.getExpandedNodeList()
-    );*/
-    //this.nzTreeComponent.beforeInit
 
-   // console.log('get node: ', this.nzTreeComponent.getTreeNodeByKey('2'));
   }
   
-
   /*ens nz tree*/
-/*     
-  options = {
-    displayField: 'title',
-    allowDrag: (node) => node.isLeaf
-  };
-  
-
-  onMoveNode($event) {
-    console.log(
-      "Moved",
-      $event.node.title,
-      "to",
-      $event.to.parent.title,
-      "at index",
-      $event.to.index);
-  }
-  */
 
   ngOnInit():void {
         //this.store.dispatch(productsAction({view: 'tree'}));
@@ -133,18 +98,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
         this.initializeSubscription()
   }
      
-    /*
-      filterFn(value: string, treeModel: TreeModel) {
-        value = value.toLowerCase();
-        const t = RegExp(value, 'i')
-        treeModel.filterNodes((node: TreeNode) => t.test(node.data.title))//!node.data.name.toLowerCase().indexOf(value))
-      }
-
-     addChildren(id):void {
-        this.router.navigate(['group', id]);
-        console.log('hello click')
-     }
-      */
 
       ngOnDestroy():void {
         this.productsSub.unsubscribe();
@@ -158,39 +111,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
             this.expandedNodeList = [...this.expandedNodeList]
           }
         )
-
-       // this.productSub = this.store.pipe(select(isCurrentProduct), filter(Boolean)).su
       }
-
-      /*
-      itemTableVisible(id, view){
-        //console.log('itemVisibleTable');
-        this.productsTable = this.productsTable.map(item => (item.parentId === id) ? ({...item, visible: view}) : item);
-      }
-
-      del(){
-        //this.treeToTable(this.nodes);
-        console.log(this.productsTable);
-      }
-
-      */
-
-      //onEventTable = (id) => this.router.navigate(['/products', id]);
-
-      /*
-      onEvent = ($event, template: TemplateRef<any>) => {
-        //console.log('event start')
-        //this.router.navigate(['/products', $event.node.data.id]);
-        //console.log($event)
-        if($event.node.data.price){
-          console.log('position ', $event.node.data.id)
-
-          this.selectedProduct = $event.node.data.id
-          this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
-        }
-      }
-
-      */
 
     /**
      * 

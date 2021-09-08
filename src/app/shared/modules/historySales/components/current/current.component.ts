@@ -36,7 +36,6 @@ export class CurrentHistorySalesComponent implements OnInit, OnDestroy{
     ngOnDestroy(){
 
         this.currentSub.unsubscribe();
-
     }
 
     print(){

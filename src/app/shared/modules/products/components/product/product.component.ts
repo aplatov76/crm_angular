@@ -36,9 +36,8 @@ export class ProductComponent implements OnInit, OnDestroy{
     currentParent: number[] = [];
 
     onChange($event: string[]): void {
-      console.log($event);
+      //console.log($event);
     }
-    
 
     constructor(
         private fb: FormBuilder, 
@@ -75,10 +74,6 @@ export class ProductComponent implements OnInit, OnDestroy{
                 this.currentProductCountCm$ = this.productService.getCountCm({articul: item[0].articul});
         })
 
-     // of(this.currentProduct).pipe(
-     //   this.productService.getCountCm({query: {articul: this.currentProduct.articul}})
-     // )
-
     }
 
     initializeSubGroup(){
@@ -89,11 +84,9 @@ export class ProductComponent implements OnInit, OnDestroy{
       })
     }
 
-    //`id`, `articul`, `title`, `visible`, `stock`, `price`, `trade_price`, `parent
     initializeForm(item: ProductInterface | null){
 
       this.currentParent.push(item ? item.parent : this.id)
-      //console.log('currentParent:', item , this.id)
 
         this.form = this.fb.group({
             title: new FormControl(item ? item.title : null, Validators.required),
@@ -110,18 +103,13 @@ export class ProductComponent implements OnInit, OnDestroy{
     }
 
     submit(){
-      console.log('update product: ',{...this.form.value, parent: this.form.value.parent[0]})
-      //this.newItemEvent.emit({...this.form.value, parent: this.form.value.parent[0]});
 
       this.store.dispatch(productInsertUpdate({product: {...this.form.value, parent: this.form.value.parent[0]}}));
-      //this.valueChange.next('hello')
-      
       this.modal.close();
-      
     }
 
     remove(){
-      console.log(this.groups)
+      console.log('remove product')
     }
     
 }

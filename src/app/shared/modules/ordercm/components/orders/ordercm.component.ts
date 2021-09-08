@@ -67,8 +67,6 @@ export class OrderCmComponent implements OnInit{
 
     createEmptyOrder(): void{
 
-        //console.log('last order now: ', this.lastOrder)
-
         this.modalService.create({
             nzTitle: `Cоздание новой заявки`,
             nzViewContainerRef: this.viewContainerRef,

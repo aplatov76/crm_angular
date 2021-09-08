@@ -10,21 +10,15 @@
 </div>
   <div class="d-flex header-dashboard justify-content-between">
     <h2>Должники</h2>
-    <i class="material-icons" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">filter_list</i>
+    <i class="material-icons" (click)="filter = !filter">filter_list</i>
   </div>
-  <div class="collapse" id="collapseExample">
+  <div *ngIf="filter">
     <div class="card card-body">
-      
+      <p class="text-info">*Товар будет списан после полной оплаты</p>
+
         <div class="input-group mb-3">
             <div class="input-group-prepend">
               <button type="button" class="btn btn-outline-secondary">Поиск</button>
-              <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="sr-only">Статус</span>
-              </button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Открытые</a>
-                <a class="dropdown-item" href="#">Закрытые</a>
-              </div>
             </div>
             <input type="text" class="form-control" placeholder="Фамилия Имя Отчество" aria-label="Text input with segmented dropdown button">
           </div>

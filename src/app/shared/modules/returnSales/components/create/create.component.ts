@@ -61,14 +61,13 @@ export class CreateReturnSaleComponent implements OnInit, OnDestroy{
     }
 
     onChange($target: any): void{
-        this.currentId = $target.id;
 
+        this.currentId = $target.id;
         this.getSalesInPeriod();
-        //console.log(date)
     }
 
     pageChanged($target): void{
-        console.log($target)
+
         this.currentPage = $target;
         this.getSalesInPeriod()
     }
@@ -82,23 +81,17 @@ export class CreateReturnSaleComponent implements OnInit, OnDestroy{
         const dataBegin = new Date();
               dataBegin.setDate(this.currentData.getDate() - 7*index - 14);
 
-        console.log('begin: ', dataBegin.toISOString().slice(0, 10), 'end: ', dataEnd.toISOString().slice(0, 10))
-
         this.selectSales$ = this.salesService.getSales(dataBegin.toISOString().slice(0, 10), dataEnd.toISOString().slice(0, 10), this.currentId, 'desc')
     }
 
     onClickSelectCurrent(element: SalesInterface): void{
 
         this.selectCurrent = element;
-
     }
 
     createReturnSale(): void{
 
         this.store.dispatch(createReturnSalesAction({returnsale: {id: this.selectCurrent.id, quantity: this.selectCurrentQuantity}}));
-        //this.toastService.success(`Возврат: ${this.selectCurrent.product.title} успешен`);
-        //console.log('in')
-        //this.currentCreateReturnSale$ = this.returnSalesService.createReturnSale({id: this.selectCurrent.id, quantity: this.selectCurrentQuantity});
     }
 
 }

@@ -37,7 +37,6 @@ export class ProductsCmComponent implements OnInit, OnDestroy{
     root: Observable<any>
     modelChanged: Subject<string> = new Subject<string>();
 
-
     constructor(
       private modal: NzModalService,
       private cmService: ProductsCmService,
@@ -72,9 +71,8 @@ export class ProductsCmComponent implements OnInit, OnDestroy{
     }
 
     showSelectProduct(index: number){
-      console.log(index)
+
       const currentProduct: ProductCmInterface = this.nodes[index];
-      console.log(currentProduct)
 
       if(!currentProduct.articul){
         this.toastservice.error('Это категория');

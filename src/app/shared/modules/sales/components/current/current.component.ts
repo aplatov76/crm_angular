@@ -86,7 +86,6 @@ export class CurrentSaleComponent{
         this.subCompleted = this.store.pipe(select(currentSaleCompleted), filter(Boolean))
         .subscribe((res: SalesInterface[]) => {
 
-                console.log('created check: ', res);
                 if(this.printcheck)this.createCheck(res)
                 this.currentSale = [];
                 this.currentSum = 0;
@@ -97,7 +96,7 @@ export class CurrentSaleComponent{
     }
 
     initializeForm(){
-        //console.log('Initialize form: ', this.isCurrentProduct)
+
         this.form = this.fb.group({
             id: [this.isCurrentProduct.id, [Validators.required]],
             stock: [{value: this.isCurrentProduct.stock, disabled: true}, [Validators.required]],
@@ -108,7 +107,7 @@ export class CurrentSaleComponent{
     }
 
     initializeDeliveryForm(client: ClientInterface){
-        console.log(client)
+
         this.deliveryForm = this.fb.group({
             residence_address: [{value: client.residence_address, disabled: true}, [Validators.required]],
             clientid: [client.id, Validators.required],
@@ -130,8 +129,6 @@ export class CurrentSaleComponent{
     onChange(target) {
 
         this.store.dispatch(productAction({id: target.id}))
-        //this.isCurrentProduct = {...target}
-        //this.initializeForm()
     }
 
     submit(){
@@ -251,7 +248,6 @@ export class CurrentSaleComponent{
              }
            };  
           
-           pdfMake.createPdf(docDefinition).open() 
-
+           pdfMake.createPdf(docDefinition).open()
     }
 }

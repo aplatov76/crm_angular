@@ -17,7 +17,7 @@ export class ClientsComponent implements OnInit, OnDestroy{
 
     clients$: Observable<ClientInterface[]>
     clientsSub: Subscription
-    customSubject$: Subject<ClientInterface[]> = new Subject();//BehaviorSubject<ClientInterface[]>(null);
+    customSubject$: Subject<ClientInterface[]> = new Subject();
     visible: boolean = false
 
     constructor(
@@ -29,17 +29,11 @@ export class ClientsComponent implements OnInit, OnDestroy{
     }
 
     ngOnInit(): void{
-       // this.clients$.
-       //this.clientService.getClients();
-     // this.clients$ = this.refreshClients$.pipe(switchMap(_ => this.clientService.getClients()))
-     // this.clients$ = this.refreshClients$,pipe(switchMap(_ => this.clientService.getClients()))
      
       this.clientsSub = this.clientService.getClients().subscribe(items => {
-        //console.log(items)
         this.customSubject$.next(items)
       })
 
-       //this.clientService.subject.subscribe(item => console.log(item))
     }
 
     ngOnDestroy(){

@@ -35,7 +35,6 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
     currentOrderSendError$: Subscription
     sendBtn: boolean = true
 
-
     units = units;
 
     constructor(
@@ -125,9 +124,7 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
     }
 
     send(){
-        //console.log('form data: ', (this.formTable.value.tableRows))
         this.store.dispatch(orderDataCmSendAction({orderdata: this.formTable.value.tableRows}));
-        //this.modal.close();
     }
 
     addRow(item?: PraisInterface){
@@ -144,7 +141,7 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
     }
 
     removeRow(id_in_db: number, index: number) {
-        //console.log(id_in_db, index)
+        
         if(id_in_db !== 0)this.store.dispatch(orderDataCmRemoveAction({id: id_in_db}));
 
         //т.к. не делаею dispatch (он удалит все поля которые добавлены но не отправлены в БД)
@@ -154,9 +151,8 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
     }
 
     onChange($event){
-        //console.log($event)
+        
         this.addRow($event)
-
     }
 
     submit(){

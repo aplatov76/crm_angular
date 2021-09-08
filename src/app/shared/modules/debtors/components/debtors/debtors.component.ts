@@ -17,6 +17,7 @@ import {CreateDebtorComponent} from '../create/create.component';
 export class DebtorsComponent implements OnInit{
 
     debtors$: Observable<DebtorInterface[]>
+    filter: boolean = false
 
     constructor(
         private store: Store,
@@ -29,13 +30,11 @@ export class DebtorsComponent implements OnInit{
     ngOnInit(): void{
         this.store.dispatch(debtorsAction())
         this.initializeSubscription();
-        
     }
 
     initializeSubscription(){
 
         this.debtors$ = this.store.pipe(select(currentDebtors));
-
     }
 
     openSelectedDebtor(): void{
@@ -51,7 +50,4 @@ export class DebtorsComponent implements OnInit{
             nzContent: CreateDebtorComponent
         })
     }
-
-
-    
 }

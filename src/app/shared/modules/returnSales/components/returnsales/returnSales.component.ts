@@ -85,7 +85,6 @@ export class ReturnSalesComponent implements OnInit{
 
     onChange(target) {
 
-        console.log(target)
         this.returnSales$ = this.returnSales$.pipe(
             map((items: ReturnSalesInterface[]) => 
                     items.map((item: ReturnSalesInterface) => 
@@ -98,7 +97,6 @@ export class ReturnSalesComponent implements OnInit{
                     ))
         )
 
-       //console.log(co$)
     }
 
     showModal(title: string){

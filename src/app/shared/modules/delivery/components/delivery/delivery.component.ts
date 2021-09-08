@@ -38,9 +38,7 @@ export class DeliveryComponent implements OnInit{
         this.id = parseInt(this.route.snapshot.paramMap.get('id'));
         this.store.dispatch(deliveryAction({id: this.id}))
 
-        //this.initializeForm();
         this.initializeSubscription();
-
     }
 
     ngOnDestroy(): void{
@@ -49,7 +47,6 @@ export class DeliveryComponent implements OnInit{
 
 
     initializeSubscription(){
-
       
         this.currentDelivery = this.store.pipe(select(currentDelivery), filter(Boolean)).subscribe((item: DeliveryInterface) => {
             this.initializeForm(item[0])
@@ -63,8 +60,6 @@ export class DeliveryComponent implements OnInit{
 
         this.store.dispatch(closeDeliveryAction({id: this.id}))
         this.toastservice.success('Доставка закрыта');
-       /// this.store
-
     }
 
     initializeForm(item: DeliveryInterface){

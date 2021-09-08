@@ -23,7 +23,6 @@ export class OrdersComponent implements OnInit{
         end: '2020-12-22'
     }
 
-
     constructor(
         private store: Store,
         private modalService: NzModalService,
@@ -40,7 +39,6 @@ export class OrdersComponent implements OnInit{
 
         this.ordersSub = this.store.pipe(select(currentOrders), filter(Boolean))
             .subscribe((items: OrderInterface[])  => this.orders = items)
-        //this.orders$ = 
     }
 
     setDataStart(e, index: number){
@@ -73,7 +71,6 @@ export class OrdersComponent implements OnInit{
                 nzAutofocus: null,
                 nzContent: CreateOrderComponent
             });
-
     }
     
 }

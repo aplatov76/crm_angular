@@ -30,7 +30,6 @@ export class DeliverysComponent implements OnInit{
 
         this.store.dispatch(deliverysAction());
         this.initializeSubscription();
-
     }
 
     initializeSubscription(){

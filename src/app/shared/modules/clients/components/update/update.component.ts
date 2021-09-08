@@ -27,8 +27,7 @@ export class UpdateClientComponent implements OnInit, OnDestroy{
 
     ngOnInit(): void{
 
-        this.initializeForm()
-
+        this.initializeForm();
     }
 
     ngOnDestroy(){

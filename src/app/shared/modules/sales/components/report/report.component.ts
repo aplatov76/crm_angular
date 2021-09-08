@@ -37,7 +37,6 @@ export class ReportComponent implements OnInit, OnDestroy{
     returnsum: number = 0
     sum: number = 0
     
-
     constructor(
         private store: Store, 
         private salesService: SalesService, 
@@ -48,8 +47,6 @@ export class ReportComponent implements OnInit, OnDestroy{
     
     ngOnInit(): void{null
         this.initializeSubscription()
-        //console.log(this.datepipe.transform(this.data, 'yyyy-MM-dd'))
-        //this.modal.c
     }
 
     ngOnDestroy(): void{
@@ -57,25 +54,6 @@ export class ReportComponent implements OnInit, OnDestroy{
     }
 
     initializeSubscription(){
-
-       // console.log('hello subscription')
-
-        /*
-         = combineLatest(
-                        this.store.pipe(select(currentSalesSelector)),
-                        this.store.pipe(select(currentCassaValue))
-                     ).pipe(
-                         map(
-                             ([currentSales, cassaValue]: [SalesInterface[] | null, CassaValueInterface | null]) => {
-
-
-                                return {sales: currentSales, cassa: cassaValue}
-                             }
-                         )
-                     )
-                     .subscribe(value => {
-                         console.log(value)
-        })*/
 
         const currentData = this.datepipe.transform(this.data, 'yyyy-MM-dd');
         this.forkData$ = forkJoin([
@@ -93,14 +71,12 @@ export class ReportComponent implements OnInit, OnDestroy{
             this.currentCassa = cassa;
             this.currentOrdersPayed = orderspayed;
             this.currentDebtorsPayed = debtorpayed;
-            console.log(this.currentDebtorsPayed)
             
             this.sum = this.currentSales.reduce((sum, current) => (sum + current.price*current.quantity), 0)
             this.returnsum = this.currentReturnSales.reduce((sum, current) => (sum + current.sale.price*current.quantity), 0)
             this.orderPayed = this.currentOrdersPayed.reduce((sum, current) => (sum +  current.orderpay.reduce((sum, el) => (sum + el.payed), 0)), 0)
             this.debtorPayed = this.currentDebtorsPayed.reduce((sum, current) => (sum +  current.debtorpayed.reduce((sum, el) => (sum + el.payed), 0)), 0)
 
-            console.log(this.debtorPayed)
         })          
 
     }
