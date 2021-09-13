@@ -140,7 +140,7 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
         )
     }
 
-    removeRow(id_in_db: number, index: number) {
+    removeRow(id_in_db: number, index: number){
         
         if(id_in_db !== 0)this.store.dispatch(orderDataCmRemoveAction({id: id_in_db}));
 
