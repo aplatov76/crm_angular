@@ -18,12 +18,12 @@ import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzModalModule, NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 import { NzIconModule, NZ_ICONS } from 'ng-zorro-antd/icon';
-import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
+import { NgChartsModule } from 'ng2-charts';
 
 const routes = [
     {
@@ -35,10 +35,10 @@ const routes = [
 
 const antDesignIcons = AllIcons as {
     [key: string]: IconDefinition;
-  };
-  const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
-  
+};
 
+const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key]);
+  
 @NgModule({
     imports: [
         CommonModule, 
@@ -53,6 +53,7 @@ const antDesignIcons = AllIcons as {
         NgSelectModule,
         NzUploadModule,
         NzCollapseModule,
+        NgChartsModule,
         //ngrx modules
         StoreModule.forFeature('cmproducts', reducer),
         EffectsModule.forFeature([ProductsCmEffects])
@@ -61,6 +62,7 @@ const antDesignIcons = AllIcons as {
     declarations: [ProductsCmComponent, CurrentCmProductComponent],
     providers: [ProductsCmService, { provide: NZ_I18N, useValue: en_US },  { provide: NZ_ICONS, useValue: icons } ]
 })
+
 export class ProductsCmModule {
 
 }

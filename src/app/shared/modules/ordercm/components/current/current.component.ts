@@ -7,7 +7,7 @@ import { Observable, of, Subject,  Subscription } from "rxjs";
 
 import { Store, select } from "@ngrx/store";
 import { filter } from 'rxjs/operators';
-import {orderDataCmAction, orderInsertAction, orderDataCmRemoveAction, orderDataCmSendAction, ordersCmAction} from '../../store/actions/action';
+import {orderDataCmAction, orderInsertAction, orderDataCmRemoveAction,  orderDataCmSendAction, ordersCmAction} from '../../store/actions/action';
 import {currentDataSelector as currentPraisSelector} from '../../../../utilmodules/prais/store/selectors';
 
 import { OrderCmService } from "../../store/services/ordercm.service";
@@ -154,6 +154,14 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy{
         
         this.addRow($event)
     }
+
+    save(){
+        //console.log(this.formTable.value.tableRows)
+        this.store.dispatch(orderInsertAction({orderdata: this.formTable.value.tableRows}));
+        this.toastr.info("Заявка успешно сохранена");
+        this.modal.close()
+    }
+
 
     submit(){
       this.modal.close();

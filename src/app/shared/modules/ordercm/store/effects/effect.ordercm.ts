@@ -80,6 +80,7 @@ export class CmOrderEffect {
             return this.ordersCmService.setOrderData(orderdata).pipe(
                 map((orderdata: OrderCmDataInterface[]) => {
                     //console.log(query)
+                    //this.store.dispatch(orderDataCmAction({id: orderdata.}))
                     return orderInsertActionSuccess({orderdata})
                 }),
                 catchError((errorResponse: ErrorMessageInterface) => {

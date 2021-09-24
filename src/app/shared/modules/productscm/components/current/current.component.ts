@@ -2,16 +2,21 @@ import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from "@angu
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { ToastrService } from 'ngx-toastr';
 
+import { ChartConfiguration, ChartEvent, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
+
 import { Observable, of, Subject,  Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { filter } from 'rxjs/operators';
 import { ProductInterface } from "../../../../interfaces/product.interface";
+
 
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { ProductsCmService } from "../../store/services/productscm.service";
 import { ProductCmInterface } from "../../interfaces/productcm.interface";
 import { orderInsertAction } from "../../../ordercm/store/actions/action";
 import { PersistanceService } from "src/app/shared/services/persistence.service";
+import { ProductCmHistory } from "../../interfaces/productCmHistory.interface";
 
 @Component({
     selector: 'productcm-component',
@@ -20,12 +25,34 @@ import { PersistanceService } from "src/app/shared/services/persistence.service"
 })
 export class CurrentCmProductComponent implements OnInit, OnDestroy{
 
+    public lineChartData: ChartConfiguration['data'] = null;
+    
+      public lineChartOptions: ChartConfiguration['options'] = {
+        elements: {
+          line: {
+            tension: 0.5
+          }
+        },
+        scales: {
+          // We use this empty structure as a placeholder for dynamic theming.
+          x: {},
+          'y-axis-0':
+            {
+              position: 'left',
+            }
+        }
+    
+      };
+    
+      public lineChartType: ChartType = 'line';
+
     form: FormGroup
     toOrderForm: FormGroup
 
     @Input() product: ProductCmInterface
     url: string
     currentProductCountCm$: Observable<number>
+    currentHistoryProduct$: Subscription
 
     currentParent: number[] = [];
 
@@ -48,11 +75,30 @@ export class CurrentCmProductComponent implements OnInit, OnDestroy{
 
     ngOnDestroy(): void{
       //this.currentProduct$.unsubscribe();
+      this.currentHistoryProduct$.unsubscribe();
     }
 
     initializeSubscription(){
 
         this.currentProductCountCm$ = this.productService.getCountCm({articul: this.product.articul});
+        this.currentHistoryProduct$ = this.productService.getHistoryPriceData(this.product.articul).subscribe((item: ProductCmHistory) => {
+            this.lineChartData = {
+                datasets: [
+                  {
+                    data: item.price.map(el => el.price),
+                    label: this.product.title,
+                    backgroundColor: 'rgba(148,159,177,0.2)',
+                    borderColor: 'rgba(148,159,177,1)',
+                    pointBackgroundColor: 'rgba(148,159,177,1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(148,159,177,0.8)',
+                    fill: 'origin',
+                  }
+                ],
+                labels: item.price.map(el => el.data),
+              };
+        })
         this.initializeForm();
     }
 

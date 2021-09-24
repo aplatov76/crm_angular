@@ -31,11 +31,17 @@
                 </div>
                     <input type="number" [ngClass]="{'border border-danger' : form.get('count').invalid && form.get('count').touched}" class="form-control"  formControlName="count" placeholder="0">
             </div>
+            <div class="d-flex justify-content-between">
+                <div class=" btn-group mt-2">
+                    <button type="submit" [disabled]="form.controls.invalid" class="btn btn-outline-success mr-1">В заявку</button>
+                    <button type="button" (click)="close()" class="btn btn-outline-danger mr-1">Отмена</button>
+                </div>
 
-            <div class=" btn-group mt-2">
-                <button type="submit" [disabled]="form.controls.invalid" class="btn btn-outline-success mr-1">В заявку</button>
-                <button type="button" (click)="close()" class="btn btn-outline-danger mr-1">Отмена</button>
+                <div class=" btn-group mt-2">
+                    <button class="btn btn-outline-info mr-1">История цен</button>
+                </div>
             </div>
+
           </form>
           <h5>Добавить в заказ</h5>
           <form [formGroup]="toOrderForm" class="mb-1" *ngIf="toOrderForm" (ngSubmit)="toOrderSubmit()">
@@ -63,4 +69,13 @@
 
     </div>
 
+</div>
+<div class="row">
+    <div class="col-md-12" *ngIf="lineChartData">
+        <canvas baseChart  height="60"
+            [data]="lineChartData"
+            [options]="lineChartOptions"
+            [type]="lineChartType">
+        </canvas>
+    </div>
 </div>
