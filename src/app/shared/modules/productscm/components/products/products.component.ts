@@ -29,9 +29,13 @@ export class ProductsCmComponent implements OnInit, OnDestroy{
     searchValue: string = ''
     currentDocument = {id: null, show: false}
     search = new FormControl();
+    /**костыль для запроса который занесет цены текущих прайсов в бд */
+    private pushPrices: boolean = false
     private viewContainerRef: ViewContainerRef
 
     productscm$: Subscription
+    modalPushPrices$: Subscription
+    removePrices$: Subscription
     productsLoading$: Observable<Boolean>
     nodes: ProductsCmInterface[]
     root: Observable<any>
@@ -48,12 +52,16 @@ export class ProductsCmComponent implements OnInit, OnDestroy{
 
     ngOnInit(): void{
       //
-      this.initializeSubscription()
+      this.initializeSubscription();
+      //this.modal.afterAllClose
     }
 
     ngOnDestroy(){
+      if(this.modalPushPrices$)this.modalPushPrices$.unsubscribe();
+      if(this.removePrices$)this.removePrices$.unsubscribe();
+      
       this.productscm$.unsubscribe();
-
+      
       this.modelChanged.next(null);
       this.modelChanged.complete();
     }
@@ -129,34 +137,41 @@ export class ProductsCmComponent implements OnInit, OnDestroy{
       this.modelChanged.next(text);
     }
 
+    removeCurrentPrices(){
+
+      this.removePrices$ = this.cmService.removeCurrentPrices().subscribe(item => {
+          this.toastservice.info("Текущий прайс удален");
+      })
+    }
+
     createTplModal(tplTitle: string, tplContent: TemplateRef<{}>): void {
-        this.modal.create({
+        const m = this.modal.create({
           nzTitle: tplTitle,
           nzContent: tplContent,
           nzMaskClosable: false,
           nzClosable: true,
           nzComponentParams: {
-            value: 'Template Context'
+            value: 'Загрузка прайсов'
           },
           nzFooter: [],
           nzStyle: { width: '80%' },
           nzAutofocus: null
         });
+
+        this.modalPushPrices$ = m.afterClose.subscribe(() => {
+          //console.log('i was closed')
+          if(this.pushPrices){
+            this.cmService.pushProductCmPrice();
+            this.pushPrices = false;
+          }
+          
+        })
       }
 
-      handleChange(info: NzUploadChangeParam): void {
+      handleChange(info: any): void {
 
-        console.log('info:' , info)
-        if (info.file.status !== 'uploading') {
-          console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-         // this.msg.success(`${info.file.name} file uploaded successfully`);
-         console.log('file upload succesfull')
-        } else if (info.file.status === 'error') {
-          //this.msg.error(`${info.file.name} file upload failed.`);
-          console.log('file upload error')
-        }
+        this.pushPrices = true;
+
       }
 
 }

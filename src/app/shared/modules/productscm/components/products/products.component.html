@@ -3,7 +3,8 @@
   <h1 class="h2"></h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="createTplModal('Загрузка прайса', loadprice)">Загрузить прайсы</button>
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="createTplModal('Загрузка прайса', loadprice)">Загрузить прайс</button>
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="removeCurrentPrices()">Очистить прайс</button>
       <button type="button" class="btn btn-sm btn-outline-secondary" >Таблица</button>
     </div>
     <div class="btn-group mr-2">
@@ -100,10 +101,10 @@
       nzType="drag"
       nzName="files"
       [nzMultiple]="true"
-      nzAction="{{baseUrl}}"
       (nzChange)="handleChange($event)"
-      [nzMultiple]=true
-    >
+      nzAction="{{baseUrl}}"
+      [nzMultiple]=true>
+
       <p class="ant-upload-drag-icon">
         <i class="material-icons">cloud_upload</i>
       </p>
@@ -111,5 +112,6 @@
       <p class="ant-upload-hint">
         Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files
       </p>
+
     </nz-upload>
-  </ng-template>
+</ng-template>
