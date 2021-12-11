@@ -149,6 +149,9 @@
         <thead>
           <th>№</th>
           <th class="width-th-title">Наименование</th>
+          <th >Артикул</th>
+          <th >Цена СМ</th>
+          <th >%</th>
           <th>Кол-во</th>
           <th>Цена</th>
           <th>Ед.изм.</th>
@@ -174,6 +177,27 @@
                   formControlName="title"
                 />
               </td>
+              <td>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="articul"
+                />
+              </td>              
+              <td>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="trade_price"
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="percent"
+                />
+              </td>                             
               <td>
                 <input
                   type="number"

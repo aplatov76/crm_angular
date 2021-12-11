@@ -133,9 +133,10 @@ export class CurrentCmProductComponent implements OnInit, OnDestroy{
     
         const array = this.persistanceService.get('orderdata') || [];
 
-        array.push({title: this.product.title, quantity: this.toOrderForm.controls.quantity.value, price: this.toOrderForm.controls.price.value })
+        array.push({title: this.product.title, articul: this.form.controls.articul.value, trade_price: this.product.price, percent: this.toOrderForm.controls.percent.value, quantity: this.toOrderForm.controls.quantity.value, price: this.toOrderForm.controls.price.value })
 
-        this.persistanceService.set('orderdata', array )
+        this.persistanceService.set('orderdata', array );
+        
     }
 
     close(){

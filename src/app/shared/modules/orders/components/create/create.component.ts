@@ -65,8 +65,6 @@ export class CreateOrderComponent implements OnInit{
 
     initializeLocalStorage(){
 
-        
-
         const orderproducts = this.persistanceService.get('orderdata') || null;
 
         //this.correctTotal();
@@ -78,15 +76,15 @@ export class CreateOrderComponent implements OnInit{
 
         this.formTable = this.fb.group({
             tableRows: this.fb.array(orderproducts.map(item => {
-                //console.log(item)
                 return this.fb.group({
-                    //id: [item.id],
-                    //articul: [{value: item.articul, disabled: disable}],
-                    title: [{value: item.title, disabled: disable}],
-                    quantity: [{value: item.quantity, disabled: disable}, [Validators.required, Validators.min(1)]],
+                    title: [{value: item.title, disabled: true}],
+                    trade_price: [{value: item.trade_price, disabled: true}],
+                    articul: [{value: item.articul, disabled: true}],
+                    percent: [item.percent],
+                    quantity: [item.quantity, [Validators.required, Validators.min(1)]],
                     price: [item.price, Validators.required],
-                    unit: [{value: 1, disabled: disable}, [ Validators.required]],
-                    description: [{value: '', disabled: disable}]
+                    unit: [{value: 1, disabled: true}, [ Validators.required]],
+                    description: [{value: '', disabled: true}]
                   })
             }))
         })
