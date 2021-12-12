@@ -83,7 +83,8 @@ export class CreateOrderComponent implements OnInit{
                     percent: [item.percent],
                     quantity: [item.quantity, [Validators.required, Validators.min(1)]],
                     price: [item.price, Validators.required],
-                    unit: [{value: 1, disabled: true}, [ Validators.required]],
+                    unit: [1, [ Validators.required]],
+                    summa: [{value: item.price*item.quantity, disabled: true}],
                     description: [{value: '', disabled: true}]
                   })
             }))
@@ -157,8 +158,12 @@ export class CreateOrderComponent implements OnInit{
                 //articul: [item ? item.articul : null],
                 title: [this.formData.value.title, Validators.required],
                 quantity: [this.formData.value.quantity, [Validators.required, Validators.min(1)]],
+                trade_price: {value:'', disabled: true},
+                percent: {value:'', disabled: true},
+                articul: {value:'', disabled: true},
                 price: [this.formData.value.price, Validators.required],
                 unit: [1, [ Validators.required]],
+                summa: [{value: this.formData.value.quantity*this.formData.value.price, disabled: true}],
                 description: ['']
               })
         )
@@ -179,6 +184,35 @@ export class CreateOrderComponent implements OnInit{
         const quantity = this.formData.controls.quantity.value
         const price = this.formData.controls.price.value
         this.formData.controls.sum.setValue(quantity*price)
+        this.correctTotal()
+    }
+
+    onInputPercent(index: number){
+        const percent = (<FormArray>this.formTable.get('tableRows')).controls[index].get('percent').value;
+        const quantity = (<FormArray>this.formTable.get('tableRows')).controls[index].get('quantity').value;
+        const trade_price = (<FormArray>this.formTable.get('tableRows')).controls[index].get('trade_price').value;
+
+        if(percent && quantity && trade_price){
+
+            (<FormArray>this.formTable.get('tableRows')).controls[index].get('price').setValue(percent*trade_price);
+            (<FormArray>this.formTable.get('tableRows')).controls[index].get('summa').setValue(quantity*percent*trade_price);
+            this.correctTotal()
+        }
+
+    }
+
+    onInputPrice(index: number){
+        const trade_price = (<FormArray>this.formTable.get('tableRows')).controls[index].get('trade_price').value;
+        const quantity = (<FormArray>this.formTable.get('tableRows')).controls[index].get('quantity').value;
+        const price = (<FormArray>this.formTable.get('tableRows')).controls[index].get('price').value;
+
+        if(price && quantity && price){
+
+            (<FormArray>this.formTable.get('tableRows')).controls[index].get('percent').setValue(price/trade_price);
+            (<FormArray>this.formTable.get('tableRows')).controls[index].get('summa').setValue(quantity*price);
+            this.correctTotal()
+        }
+
     }
 
     onClient($event: ClientInterface){

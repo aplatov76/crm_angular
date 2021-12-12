@@ -67,7 +67,7 @@ export class OrdersComponent implements OnInit{
 
                 },
                 nzFooter: [],
-                nzStyle: { width: '80%' },
+                nzStyle: { width: '85%' },
                 nzAutofocus: null,
                 nzContent: CreateOrderComponent
             });
