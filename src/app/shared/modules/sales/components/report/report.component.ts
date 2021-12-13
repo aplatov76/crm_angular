@@ -66,13 +66,18 @@ export class ReportComponent implements OnInit, OnDestroy{
         ]).subscribe(
             ([currentSales, cassa, returnsales, orderspayed, debtorpayed]: [SalesInterface[], CassaValueInterface, ReturnSalesInterface[], OrderInterface[], DebtorInterface[]]) => {
             
+            console.log(currentSales)
+
             this.currentSales = currentSales;
             this.currentReturnSales = returnsales;
-            this.currentCassa = cassa;
+            this.currentCassa = cassa ? cassa : {id: 0, sum: 0, data: new Date()};
             this.currentOrdersPayed = orderspayed;
             this.currentDebtorsPayed = debtorpayed;
+
+            console.log('currentCassa: ', this.currentCassa)
             
-            this.sum = this.currentSales.reduce((sum, current) => (sum + current.price*current.quantity), 0)
+            this.sum = this.currentSales.reduce((sum, current) => (sum + current.price*current.quantity), 0);
+
             this.returnsum = this.currentReturnSales.reduce((sum, current) => (sum + current.sale.price*current.quantity), 0)
             this.orderPayed = this.currentOrdersPayed.reduce((sum, current) => (sum +  current.orderpay.reduce((sum, el) => (sum + el.payed), 0)), 0)
             this.debtorPayed = this.currentDebtorsPayed.reduce((sum, current) => (sum +  current.debtorpayed.reduce((sum, el) => (sum + el.payed), 0)), 0)

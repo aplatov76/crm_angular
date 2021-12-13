@@ -1,8 +1,7 @@
 <div
   class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2"></h1>
-  <div class="btn-toolbar mb-2 mb-md-0">
-    
+  <div class="btn-toolbar mb-2 mb-md-0"> 
     <div class="btn-group mr-2">
       <button type="button" class="btn btn-sm btn-outline-secondary" (click)="nzSelect()">В заявку</button>
     </div>
@@ -10,9 +9,9 @@
       <button type="button" class="btn btn-sm btn-outline-secondary">Export xlsx</button>
       <button type="button" class="btn btn-sm btn-outline-secondary">Export pdf</button>
     </div>
-
     <div class="btn-group mr-2">
-      <button type="button" class="btn btn-sm btn-outline-danger" >Удалить</button>
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="showModalProduct(0, 'product', 'new', 'Новая позиция')">Создать позицию</button>
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="showModalProduct(0, 'group', 'new', 'Новая категория')">Создать группу</button>
     </div>
   </div>
 </div>
@@ -56,11 +55,11 @@
 
 <ng-template #nzTreeTemplate let-node let-origin="origin">
 
-  <div *ngIf="!node.origin.price" class="d-flex justify-content-between border-bottom border-top" colspan="6">
+  <div *ngIf="!node.origin.price" class="d-flex justify-content-between align-items-center border-bottom border-top" colspan="6">
     {{ node.title }}
-    <div>
-      <i class="material-icons pr-1" (click)="showModalProduct(node.origin.id, 'group', 'new', 'Новая категория')">playlist_add</i>
-      <i class="material-icons">delete_sweep</i>
+    <div class="only-show-on-hover">
+      <button type="button" (click)="showModalProduct(node.origin.id, 'product', 'new', 'Новая позиция')" class="btn btn-outline-success btn-sm">Добавить позицию</button>
+      <button type="button" (click)="showModalProduct(node.origin.id, 'group', 'new', 'Новая категория')" class="btn btn-outline-secondary btn-sm">Добавить группу</button>
     </div>
   </div>
 

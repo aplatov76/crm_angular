@@ -65,18 +65,18 @@
         </div>
         <div class="d-flex input-group mb-1">
             <div class="input-group-prepend">
-                <span class="input-group-text cw" >Информация: </span>
+                <span class="input-group-text cw">Информация: </span>
             </div>
             <textarea class="form-control" formControlName="description"></textarea>
         </div>
-        <div  class="d-flex input-group mb-1">
+        <div  *ngIf="event == 'correct' && type == 'product'" class="d-flex input-group mb-1">
             <div class="input-group-prepend">
                 <span class="input-group-text cw">Склад см: </span>
             </div>
                 <input *ngIf="currentProductCountCm$ | async as count" type="text" class="form-control" value="{{count.count}}" placeholder="склад см" [disabled]="true">
         </div>
         <div class=" btn-group mt-2">
-            <button type="submit" [disabled]="form.controls.invalid" class="btn btn-outline-success mr-1">Сохранить</button>
+            <button type="submit" class="btn btn-outline-success mr-1">Сохранить</button>
             <button type="button" (click)="remove()" class="btn btn-outline-danger mr-1">Удалить</button>
         </div>
       </form>

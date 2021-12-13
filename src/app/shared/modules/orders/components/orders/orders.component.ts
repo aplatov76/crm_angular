@@ -50,12 +50,6 @@ export class OrdersComponent implements OnInit{
 
     filterOrders(){
         this.orders = this.orders.filter(item => (new Date(item.data) >= new Date(this.data.start) && new Date(item.data) <= new Date(this.data.end)))
-        this.orders.map(item => {
-            console.log(item.data);
-            console.log(this.data.start)
-            console.log(this.data.end)
-            console.log(new Date(item.data) >= new Date(this.data.start) && new Date(item.data) <= new Date(this.data.end))
-        })
     }
 
     showModal(){

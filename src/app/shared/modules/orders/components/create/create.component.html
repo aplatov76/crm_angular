@@ -284,13 +284,35 @@
           formControlName="total"
         />
       </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Создать заявку: </span>
+        </div>
+        <select class="form-control" formControlName="ordertocm"           
+          [ngClass]="{
+              'border border-danger':
+                formPayed.get('ordertocm').invalid
+            }">
+            <option hidden>Создать заявку в СМ</option>
+            <option [value]='1'>Да</option>
+            <option [value]='2'>Нет</option>
+        </select>        
+      </div>     
     </form>
+    
     <div class="d-flex btn-group">
+      <button
+        type="button"
+        (click)="saveToLocalStorage()"
+        class="btn btn-outline-warning mb-5"
+      >
+        Cохранить
+      </button>     
       <button
         type="button"
         (click)="orderDispatch()"
         [disabled]="formPayed.invalid || !formTable || !formClient"
-        class="btn btn-outline-warning mb-5"
+        class="btn btn-outline-success mb-5"
       >
         Готово
       </button>

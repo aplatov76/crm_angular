@@ -1,11 +1,11 @@
 import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import {productAction, productInsertUpdate, productsAction } from '../../store/actions/action';
+import {productAction, productActionRemove, productInsertUpdate, productsAction } from '../../store/actions/action';
 import { isGroupsProduct} from '../../store/selectors';
 import { Observable, of, Subject,  Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
-import { filter } from 'rxjs/operators';
+import { catchError, filter } from 'rxjs/operators';
 import { ProductInterface } from "../../../../interfaces/product.interface";
 import {GroupsInterface} from '../../interfaces/groups.interface';
 import {isCurrentProduct} from '../../store/selectors';
@@ -13,6 +13,7 @@ import {isCurrentProduct} from '../../store/selectors';
 import {cloneDeep} from 'lodash-es';
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { ProductsService } from "../../store/services/products.service";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
     selector: 'product-component',
@@ -44,6 +45,7 @@ export class ProductComponent implements OnInit, OnDestroy{
         private route: ActivatedRoute, 
         private store: Store,
         private modal: NzModalRef,
+        private toastr: ToastrService,
         private productService: ProductsService
     ){}
 
@@ -65,13 +67,20 @@ export class ProductComponent implements OnInit, OnDestroy{
     ngOnDestroy(): void{
 
       this.groups$.unsubscribe();
-      this.currentProduct$.unsubscribe();
+      if(this.currentProduct$)this.currentProduct$.unsubscribe();
     }
     initializeSubscription(){
         this.currentProduct$ = this.store.pipe(select(isCurrentProduct), filter(Boolean))
             .subscribe((item: ProductInterface) => {
                 this.initializeForm(item[0])
-                this.currentProductCountCm$ = this.productService.getCountCm({articul: item[0].articul});
+                this.currentProductCountCm$ = this.productService.getCountCm({articul: item[0].articul})
+                    .pipe(
+                      catchError(err => {
+                        this.toastr.warning('Не удалось загрузить остаток СМ')
+                        return of({ count: 'ошибка загрузки' } as any);
+                        //throw err;
+                      })
+                    );
         })
 
     }
@@ -79,7 +88,6 @@ export class ProductComponent implements OnInit, OnDestroy{
     initializeSubGroup(){
       this.groups$ = this.store.pipe(select(isGroupsProduct), filter(Boolean))
           .subscribe((items: GroupsInterface[]) => {
-                console.log('sub');
                 this.groups = cloneDeep(items);
       })
     }
@@ -90,26 +98,27 @@ export class ProductComponent implements OnInit, OnDestroy{
 
         this.form = this.fb.group({
             title: new FormControl(item ? item.title : null, Validators.required),
-            id: [item ? item.id : null, [Validators.required]],
+            id: [item ? item.id : null],
             stock: [item ? item.stock : null, [Validators.required]],
             articul: [item ? item.articul : null, [Validators.required]],
             price: [item ? item.price : null, [Validators.required]],
             trade_price: [item ? item.trade_price : null, [Validators.required, Validators.min(1), Validators.max(6)]],
             parent: [item ? [item.parent] : [this.id], [Validators.required]],
             //parent: [item ? 8: 8, [Validators.required]],
-            visible: [item ? item.visible : null, [Validators.required]],
+            visible: [item ? item.visible : 1, [Validators.required]],
             description: [item ? item.description : null]
         })
     }
 
     submit(){
-
-      this.store.dispatch(productInsertUpdate({product: {...this.form.value, parent: this.form.value.parent[0]}}));
+      this.store.dispatch(productInsertUpdate({product: {...this.form.value, parent: {id: this.form.value.parent[0]}}}));
       this.modal.close();
     }
 
     remove(){
-      console.log('remove product')
+      //console.log('remove product')
+      this.store.dispatch(productActionRemove({id: this.id}))
+
     }
     
 }

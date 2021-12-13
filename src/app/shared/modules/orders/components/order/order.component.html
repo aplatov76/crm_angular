@@ -39,12 +39,15 @@
 </ng-container>
 
   <h5>Содержимое: </h5>
-  <table #htmlData class="table table-striped" *ngIf="currentOrder$ | async">
+  <table #htmlData class="table table-bordered table-striped" *ngIf="currentOrder$ | async">
     <thead>
       <tr>
         <th scope="col">#</th>
         <th scope="col">Код</th>
         <th scope="col">Наименование</th>
+        <th scope="col">Артикул</th>
+        <th scope="col">Цена СМ</th>
+        <th scope="col">%</th>
         <th scope="col">Количество</th>
         <th scope="col">Цена</th>
         <th scope="col">Сумма</th>
@@ -55,6 +58,9 @@
         <th scope="row">{{i + 1}}</th>
         <td>{{item.id}}</td>
         <td>{{item.title}}</td>
+        <td>{{item.articul}}</td>
+        <td>{{item.trade_price}}</td>
+        <td>{{item.percent}}</td>                      
         <td>{{item.quantity}}</td>
         <td>{{item.price}}</td>
         <td>{{item.sum}}</td>

@@ -4,7 +4,6 @@ import { Observable } from "rxjs";
 import { ClientInterface } from "src/app/shared/interfaces/client.interface";
 import {CreateOrderInterface} from '../../interfaces/createOrder.interface'
 import { OrdersService } from "../../store/services/orders.service";
-import { filter, map } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { Store } from "@ngrx/store";
 import { addOrderAction } from "../../store/actions/action";
@@ -24,7 +23,7 @@ export class CreateOrderComponent implements OnInit{
     formClient: FormGroup
     formPayed: FormGroup
     formTable: FormGroup
-    createOrder = {clientId: null, total: null, current: null}
+    createOrder = {clientId: null, total: null, current: null, ordertocm: null}
     clients$: Observable<ClientInterface[]>
 
     units = units;
@@ -58,7 +57,8 @@ export class CreateOrderComponent implements OnInit{
 
         this.formPayed = this.fb.group({
             current: [null, [Validators.required]],
-            total: [{value: 0, disabled: true}, [Validators.required, Validators.min(1)]]
+            total: [{value: 0, disabled: true}, [Validators.required, Validators.min(1)]],
+            ordertocm: [null, [Validators.required]],
         })
 
     }
@@ -67,17 +67,12 @@ export class CreateOrderComponent implements OnInit{
 
         const orderproducts = this.persistanceService.get('orderdata') || null;
 
-        //this.correctTotal();
-        //console.log(orderproducts)
-
         if(orderproducts !== null){
-
-        const disable: boolean = false;
 
         this.formTable = this.fb.group({
             tableRows: this.fb.array(orderproducts.map(item => {
                 return this.fb.group({
-                    title: [{value: item.title, disabled: true}],
+                    title: [{value: item.title, disabled: false}],
                     trade_price: [{value: item.trade_price, disabled: true}],
                     articul: [{value: item.articul, disabled: true}],
                     percent: [item.percent],
@@ -85,7 +80,7 @@ export class CreateOrderComponent implements OnInit{
                     price: [item.price, Validators.required],
                     unit: [1, [ Validators.required]],
                     summa: [{value: item.price*item.quantity, disabled: true}],
-                    description: [{value: '', disabled: true}]
+                    description: ''
                   })
             }))
         })
@@ -95,7 +90,6 @@ export class CreateOrderComponent implements OnInit{
     }
 
     initializeSubscription(){
-
         this.clients$ = this.ordersService.getClients();
 
     }
@@ -103,6 +97,7 @@ export class CreateOrderComponent implements OnInit{
     orderDispatch(){
 
         this.createOrder.current = this.formPayed.controls.current.value;
+        this.createOrder.ordertocm = 1*this.formPayed.controls.ordertocm.value;
 
         //console.log(this.createOrder)
 
@@ -126,9 +121,16 @@ export class CreateOrderComponent implements OnInit{
             return;
         }
 
-        this.store.dispatch(addOrderAction({createOrder: {...this.createOrder, products: this.formTable.value.tableRows}}));
+        if(!this.createOrder.ordertocm){
+            this.toastr.error('Не выбрана опция создания заявки');
+            return;
+        }
 
-        this.persistanceService.set('orderdata', null);
+        //console.log({createOrder: {...this.createOrder, products: (<FormArray>this.formTable.get('tableRows')).getRawValue()}})
+
+        this.store.dispatch(addOrderAction({createOrder: {...this.createOrder, products: (<FormArray>this.formTable.get('tableRows')).getRawValue()}}));
+
+        //this.persistanceService.set('orderdata', null);
         this.modalRef.close();
     }
 
@@ -158,9 +160,9 @@ export class CreateOrderComponent implements OnInit{
                 //articul: [item ? item.articul : null],
                 title: [this.formData.value.title, Validators.required],
                 quantity: [this.formData.value.quantity, [Validators.required, Validators.min(1)]],
-                trade_price: {value:'', disabled: true},
-                percent: {value:'', disabled: true},
-                articul: {value:'', disabled: true},
+                trade_price: [{value: null, disabled: true}],
+                percent: [{value: null, disabled: true}],
+                articul: [{value: null, disabled: true}],
                 price: [this.formData.value.price, Validators.required],
                 unit: [1, [ Validators.required]],
                 summa: [{value: this.formData.value.quantity*this.formData.value.price, disabled: true}],
@@ -213,6 +215,23 @@ export class CreateOrderComponent implements OnInit{
             this.correctTotal()
         }
 
+    }
+
+    
+    saveToLocalStorage(){
+        this.persistanceService.set('orderdata', (<FormArray>this.formTable.get('tableRows')).controls.map(item => ({
+            title: item.get('title').value,
+            quantity: item.get('quantity').value,
+            trade_price: item.get('trade_price').value,
+            percent: item.get('percent').value,
+            articul: item.get('articul').value,
+            price: item.get('price').value,
+            unit: item.get('unit').value,
+            summa: item.get('summa').value,
+            description: item.get('description').value
+        })));
+
+        this.toastr.success('Заказ успешно сохранен')
     }
 
     onClient($event: ClientInterface){

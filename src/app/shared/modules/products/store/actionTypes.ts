@@ -19,4 +19,8 @@ export enum ActionTypes {
     PRODUCT_GROUPS = "[Product groups ] START LOAD",
     PRODUCTS_GROUPS_SUCCESS = "[Product groups ] LOAD SUCCESS",
     PRODUCTS_GROUPS_FAILED = "[Product groups ] LOAD FAILED",
+
+    PRODUCT_GROUP_REMOVE = "[Product group ] START remove",
+    PRODUCTS_GROUP_REMOVE_SUCCESS = "[Product group ] remove SUCCESS",
+    PRODUCTS_GROUP_REMOVE_FAILED = "[Product group ] remove FAILED",
 }

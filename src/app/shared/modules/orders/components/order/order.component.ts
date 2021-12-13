@@ -7,14 +7,12 @@ import { ordersAction, orderAction, orderPayAction, orderPayActionFailed } from 
 import { currentOrders, currentError, currentOrder } from '../../store/selectors';
 import { ActivatedRoute } from "@angular/router";
 
-import {OrderProductInterface} from '../../interfaces/orderProduct.interface';
 import {ErrorMessageInterface} from '../../../../interfaces/errMessages.interface';
 import { filter, map } from 'rxjs/operators';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";  
 import { DatePipe } from '@angular/common';
 import { orderInsertAction, ordersCmAction } from '../../../ordercm/store/actions/action';
-import { ItemsList } from '@ng-select/ng-select/lib/items-list';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;   
 
@@ -86,7 +84,7 @@ export class OrderItemComponent implements OnInit, OnDestroy{
         this.createCmOrder$ = this.currentOrder$.pipe().subscribe(
             order => {
                 //console.log(order)
-                const orderdata = order[0].orderproduct.map(item => ({...item, id: null, articul: null, unit: 1}));
+                const orderdata = order[0].orderproduct.map(item => ({...item, id: null}));
                 this.store.dispatch(orderInsertAction({orderdata}));
                 this.toastService.success('Заявка создана')
             }

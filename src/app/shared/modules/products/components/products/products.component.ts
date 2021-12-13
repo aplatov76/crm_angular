@@ -40,8 +40,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
   productSub: Subscription
   nodes: ProductsInterface[] = null
   productsTable: ProductsInterface[] = []
+  /**Открытые категории */
   expandedNodeList: number[]  = []
-  
 
   /**start nz tree */
 
@@ -55,7 +55,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   nzCheck(event: NzFormatEmitEvent): void {
-    console.log('event',event);
+    console.log(this.nzTreeComponent.getCheckedNodeList());
+    //const checkedElement: any = 
   }
 
   // nzSelectedKeys change

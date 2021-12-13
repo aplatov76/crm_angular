@@ -35,11 +35,14 @@ export class ProductsService{
     }
 
     saveProduct(product: ProductInterface): Observable<any>{
+        return this.http.post<ProductInterface>(`${environment.url}/product`, {product});
+    }
+
+    updateProduct(product: ProductInterface): Observable<any>{
         return this.http.put<ProductInterface>(`${environment.url}/product/${product.id}`, {product});
     }
 
     getCountCm(query: any): Observable<number>{
-        //console.log('query product count cm: ',query)
 
         return this.http.get<number>(`${environment.url}/cm/count?articul=${query.articul}`);
     }
