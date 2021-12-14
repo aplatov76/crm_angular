@@ -17,8 +17,7 @@ import { DebtorInterface } from "../../../debtors/interfaces/debtor.interface";
 
 @Component({
     selector: 'report-sales',
-    templateUrl: 'report.component.html',
-    styles: ['report.component.css']
+    templateUrl: 'report.component.html'
 })
 export class ReportComponent implements OnInit, OnDestroy{
 

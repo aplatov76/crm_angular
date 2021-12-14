@@ -63,7 +63,7 @@ const orderReducer = createReducer(
     })),
     on(orderPayActionFailed, (state, action) => ({
         ...state,
-        error: action.err
+        error: action.err.error
     }))
 )
 

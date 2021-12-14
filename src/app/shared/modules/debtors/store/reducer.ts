@@ -32,7 +32,7 @@ const debtorReducer = createReducer(
         ...state,
         debtors: null,
         loading: false,
-        error: action.err
+        error: action.err.error
     })),
     on(debtorActionSuccess, (state, action) => ({
         ...state,
@@ -44,7 +44,7 @@ const debtorReducer = createReducer(
         ...state,
         currentDebtor: null,
         loading: false,
-        error: action.err
+        error: action.err.error
     })),
 )
 

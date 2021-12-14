@@ -30,6 +30,13 @@ import { ProductsModule } from './shared/modules/products/products.module';
 import {ProductsCmModule} from './shared/modules/productscm/productscm.module';
 import {ClientsModule} from './shared/modules/clients/clients.module';
 import {DeliveryModule} from './shared/modules/delivery/delivery.module';
+import { NZ_I18N } from 'ng-zorro-antd/i18n';
+import { ru_RU } from 'ng-zorro-antd/i18n';
+import { registerLocaleData } from '@angular/common';
+import ru from '@angular/common/locales/ru';
+import { FormsModule } from '@angular/forms';
+
+registerLocaleData(ru);
 //import {WebProductsModule} from './shared/modules/webProducts/webProducts.module';
 
 @NgModule({
@@ -72,7 +79,10 @@ import {DeliveryModule} from './shared/modules/delivery/delivery.module';
     ProductsModule,
     ProductsCmModule,
     ClientsModule,
-    DeliveryModule
+    DeliveryModule,
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    FormsModule,
+    StoreModule.forRoot({}, {})
     //WebProductsModule
   ],
   providers: [
@@ -80,7 +90,8 @@ import {DeliveryModule} from './shared/modules/delivery/delivery.module';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }
+    },
+    { provide: NZ_I18N, useValue: ru_RU }
   ],
   bootstrap: [AppComponent],
   //exports: [CollapseModule]

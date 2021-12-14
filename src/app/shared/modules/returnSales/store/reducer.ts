@@ -15,6 +15,7 @@ const initialState: ReturnSalesStateInterface = {
 const returnSalesReducer = createReducer(
     initialState,
     on(returnSalesActionSuccess, (state, action) => ({
+        ...state,
         loading: false,
         returnSales: action.returnsales
     })),
@@ -23,6 +24,7 @@ const returnSalesReducer = createReducer(
         loading: true
     })),
     on(returnSalesActionFailure, (state, action) => ({
+        ...state,
         returnSales: null,
         loading: false
     })),
@@ -31,9 +33,10 @@ const returnSalesReducer = createReducer(
         createdReturnSale: action.returnsale
     })),
     on(createReturnSalesActionFailed, (state, action) => ({
+        ...state,
         returnSales: null,
         loading: false,
-        err: action.err
+        err: action.err.error
     }))
 )
 
