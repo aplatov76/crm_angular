@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import {productAction, productActionRemove, productInsertUpdate, productsAction } from '../../store/actions/action';
+import {productAction, productActionRemove, productGroups, productInsertUpdate, productsAction } from '../../store/actions/action';
 import { isGroupsProduct} from '../../store/selectors';
 import { Observable, of, Subject,  Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
@@ -35,10 +35,6 @@ export class ProductComponent implements OnInit, OnDestroy{
     @Input() valueChange: Subject<string>;
 
     currentParent: number[] = [];
-
-    onChange($event: string[]): void {
-      //console.log($event);
-    }
 
     constructor(
         private fb: FormBuilder, 
@@ -95,7 +91,7 @@ export class ProductComponent implements OnInit, OnDestroy{
     initializeForm(item: ProductInterface | null){
 
       this.currentParent.push(item ? item.parent : this.id)
-
+        console.log(item, this.id)
         this.form = this.fb.group({
             title: new FormControl(item ? item.title : null, Validators.required),
             id: [item ? item.id : null],
@@ -111,7 +107,7 @@ export class ProductComponent implements OnInit, OnDestroy{
     }
 
     submit(){
-      this.store.dispatch(productInsertUpdate({product: {...this.form.value, parent: {id: this.form.value.parent[0]}}}));
+      this.store.dispatch(productInsertUpdate({product: {...this.form.value, parent: {id: !!this.form.value.parent[0] ? this.form.value.parent[0] : null}}}));
       this.modal.close();
     }
 

@@ -47,4 +47,9 @@ export class ProductsService{
         return this.http.get<number>(`${environment.url}/cm/count?articul=${query.articul}`);
     }
 
+    removeProductOrGroup(id: number): Observable<any>{
+
+        return this.http.delete<any>(`${environment.url}/product/${id}`)
+    }
+
 }

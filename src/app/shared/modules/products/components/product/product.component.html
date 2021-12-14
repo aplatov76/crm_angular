@@ -38,11 +38,12 @@
             <div *ngIf="groups" class="d-flex custom-group">
                 <nz-tree-select
                 style="width: 100%;height:100%"
-                nzShowSearch
+                [nzMultiple]=false
                 nzCheckable
+                [nzCheckStrictly]=true
                 formControlName="parent"
                 [nzNodes]="groups"
-                nzPlaceHolder="Please select">
+                nzPlaceHolder="Выберите группу">
                 <ng-template #nzTreeTemplate let-node>
                   <span class="ant-tree-node-content-wrapper" [class.ant-tree-node-selected]="node.isSelected">
                     <span>
@@ -77,6 +78,6 @@
         </div>
         <div class=" btn-group mt-2">
             <button type="submit" class="btn btn-outline-success mr-1">Сохранить</button>
-            <button type="button" (click)="remove()" class="btn btn-outline-danger mr-1">Удалить</button>
+            <button type="button" *ngIf="event == 'correct'" (click)="remove()" class="btn btn-outline-danger mr-1">Удалить</button>
         </div>
       </form>

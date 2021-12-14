@@ -15,7 +15,8 @@ import {
      productGroupsFailed,
      productsWarningAction,
      productsWarningActionSuccess,
-     productsWarningActionFailed
+     productsWarningActionFailed,
+     productActionRemove
     } from "../actions/action";
 import {switchMap, map, tap, catchError} from "rxjs/operators";
 import {of} from "rxjs";
@@ -97,12 +98,16 @@ export class ProductsEffect {
     productInsertUpdate$ = createEffect(() => this.actions$.pipe(
         ofType(productInsertUpdate),
         switchMap(({product}) => {
+            console.log('effect product: ', product)
+            //костыль, создание новой позиции или обновление старой, отдельный эффект писать лень
             if(!product.id)
                 return this.productsService.saveProduct(product).pipe(
                     map((res: any) => {
                         //console.log(product)
                         this.store.dispatch(productsAction({query: {view: 'tree'}}))
-                        this.store.dispatch(productsWarningAction({query: {warning: true}}))
+                        this.store.dispatch(productsWarningAction({query: {warning: true}}));
+                        if(!product.price)this.store.dispatch(productGroups());
+                        
                         return productInsertUpdateSuccess({res})
                     } ),
                     catchError((errorResponse: HttpErrorResponse) => {
@@ -111,17 +116,18 @@ export class ProductsEffect {
                 )
             else return this.productsService.updateProduct(product).pipe(
                     map((res: any) => {
-                        //console.log(product)
+                        console.log('effect update product: ', product)
                         this.store.dispatch(productsAction({query: {view: 'tree'}}))
-                        this.store.dispatch(productsWarningAction({query: {warning: true}}))
+                        this.store.dispatch(productsWarningAction({query: {warning: true}}));
+
+                        if(!product.price)this.store.dispatch(productGroups());
+
                         return productInsertUpdateSuccess({res})
                     } ),
                     catchError((errorResponse: HttpErrorResponse) => {
                         return of(productInsertUpdateFailed({err: errorResponse}))
                     })
                 )
-
-
 
         } )
       )
@@ -134,6 +140,21 @@ export class ProductsEffect {
                 map((groups: GroupsInterface[]) => {
                     //console.log(product)
                     ////console.log('tree: ', this.buildTree(groups))
+                    return productGroupsSuccess({groups:  this.buildTree(groups)})
+                } ),
+                catchError((errorResponse: HttpErrorResponse) => {
+                    return of(productGroupsFailed({err: errorResponse}))
+                })
+            )
+        } )
+      )
+    )
+
+    removeProductOrGroup$ = createEffect(() => this.actions$.pipe(
+        ofType(productActionRemove),
+        switchMap(({id}) => {
+            return this.productsService.removeProductOrGroup(id).pipe(
+                map((groups: GroupsInterface[]) => {
                     return productGroupsSuccess({groups:  this.buildTree(groups)})
                 } ),
                 catchError((errorResponse: HttpErrorResponse) => {
