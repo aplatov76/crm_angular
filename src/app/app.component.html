@@ -1,36 +1,80 @@
-<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow ">
-    <div class="d-flex justify-content-between navbar-brand col-md-3 col-lg-2 mr-0 px-3">
-      <a class="text-white"  [routerLink]="['/']">CRM Repeat</a>
-      <i class="material-icons d-none d-sm-block" (click)="view = !view">storage</i>
-    </div>
-
-    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
-      data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <!--<input class="form-control form-control-dark w-100" type="text" placeholder="Поиск..." aria-label="Search">-->
-    <div class="d-flex justify-content-end align-items-center">
-      <app-indicator></app-indicator>
-      <ul class="navbar-nav px-3">
-        <li  *ngIf="(currentUser$ | async) as isAnonimus; else auth"  class="nav-item text-nowrap">
-          <a *ngIf="isAnonimus" type="button" (click)="out()" class="nav-link">Выйти</a>
-        </li>
-
-        <ng-template #auth>
-          <li  class="nav-item text-nowrap">
-            <a [routerLink]="['/auth']" class="nav-link">Войти</a>
-          </li>
-        </ng-template>
-      </ul>
-    </div>
-  </nav>
-
-  <div class="container-fluid">
-    <div class="row">
-      <left-nav [view]="view"></left-nav>
-      <main role="main" [ngClass]="{'col-md-9': view, 'col-lg-10': view, 'col-lg-12': !view}" class="ml-sm-auto px-md-4">
-          <router-outlet></router-outlet>
-      </main>
-    </div>
+<nav
+  class="
+    navbar navbar-dark
+    sticky-top
+    bg-dark
+    flex-md-nowrap
+    p-0
+    shadow
+  "
+>
+  <div
+    class="
+      d-flex
+      justify-content-between
+      navbar-brand
+      col-md-3 col-lg-2
+      mr-0
+      px-3
+    "
+  >
+    <a class="text-white" [routerLink]="['/']">CRM Repeat</a>
+    <i class="material-icons d-none d-sm-block" (click)="view = !view"
+      >storage</i
+    >
   </div>
+
+  <button
+    class="navbar-toggler position-absolute d-md-none collapsed"
+    type="button"
+    data-toggle="collapse"
+    data-target="#sidebarMenu"
+    aria-controls="sidebarMenu"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!--<input class="form-control form-control-dark w-100" type="text" placeholder="Поиск..." aria-label="Search">-->
+  <div class="d-flex justify-content-end align-items-center">
+    <app-indicator></app-indicator>
+    <ul class="navbar-nav px-3">
+      <li
+        *ngIf="currentUser$ | async as isAnonimus; else auth"
+        class="nav-item text-nowrap"
+      >
+        <a
+          *ngIf="isAnonimus"
+          type="button"
+          (click)="out()"
+          class="nav-link"
+          >Выйти</a
+        >
+      </li>
+
+      <ng-template #auth>
+        <li class="nav-item text-nowrap">
+          <a [routerLink]="['/auth']" class="nav-link">Войти</a>
+        </li>
+      </ng-template>
+    </ul>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <left-nav [view]="view"></left-nav>
+    <main
+      role="main"
+      [ngClass]="{
+        'col-md-9': view,
+        'col-lg-10': view,
+        'col-lg-12': !view
+      }"
+      class="ml-sm-auto px-md-4"
+    >
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
