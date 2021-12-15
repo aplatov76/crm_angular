@@ -1,8 +1,7 @@
-import {UserInterface} from './user.interface';
+import { UserInterface } from './user.interface';
 
-export interface CheckInterface{
-
-    id: number,
-    data: Date,
-    user: UserInterface
+export interface CheckInterface {
+  id: number;
+  data: Date;
+  user: UserInterface;
 }

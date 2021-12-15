@@ -1,5 +1,5 @@
-export interface ProductCmHistoryPrice{
-    id: number,
-    data: Date,
-    price: number
+export interface ProductCmHistoryPrice {
+  id: number;
+  data: Date;
+  price: number;
 }

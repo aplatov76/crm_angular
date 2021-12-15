@@ -1,7 +1,7 @@
-import { ProductCmHistoryPrice } from "./productcmHistoryPrice.interface";
+import { ProductCmHistoryPrice } from './productcmHistoryPrice.interface';
 
-export interface ProductCmHistory{
-    id: number,
-    articul: number,
-    price: ProductCmHistoryPrice[]
+export interface ProductCmHistory {
+  id: number;
+  articul: number;
+  price: ProductCmHistoryPrice[];
 }

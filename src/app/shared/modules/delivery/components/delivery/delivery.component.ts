@@ -1,79 +1,81 @@
-import {Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import {filter} from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 
-import {closeDeliveryAction, deliveryAction} from '../../store/actions/actions';
-import {DeliveryInterface} from '../../interfaces/delivery.interface';
-import {currentDelivery} from '../../store/selectors';
 import { ActivatedRoute } from '@angular/router';
+import {
+  closeDeliveryAction,
+  deliveryAction
+} from '../../store/actions/actions';
+import { DeliveryInterface } from '../../interfaces/delivery.interface';
+import { currentDelivery } from '../../store/selectors';
 import { SalesInterface } from '../../../sales/interfaces/sales.interface';
 
 @Component({
-    selector: 'currentdelivery-component',
-    templateUrl: './delivery.component.html'
+  selector: 'currentdelivery-component',
+  templateUrl: './delivery.component.html'
 })
-export class DeliveryComponent implements OnInit{
+export class DeliveryComponent implements OnInit {
+  id: number;
 
-    id: number
-    status: number = 0
-    sale: SalesInterface[]
-    form: FormGroup
-    currentDelivery: Subscription
+  status: number = 0;
 
-    constructor(
-        private fb: FormBuilder,
-        private store: Store,
-        private route: ActivatedRoute,
-        private datepipe: DatePipe,
-        private toastservice: ToastrService, 
-    ){
+  sale: SalesInterface[];
 
-    }
+  form: FormGroup;
 
-    ngOnInit(){
-        this.id = parseInt(this.route.snapshot.paramMap.get('id'));
-        this.store.dispatch(deliveryAction({id: this.id}))
+  currentDelivery: Subscription;
 
-        this.initializeSubscription();
-    }
+  constructor(
+    private fb: FormBuilder,
+    private store: Store,
+    private route: ActivatedRoute,
+    private datepipe: DatePipe,
+    private toastservice: ToastrService
+  ) {}
 
-    ngOnDestroy(): void{
-        if(this.currentDelivery)this.currentDelivery.unsubscribe();
-    }
+  ngOnInit() {
+    this.id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.store.dispatch(deliveryAction({ id: this.id }));
 
+    this.initializeSubscription();
+  }
 
-    initializeSubscription(){
-      
-        this.currentDelivery = this.store.pipe(select(currentDelivery), filter(Boolean)).subscribe((item: DeliveryInterface) => {
-            this.initializeForm(item[0])
-            this.status = item[0].status;
-            this.sale = item[0].check.sale;
-        })
+  ngOnDestroy(): void {
+    if (this.currentDelivery) this.currentDelivery.unsubscribe();
+  }
 
-    }
+  initializeSubscription() {
+    this.currentDelivery = this.store
+      .pipe(select(currentDelivery), filter(Boolean))
+      .subscribe((item: DeliveryInterface) => {
+        this.initializeForm(item[0]);
+        this.status = item[0].status;
+        this.sale = item[0].check.sale;
+      });
+  }
 
-    closeDelivery(){
+  closeDelivery() {
+    this.store.dispatch(closeDeliveryAction({ id: this.id }));
+    this.toastservice.success('Доставка закрыта');
+  }
 
-        this.store.dispatch(closeDeliveryAction({id: this.id}))
-        this.toastservice.success('Доставка закрыта');
-    }
-
-    initializeForm(item: DeliveryInterface){
-
-        this.form = this.fb.group({
-            id: [item.id, Validators.required],
-            data: [this.datepipe.transform(item.data, 'yyyy-MM-dd'), Validators.required],
-            address: [item.client.residence_address],
-            description: [item.description],
-            price: [item.price],
-            client: [item.client.fullname],
-            status: [{value: (item.status === 0) ? 'Открыта' : 'Закрыта'}]
-        })
-
-    }
-
+  initializeForm(item: DeliveryInterface) {
+    this.form = this.fb.group({
+      id: [item.id, Validators.required],
+      data: [
+        this.datepipe.transform(item.data, 'yyyy-MM-dd'),
+        Validators.required
+      ],
+      address: [item.client.residence_address],
+      description: [item.description],
+      price: [item.price],
+      client: [item.client.fullname],
+      status: [{ value: item.status === 0 ? 'Открыта' : 'Закрыта' }]
+    });
+  }
 }

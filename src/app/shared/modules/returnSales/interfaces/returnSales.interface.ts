@@ -1,8 +1,8 @@
-import { SalesInterface } from "../../sales/interfaces/sales.interface"
+import { SalesInterface } from '../../sales/interfaces/sales.interface';
 
-export interface ReturnSalesInterface{
-    id: number,
-    sale: SalesInterface,
-    quantity: number,
-    data: Date
+export interface ReturnSalesInterface {
+  id: number;
+  sale: SalesInterface;
+  quantity: number;
+  data: Date;
 }

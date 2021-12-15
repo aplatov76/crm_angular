@@ -1,49 +1,63 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-import {DeliveryInterface} from '../../interfaces/delivery.interface';
 import { ClientInterface } from 'src/app/shared/interfaces/client.interface';
-import {environment} from '../../../../../../environments/environment';
-import { map } from 'rxjs/operators';
-import { CheckInterface } from "src/app/shared/interfaces/check.interface";
+import { CheckInterface } from 'src/app/shared/interfaces/check.interface';
+import { environment } from '../../../../../../environments/environment';
+import { DeliveryInterface } from '../../interfaces/delivery.interface';
 
 @Injectable()
-export class DeliveryService{
+export class DeliveryService {
+  constructor(private http: HttpClient) {}
 
-    constructor(private http: HttpClient){
+  getAll(): Observable<DeliveryInterface[]> {
+    return this.http.get<DeliveryInterface[]>(
+      `${environment.url}/delivery`,
+      {}
+    );
+  }
 
-    }
+  getDelivery(id: number): Observable<DeliveryInterface> {
+    return this.http.get<DeliveryInterface>(
+      `${environment.url}/delivery?id=${id}`
+    );
+  }
 
-    getAll(): Observable<DeliveryInterface[]>{
-        return this.http.get<DeliveryInterface[]>(`${environment.url}/delivery`, {});
-    }
+  createDelivery(
+    delivery: DeliveryInterface
+  ): Observable<DeliveryInterface> {
+    return this.http.post<DeliveryInterface>(
+      `${environment.url}/delivery`,
+      { delivery }
+    );
+  }
 
-    getDelivery(id: number): Observable<DeliveryInterface>{
-        return this.http.get<DeliveryInterface>(`${environment.url}/delivery?id=${id}`);
-    }
+  closeDelivery(id: number): Observable<DeliveryInterface> {
+    return this.http.put<DeliveryInterface>(
+      `${environment.url}/delivery`,
+      { id }
+    );
+  }
 
-    createDelivery(delivery: DeliveryInterface): Observable<DeliveryInterface>{
-        return this.http.post<DeliveryInterface>(`${environment.url}/delivery`, {delivery});
-    }
+  getClients(): Observable<ClientInterface[]> {
+    return this.http.get<ClientInterface[]>(
+      `${environment.url}/client`
+    );
+  }
 
-    closeDelivery(id: number): Observable<DeliveryInterface>{
+  getChecks(): Observable<CheckInterface[]> {
+    return this.http.get<CheckInterface[]>(
+      `${environment.url}/check?limit=10`
+    );
+  }
 
-        return this.http.put<DeliveryInterface>(`${environment.url}/delivery`, {id});
-    }
-
-    getClients(): Observable<ClientInterface[]>{
-        return this.http.get<ClientInterface[]>(`${environment.url}/client`)//.pipe(map((items) => items))
-    }
-
-    getChecks(): Observable<CheckInterface[]>{
-
-        return this.http.get<CheckInterface[]>(`${environment.url}/check?limit=10`)
-    }
-
-    addDelivery(delivery: DeliveryInterface): Observable<DeliveryInterface>{
-
-        return this.http.post<DeliveryInterface>(`${environment.url}/delivery`, {delivery})
-    }
-
+  addDelivery(
+    delivery: DeliveryInterface
+  ): Observable<DeliveryInterface> {
+    return this.http.post<DeliveryInterface>(
+      `${environment.url}/delivery`,
+      { delivery }
+    );
+  }
 }

@@ -1,9 +1,7 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
-    selector: 'invoice',
-    templateUrl: './invoice.component.html'
+  selector: 'invoice',
+  templateUrl: './invoice.component.html'
 })
-export class InvoiceComponent {
-    
-}
+export class InvoiceComponent {}

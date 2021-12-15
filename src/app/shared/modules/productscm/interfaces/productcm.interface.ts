@@ -1,8 +1,8 @@
-export interface ProductCmInterface{
-    id: number,
-    articul: number | null,
-    title: string,
-    price: number | null,
-    stock?: number | null,
-    unit: string
+export interface ProductCmInterface {
+  id: number;
+  articul: number | null;
+  title: string;
+  price: number | null;
+  stock?: number | null;
+  unit: string;
 }

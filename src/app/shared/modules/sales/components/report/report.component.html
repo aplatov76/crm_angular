@@ -1,109 +1,136 @@
-
-  <div class="modal-body">
-    <table class="table table-bordered table-striped table-sm" *ngIf="currentSales">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Код</th>
-            <th scope="col">Наименование</th>
-            <th scope="col">Шт.</th>
-            <th scope="col">Цена</th>
-            <th scope="col">Сумма</th>
-          </tr>
-        </thead>
-        <tbody >
-          <tr *ngFor="let element of currentSales; let i = index">
-            <th scope="row">{{i + 1}}</th>
-            <td>{{element.id}}</td>
-            <td>{{element.product.title}}</td>
-            <td>{{element.quantity}}</td>
-            <td>{{element.price | currency:'RUB': ' '}}</td>
-            <td>{{element.sum | currency:'RUB': ' '}}</td>
-          </tr>
-          <tr *ngIf="currentReturnSales">
-            <td scope="row"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><b>Список возвратов:</b></td>
-            <td></td>
-          </tr>
-          <tr *ngFor="let element of currentReturnSales; let i = index">
-            <th scope="row">{{i + 1}}</th>
-            <td>{{element.id}}</td>
-            <td>{{element.sale.product.title}}</td>
-            <td>{{element.quantity}}</td>
-            <td>{{element.sale.price | currency:'RUB': ' '}}</td>
-            <td>{{element.sale.price*element.quantity | currency:'RUB': ' '}}</td>
-          </tr>
-          <tr>
-            <th scope="row"></th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><b>Итого возврат:</b></td>
-            <td><b>{{returnsum | currency: 'RUB': ' '}}</b></td>
-          </tr>
-          <tr>
-            <th scope="row"></th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><b>Продажи:</b></td>
-            <td><b>{{sum | currency:'RUB': ' '}}</b></td>
-          </tr>
-          <ng-container *ngFor="let order of currentOrdersPayed">
-            <tr *ngFor="let element of order.orderpay; let i = index">
-              <th scope="row">{{i + 1}}</th>
-              <td>{{element.id}}</td>
-              <td>{{element.data}}</td>
-              <td></td>
-              <td></td>
-              <td>{{element.payed | currency: 'RUB': ' '}}</td>
-            </tr>       
-          </ng-container>
-          <tr *ngIf="currentOrdersPayed">
-            <th scope="row"></th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><b>Заказы:</b></td>
-            <td><b>{{orderPayed | currency:'RUB': ' '}}</b></td>
-          </tr>
-          <ng-container *ngFor="let debtor of currentDebtorsPayed; let j= index">
-            <tr *ngFor="let element of debtor.debtorpayed; let i = index">
-              <th scope="row">{{j + 1}}</th>
-              <td>{{element.id}}</td>
-              <td>{{element.data}}</td>
-              <td></td>
-              <td></td>
-              <td>{{element.payed | currency: 'RUB': ' '}}</td>
-            </tr>
-          </ng-container>
-          <tr *ngIf="currentDebtorsPayed">
-            <th scope="row"></th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><b>Должники:</b></td>
-            <td><b>{{debtorPayed | currency:'RUB': ' '}}</b></td>
-          </tr>
-          <tr *ngIf="currentCassa">
-            <th scope="row"></th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><b>Старт:</b></td>
-            <td><b>{{currentCassa.sum | currency:'RUB': ' '}}</b></td>
-          </tr>
-          <tr >
-            <th scope="row"></th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><b>Итого:</b></td>
-            <td><b>{{currentCassa.sum+sum-returnsum + orderPayed + debtorPayed | currency:'RUB': ' '}}</b></td>
-          </tr>
-        </tbody>
-      </table>
+<div class="modal-body">
+  <table
+    class="table table-bordered table-striped table-sm"
+    *ngIf="currentSales"
+  >
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Код</th>
+        <th scope="col">Наименование</th>
+        <th scope="col">Шт.</th>
+        <th scope="col">Цена</th>
+        <th scope="col">Сумма</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let element of currentSales; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ element.id }}</td>
+        <td>{{ element.product.title }}</td>
+        <td>{{ element.quantity }}</td>
+        <td>{{ element.price | currency: 'RUB':' ' }}</td>
+        <td>{{ element.sum | currency: 'RUB':' ' }}</td>
+      </tr>
+      <tr *ngIf="currentReturnSales">
+        <td scope="row"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><b>Список возвратов:</b></td>
+        <td></td>
+      </tr>
+      <tr *ngFor="let element of currentReturnSales; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ element.id }}</td>
+        <td>{{ element.sale.product.title }}</td>
+        <td>{{ element.quantity }}</td>
+        <td>{{ element.sale.price | currency: 'RUB':' ' }}</td>
+        <td>
+          {{
+            element.sale.price * element.quantity
+              | currency: 'RUB':' '
+          }}
+        </td>
+      </tr>
+      <tr>
+        <th scope="row"></th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><b>Итого возврат:</b></td>
+        <td>
+          <b>{{ returnsum | currency: 'RUB':' ' }}</b>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row"></th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><b>Продажи:</b></td>
+        <td>
+          <b>{{ sum | currency: 'RUB':' ' }}</b>
+        </td>
+      </tr>
+      <ng-container *ngFor="let order of currentOrdersPayed">
+        <tr *ngFor="let element of order.orderpay; let i = index">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ element.id }}</td>
+          <td>{{ element.data }}</td>
+          <td></td>
+          <td></td>
+          <td>{{ element.payed | currency: 'RUB':' ' }}</td>
+        </tr>
+      </ng-container>
+      <tr *ngIf="currentOrdersPayed">
+        <th scope="row"></th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><b>Заказы:</b></td>
+        <td>
+          <b>{{ orderPayed | currency: 'RUB':' ' }}</b>
+        </td>
+      </tr>
+      <ng-container
+        *ngFor="let debtor of currentDebtorsPayed; let j = index"
+      >
+        <tr *ngFor="let element of debtor.debtorpayed; let i = index">
+          <th scope="row">{{ j + 1 }}</th>
+          <td>{{ element.id }}</td>
+          <td>{{ element.data }}</td>
+          <td></td>
+          <td></td>
+          <td>{{ element.payed | currency: 'RUB':' ' }}</td>
+        </tr>
+      </ng-container>
+      <tr *ngIf="currentDebtorsPayed">
+        <th scope="row"></th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><b>Должники:</b></td>
+        <td>
+          <b>{{ debtorPayed | currency: 'RUB':' ' }}</b>
+        </td>
+      </tr>
+      <tr *ngIf="currentCassa">
+        <th scope="row"></th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><b>Старт:</b></td>
+        <td>
+          <b>{{ currentCassa.sum | currency: 'RUB':' ' }}</b>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row"></th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><b>Итого:</b></td>
+        <td>
+          <b>{{
+            currentCassa.sum +
+              sum -
+              returnsum +
+              orderPayed +
+              debtorPayed | currency: 'RUB':' '
+          }}</b>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

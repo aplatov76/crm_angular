@@ -1,8 +1,8 @@
-import {ReturnSalesInterface} from '../../interfaces/returnSales.interface';
+import { ReturnSalesInterface } from '../../interfaces/returnSales.interface';
 
-export interface ReturnSalesStateInterface{
-    err: string | null,
-    loading: boolean,
-    returnSales: ReturnSalesInterface[],
-    createdReturnSale: ReturnSalesInterface
+export interface ReturnSalesStateInterface {
+  err: string | null;
+  loading: boolean;
+  returnSales: ReturnSalesInterface[];
+  createdReturnSale: ReturnSalesInterface;
 }

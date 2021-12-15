@@ -1,55 +1,61 @@
-import {Injectable} from '@angular/core'
-import { HttpClient} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {environment} from '../../../../../../environments/environment';
+import { environment } from '../../../../../../environments/environment';
 import { ProductsInterface } from '../../interfaces/products.interface';
 import { ProductInterface } from '../../../../interfaces/product.interface';
 import { GroupsInterface } from '../../interfaces/groups.interface';
 
 @Injectable()
-export class ProductsService{
+export class ProductsService {
+  constructor(private http: HttpClient) {}
 
-    constructor(private http: HttpClient){
+  getAllProducts(query?: any): Observable<ProductsInterface[]> {
+    let queryParams: string = '';
+    if (query.view) queryParams += `view=${query.view}`;
+    if (query.parent === null)
+      queryParams += `parent=${query.parent}`;
+    if (query.parent) queryParams += `parent=${query.parent}`;
+    if (query.warning) queryParams += `warning=${query.warning}`;
 
-    }
+    return this.http.get<ProductsInterface[]>(
+      `${environment.url}/product?${queryParams}`
+    );
+  }
 
-    getAllProducts(query?: any): Observable<ProductsInterface[]> {
+  getProduct(id: number): Observable<ProductInterface> {
+    return this.http.get<ProductInterface>(
+      `${environment.url}/product?id=${id}`
+    );
+  }
 
-        console.log(`query in products: `,query)
+  getGroups(): Observable<GroupsInterface[]> {
+    return this.http.get<GroupsInterface[]>(
+      `${environment.url}/product?type=group`
+    );
+  }
 
-        let queryParams: string = '';
-            if(query.view)queryParams = queryParams + `view=${query.view}`;
-            if(query.parent === null)queryParams = queryParams + `parent=${query.parent}`;
-            if(query.parent)queryParams = queryParams + `parent=${query.parent}`;
-            if(query.warning)queryParams = queryParams + `warning=${query.warning}`;
+  saveProduct(product: ProductInterface): Observable<any> {
+    return this.http.post<ProductInterface>(
+      `${environment.url}/product`,
+      { product }
+    );
+  }
 
-        return this.http.get<ProductsInterface[]>(`${environment.url}/product?${queryParams}`,);
-    }
+  updateProduct(product: ProductInterface): Observable<any> {
+    return this.http.put<ProductInterface>(
+      `${environment.url}/product/${product.id}`,
+      { product }
+    );
+  }
 
-    getProduct(id: number): Observable<ProductInterface>{
-        return this.http.get<ProductInterface>(`${environment.url}/product?id=${id}`);
-    }
+  getCountCm(query: any): Observable<number> {
+    return this.http.get<number>(
+      `${environment.url}/cm/count?articul=${query.articul}`
+    );
+  }
 
-    getGroups(): Observable<GroupsInterface[]>{
-        return this.http.get<GroupsInterface[]>(`${environment.url}/product?type=group`);
-    }
-
-    saveProduct(product: ProductInterface): Observable<any>{
-        return this.http.post<ProductInterface>(`${environment.url}/product`, {product});
-    }
-
-    updateProduct(product: ProductInterface): Observable<any>{
-        return this.http.put<ProductInterface>(`${environment.url}/product/${product.id}`, {product});
-    }
-
-    getCountCm(query: any): Observable<number>{
-
-        return this.http.get<number>(`${environment.url}/cm/count?articul=${query.articul}`);
-    }
-
-    removeProductOrGroup(id: number): Observable<any>{
-
-        return this.http.delete<any>(`${environment.url}/product/${id}`)
-    }
-
+  removeProductOrGroup(id: number): Observable<any> {
+    return this.http.delete<any>(`${environment.url}/product/${id}`);
+  }
 }

@@ -1,15 +1,15 @@
-::ng-deep tr:hover{
-    cursor: default;
+::ng-deep tr:hover {
+  cursor: default;
 }
 
-.width-th-title{
-    width: 50%;
+.width-th-title {
+  width: 50%;
 }
 
-.custom-search{
-    flex: auto;
+.custom-search {
+  flex: auto;
 }
 
-.modal-dialog{
-    min-width: 80%;
+.modal-dialog {
+  min-width: 80%;
 }

@@ -1,8 +1,8 @@
-::ng-deep .ant-select-selector{
+::ng-deep .ant-select-selector {
   height: 100%;
-  width:100%;
+  width: 100%;
 }
 
-.custom-group{
+.custom-group {
   flex: auto;
 }

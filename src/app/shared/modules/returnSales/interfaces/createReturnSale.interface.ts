@@ -1,4 +1,4 @@
-export interface CreateReturnSaleInterface{
-    id: number,
-    quantity: number
+export interface CreateReturnSaleInterface {
+  id: number;
+  quantity: number;
 }

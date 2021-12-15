@@ -1,70 +1,114 @@
-
-    <div class="card card-body mb-2">
-      <div class="d-flex input-group mb-3">
-        <div class="input-group-prepend">
-          <button type="button" class="btn btn-outline-secondary">Поиск</button>
-          <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="sr-only">Поиск</span>
-          </button>
-          <div class="dropdown-menu">
-            <a class="dropdown-item">Наименование</a>
-            <a class="dropdown-item">Код</a>
-            <a class="dropdown-item">Артикул</a>
-          </div>
-
-        </div>
-        <ng-select [items]="praisList$ | async"
-            placeholder="Поиск"
-            class="custom-search"
-            bindLabel="title" 
-            bindValue="id" 
-            (change)="onChange($event)">
-        </ng-select>
-        
+<div class="card card-body mb-2">
+  <div class="d-flex input-group mb-3">
+    <div class="input-group-prepend">
+      <button type="button" class="btn btn-outline-secondary">
+        Поиск
+      </button>
+      <button
+        type="button"
+        class="
+          btn btn-outline-secondary
+          dropdown-toggle dropdown-toggle-split
+        "
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <span class="sr-only">Поиск</span>
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item">Наименование</a>
+        <a class="dropdown-item">Код</a>
+        <a class="dropdown-item">Артикул</a>
       </div>
-      <div *ngIf="selectCurrent">
-        <div class="alert alert-warning" role="alert">
-          {{selectCurrent.product.title}}
-        </div>
-        <div class="input-group mb-3">
-          <input type="number" class="form-control" value="{{selectCurrent.quantity}}" aria-describedby="basic-addon2" disabled>
-          <input type="number" class="form-control" [(ngModel)]="selectCurrentQuantity" [ngClass]="{'border border-danger': (selectCurrentQuantity > selectCurrent.quantity || selectCurrentQuantity < 1)}" placeholder="0" aria-describedby="basic-addon2" >
-          
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary" (click)="createReturnSale()" [disabled]="(selectCurrentQuantity > selectCurrent.quantity || selectCurrentQuantity < 1)" type="button">Возврат</button>
-          </div>
-        </div>
-      </div>
-
     </div>
-    <div *ngIf="selectSales$" class="table-responsive">
-      <table class="table table-bordered table-hover table-striped table-sm" >
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Код</th>
-            <th scope="col">Наименование</th>
-            <th scope="col">Шт.</th>
-            <th scope="col">Дата продажи</th>
-            <th scope="col">Цена</th>
-            <th scope="col">Сумма</th>
-          </tr>
-        </thead>
-        <tbody *ngFor="let element of (selectSales$ | async); let i = index">
-          <tr (click)="onClickSelectCurrent(element)">
-            <th scope="row">{{i + 1}}</th>
-            <td>{{element.product.id}}</td>
-            <td>{{element.product.title}}</td>
-            <td>{{element.quantity}}</td>
-            <td>{{element.check.data | date: 'yyy-MM-dd hh:mm a'}}</td>
-            <td>{{element.price | currency:'RUB': ' '}}</td>
-            <td>{{element.sum | currency:'RUB': ' '}}</td>
-          </tr>
-        </tbody>
-    </table>
+    <ng-select
+      [items]="praisList$ | async"
+      placeholder="Поиск"
+      class="custom-search"
+      bindLabel="title"
+      bindValue="id"
+      (change)="onChange($event)"
+    >
+    </ng-select>
+  </div>
+  <div *ngIf="selectCurrent">
+    <div class="alert alert-warning" role="alert">
+      {{ selectCurrent.product.title }}
     </div>
+    <div class="input-group mb-3">
+      <input
+        type="number"
+        class="form-control"
+        value="{{ selectCurrent.quantity }}"
+        aria-describedby="basic-addon2"
+        disabled
+      />
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="selectCurrentQuantity"
+        [ngClass]="{
+          'border border-danger':
+            selectCurrentQuantity > selectCurrent.quantity ||
+            selectCurrentQuantity < 1
+        }"
+        placeholder="0"
+        aria-describedby="basic-addon2"
+      />
 
-      <div class="d-flex justify-content-center pt-2">
- 
-        <nz-pagination [nzPageIndex]="currentPage" (nzPageIndexChange)="pageChanged($event)"   [nzTotal]="50"></nz-pagination> `
+      <div class="input-group-append">
+        <button
+          class="btn btn-outline-secondary"
+          (click)="createReturnSale()"
+          [disabled]="
+            selectCurrentQuantity > selectCurrent.quantity ||
+            selectCurrentQuantity < 1
+          "
+          type="button"
+        >
+          Возврат
+        </button>
       </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="selectSales$" class="table-responsive">
+  <table
+    class="table table-bordered table-hover table-striped table-sm"
+  >
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Код</th>
+        <th scope="col">Наименование</th>
+        <th scope="col">Шт.</th>
+        <th scope="col">Дата продажи</th>
+        <th scope="col">Цена</th>
+        <th scope="col">Сумма</th>
+      </tr>
+    </thead>
+    <tbody
+      *ngFor="let element of selectSales$ | async; let i = index"
+    >
+      <tr (click)="onClickSelectCurrent(element)">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ element.product.id }}</td>
+        <td>{{ element.product.title }}</td>
+        <td>{{ element.quantity }}</td>
+        <td>{{ element.check.data | date: 'yyy-MM-dd hh:mm a' }}</td>
+        <td>{{ element.price | currency: 'RUB':' ' }}</td>
+        <td>{{ element.sum | currency: 'RUB':' ' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="d-flex justify-content-center pt-2">
+  <nz-pagination
+    [nzPageIndex]="currentPage"
+    (nzPageIndexChange)="pageChanged($event)"
+    [nzTotal]="50"
+  ></nz-pagination>
+  `
+</div>

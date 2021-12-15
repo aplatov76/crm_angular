@@ -1,11 +1,11 @@
-.custom-search{
-    flex: auto;
+.custom-search {
+  flex: auto;
 }
 
-::ng-deep tr:hover{
-    cursor: default;
+::ng-deep tr:hover {
+  cursor: default;
 }
 
-.width-th-title{
-    width: 40%;
+.width-th-title {
+  width: 40%;
 }

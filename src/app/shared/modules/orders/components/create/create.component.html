@@ -149,13 +149,13 @@
         <thead>
           <th>№</th>
           <th class="width-th-title">Наименование</th>
-          <th >Артикул</th>
-          <th >Цена СМ</th>
-          <th >%</th>
+          <th>Артикул</th>
+          <th>Цена СМ</th>
+          <th>%</th>
           <th>Кол-во</th>
           <th>Цена</th>
           <th>Ед.изм.</th>
-          <th>Сумма</th>          
+          <th>Сумма</th>
           <th>Доп-но</th>
           <th></th>
         </thead>
@@ -184,7 +184,7 @@
                   class="form-control"
                   formControlName="articul"
                 />
-              </td>              
+              </td>
               <td>
                 <input
                   type="number"
@@ -199,7 +199,7 @@
                   (input)="onInputPercent(i)"
                   formControlName="percent"
                 />
-              </td>                             
+              </td>
               <td>
                 <input
                   type="number"
@@ -241,7 +241,7 @@
                   class="form-control"
                   formControlName="summa"
                 />
-              </td>              
+              </td>
               <td>
                 <input
                   type="text"
@@ -288,18 +288,20 @@
         <div class="input-group-prepend">
           <span class="input-group-text">Создать заявку: </span>
         </div>
-        <select class="form-control" formControlName="ordertocm"           
+        <select
+          class="form-control"
+          formControlName="ordertocm"
           [ngClass]="{
-              'border border-danger':
-                formPayed.get('ordertocm').invalid
-            }">
-            <option hidden>Создать заявку в СМ</option>
-            <option [value]='1'>Да</option>
-            <option [value]='2'>Нет</option>
-        </select>        
-      </div>     
+            'border border-danger': formPayed.get('ordertocm').invalid
+          }"
+        >
+          <option hidden>Создать заявку в СМ</option>
+          <option [value]="1">Да</option>
+          <option [value]="2">Нет</option>
+        </select>
+      </div>
     </form>
-    
+
     <div class="d-flex btn-group">
       <button
         type="button"
@@ -307,7 +309,7 @@
         class="btn btn-outline-warning mb-5"
       >
         Cохранить
-      </button>     
+      </button>
       <button
         type="button"
         (click)="orderDispatch()"

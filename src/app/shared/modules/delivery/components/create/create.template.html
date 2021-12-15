@@ -1,60 +1,77 @@
-<ng-select [items]="clients$ | async"
+<ng-select
+  [items]="clients$ | async"
   placeholder="Поиск клиента"
   class="custom-search mb-3"
-  bindLabel="fullname" 
-  bindValue="id" 
-  (change)="setClient($event)">
+  bindLabel="fullname"
+  bindValue="id"
+  (change)="setClient($event)"
+>
 </ng-select>
 
 <form [formGroup]="form" class="" *ngIf="form" (submit)="submit()">
-  
   <div class="d-flex input-group mb-1">
     <div class="input-group-prepend">
-        <span class="input-group-text cw" >Чек продажи: </span>
+      <span class="input-group-text cw">Чек продажи: </span>
     </div>
     <div *ngIf="checks$ | async" class="d-flex custom-group">
       <nz-tree-select
-        style="width: 100%;height:100%"
+        style="width: 100%; height: 100%"
         nzShowSearch
         nzCheckable
         formControlName="idcheck"
         [nzNodes]="checks"
-        nzPlaceHolder="Please select">
-
+        nzPlaceHolder="Please select"
+      >
         <ng-template #nzTreeTemplate let-node>
           <span class="ant-tree-node-content-wrapper">
-            <span>
-              {{ node.title }}
-            </span>
+            <span> {{ node.title }} </span>
           </span>
         </ng-template>
-
       </nz-tree-select>
     </div>
   </div>
 
-    <div class="input-group mb-1">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Cтоимость: </span>
-      </div>
-      <input type="number" class="form-control" formControlName="price">
+  <div class="input-group mb-1">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Cтоимость: </span>
     </div>
-
-    <div class="d-flex input-group mb-1">
-        <div class="input-group-prepend">
-          <span class="input-group-text">Доставить: </span>
-        </div>
-        <input type="date" class="form-control mr-1" formControlName="data">
-    </div>
-
-    <div class="d-flex input-group mb-1">
-        <div class="input-group-prepend">
-          <span class="input-group-text">Информация: </span>
-        </div>
-        <input type="text" class="form-control mr-1" placeholder="Время доставки, как проехать" formControlName="description">
-    </div>
-
-    <div class="d-flex btn-group">
-      <button type="submit" [disabled]="form.controls.invalid" class="btn btn-outline-success mr-1">Сохранить</button>
+    <input
+      type="number"
+      class="form-control"
+      formControlName="price"
+    />
   </div>
-  </form>
+
+  <div class="d-flex input-group mb-1">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Доставить: </span>
+    </div>
+    <input
+      type="date"
+      class="form-control mr-1"
+      formControlName="data"
+    />
+  </div>
+
+  <div class="d-flex input-group mb-1">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Информация: </span>
+    </div>
+    <input
+      type="text"
+      class="form-control mr-1"
+      placeholder="Время доставки, как проехать"
+      formControlName="description"
+    />
+  </div>
+
+  <div class="d-flex btn-group">
+    <button
+      type="submit"
+      [disabled]="form.controls.invalid"
+      class="btn btn-outline-success mr-1"
+    >
+      Сохранить
+    </button>
+  </div>
+</form>

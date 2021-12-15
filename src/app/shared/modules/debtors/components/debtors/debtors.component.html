@@ -1,52 +1,87 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+<div
+  class="
+    d-flex
+    justify-content-between
+    flex-wrap flex-md-nowrap
+    align-items-center
+    pt-3
+    pb-2
+    mb-3
+    border-bottom
+  "
+>
   <h1 class="h2"></h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-      <button type="button" (click)="openSelectedDebtor()" class="btn btn-sm btn-outline-secondary">Добавить</button>
-      <button type="button" class="btn btn-sm btn-outline-secondary">Открытые</button>
-      <button type="button" class="btn btn-sm btn-outline-secondary">Закрытые</button>
+      <button
+        type="button"
+        (click)="openSelectedDebtor()"
+        class="btn btn-sm btn-outline-secondary"
+      >
+        Добавить
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary">
+        Открытые
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary">
+        Закрытые
+      </button>
     </div>
   </div>
 </div>
-  <div class="d-flex header-dashboard justify-content-between">
-    <h2>Должники</h2>
-    <i class="material-icons" (click)="filter = !filter">filter_list</i>
-  </div>
-  <div *ngIf="filter">
-    <div class="card card-body">
-      <p class="text-info">*Товар будет списан после полной оплаты</p>
+<div class="d-flex header-dashboard justify-content-between">
+  <h2>Должники</h2>
+  <i class="material-icons" (click)="filter = !filter">filter_list</i>
+</div>
+<div *ngIf="filter">
+  <div class="card card-body">
+    <p class="text-info">*Товар будет списан после полной оплаты</p>
 
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <button type="button" class="btn btn-outline-secondary">Поиск</button>
-            </div>
-            <input type="text" class="form-control" placeholder="Фамилия Имя Отчество" aria-label="Text input with segmented dropdown button">
-          </div>
-          
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <button type="button" class="btn btn-outline-secondary">
+          Поиск
+        </button>
+      </div>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Фамилия Имя Отчество"
+        aria-label="Text input with segmented dropdown button"
+      />
     </div>
   </div>
+</div>
 
-  <table class="table table-striped table-hover">
-      <thead>
-        <tr>
-          <th scope="col">№</th>
-          <th scope="col">ФИО</th>
-          <th scope="col">Сумма</th>
-          <th scope="col">Оплачено</th>
-          <th scope="col">Остаток</th>
-          <th scope="col">Дата</th>
-        </tr>
-      </thead>
-      <tbody>
-
-        <tr *ngFor="let debtor of debtors$ | async;let i = index" [routerLink]="[debtor.id]">
-          <th scope="row">{{i + 1}}</th>
-          <td>{{debtor.client.fullname}}</td>
-          <td >{{debtor.total}}</td>
-          <td>{{debtor.current}}</td>
-          <td [ngClass]="{'bg-success': debtor.status === 1, 'bg-warning': debtor.status === 0}">{{debtor.total - debtor.current}}</td>
-          <td>{{debtor.data | date: 'yyy-MM-dd hh:mm a'}}</td>
-        </tr>
-
-      </tbody>
-    </table>
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th scope="col">№</th>
+      <th scope="col">ФИО</th>
+      <th scope="col">Сумма</th>
+      <th scope="col">Оплачено</th>
+      <th scope="col">Остаток</th>
+      <th scope="col">Дата</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="let debtor of debtors$ | async; let i = index"
+      [routerLink]="[debtor.id]"
+    >
+      <th scope="row">{{ i + 1 }}</th>
+      <td>{{ debtor.client.fullname }}</td>
+      <td>{{ debtor.total }}</td>
+      <td>{{ debtor.current }}</td>
+      <td
+        [ngClass]="{
+          'bg-success': debtor.status === 1,
+          'bg-warning': debtor.status === 0
+        }"
+      >
+        {{ debtor.total - debtor.current }}
+      </td>
+      <td>{{ debtor.data | date: 'yyy-MM-dd hh:mm a' }}</td>
+    </tr>
+  </tbody>
+</table>

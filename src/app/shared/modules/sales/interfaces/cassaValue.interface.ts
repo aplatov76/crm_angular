@@ -1,6 +1,5 @@
-
-export interface CassaValueInterface{
-    id: number,
-    data: Date,
-    sum: number
+export interface CassaValueInterface {
+  id: number;
+  data: Date;
+  sum: number;
 }

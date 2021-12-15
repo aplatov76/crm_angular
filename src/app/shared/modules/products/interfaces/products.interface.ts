@@ -1,5 +1,5 @@
-import { ProductInterface } from "src/app/shared/interfaces/product.interface";
+import { ProductInterface } from 'src/app/shared/interfaces/product.interface';
 
-export interface ProductsInterface extends ProductInterface{
-    children?: ProductsInterface[]
+export interface ProductsInterface extends ProductInterface {
+  children?: ProductsInterface[];
 }

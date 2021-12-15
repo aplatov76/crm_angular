@@ -1,21 +1,23 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
-export class PersistanceService{
-    set(key: string, data: any): void {
-        try{
-            localStorage.setItem(key, JSON.stringify(data))
-        } catch(e){
-            console.error('Error saving to localstorage', e)
-        }
-    }
+export class PersistanceService {
+  constructor(private toastr: ToastrService) {}
 
-    get(key: string): any{
-        try{
-            return JSON.parse(localStorage.getItem(key))
-        } catch(e){
-            console.error('Error get from localstorage', e)
-            return null
-        }
+  set(key: string, data: any): void {
+    try {
+      localStorage.setItem(key, JSON.stringify(data));
+    } catch (e) {
+      this.toastr.error(`Ошибка записи ${key}`);
     }
+  }
+
+  get(key: string): any {
+    try {
+      return JSON.parse(localStorage.getItem(key));
+    } catch (e) {
+      this.toastr.error(`Ошибка чтения ${key}`);
+    }
+  }
 }

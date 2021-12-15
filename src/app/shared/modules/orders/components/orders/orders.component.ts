@@ -1,70 +1,71 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { filter } from 'rxjs/operators';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { OrderInterface } from '../../interfaces/order.interface';
-import {State, Store, select} from '@ngrx/store'
-import { ordersAction, orderAction } from '../../store/actions/action';
-import { currentOrders, currentOrder } from '../../store/selectors';
-import {map, filter} from 'rxjs/operators'
-import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import {CreateOrderComponent} from '../create/create.component';
+import { ordersAction } from '../../store/actions/action';
+import { currentOrders } from '../../store/selectors';
+import { CreateOrderComponent } from '../create/create.component';
 
 @Component({
-    selector: 'orders',
-    templateUrl: './orders.component.html',
-    styleUrls: ['./orders.component.css']
+  selector: 'orders',
+  templateUrl: './orders.component.html',
+  styleUrls: ['./orders.component.css']
 })
-export class OrdersComponent implements OnInit{
+export class OrdersComponent implements OnInit {
+  orders: OrderInterface[] = null;
 
-    orders: OrderInterface[] = null
-    ordersSub: Subscription
-    visible = false
-    data = {
-        start: '2018-07-22',
-        end: '2020-12-22'
-    }
+  ordersSub: Subscription;
 
-    constructor(
-        private store: Store,
-        private modalService: NzModalService,
-        private viewContainerRef: ViewContainerRef){
+  visible = false;
 
-    }
+  data = {
+    start: '2018-07-22',
+    end: '2020-12-22'
+  };
 
-    ngOnInit(): void {
-        this.store.dispatch(ordersAction());
-        this.initializeListener();
-    }
+  constructor(
+    private store: Store,
+    private modalService: NzModalService,
+    private viewContainerRef: ViewContainerRef
+  ) {}
 
-    initializeListener(): void{
+  ngOnInit(): void {
+    this.store.dispatch(ordersAction());
+    this.initializeListener();
+  }
 
-        this.ordersSub = this.store.pipe(select(currentOrders), filter(Boolean))
-            .subscribe((items: OrderInterface[])  => this.orders = items)
-    }
+  initializeListener(): void {
+    this.ordersSub = this.store
+      .pipe(select(currentOrders), filter(Boolean))
+      .subscribe((items: OrderInterface[]) => {
+        this.orders = items;
+      });
+  }
 
-    setDataStart(e, index: number){
-        console.log(e.target.value)
-        if(index === 0)this.data.start = e.target.value;
-        if(index === 1)this.data.end = e.target.value;
+  setDataStart(e, index: number) {
+    if (index === 0) this.data.start = e.target.value;
+    if (index === 1) this.data.end = e.target.value;
+  }
 
-    }
+  filterOrders() {
+    this.orders = this.orders.filter(
+      (item) =>
+        new Date(item.data) >= new Date(this.data.start) &&
+        new Date(item.data) <= new Date(this.data.end)
+    );
+  }
 
-    filterOrders(){
-        this.orders = this.orders.filter(item => (new Date(item.data) >= new Date(this.data.start) && new Date(item.data) <= new Date(this.data.end)))
-    }
-
-    showModal(){
-
-            this.modalService.create({
-                nzTitle: 'Cоздание нового заказа',
-                nzViewContainerRef: this.viewContainerRef,
-                nzComponentParams: {
-
-                },
-                nzFooter: [],
-                nzStyle: { width: '85%' },
-                nzAutofocus: null,
-                nzContent: CreateOrderComponent
-            });
-    }
-    
+  showModal() {
+    this.modalService.create({
+      nzTitle: 'Cоздание нового заказа',
+      nzViewContainerRef: this.viewContainerRef,
+      nzComponentParams: {},
+      nzFooter: [],
+      nzStyle: { width: '85%' },
+      nzAutofocus: null,
+      nzContent: CreateOrderComponent
+    });
+  }
 }
