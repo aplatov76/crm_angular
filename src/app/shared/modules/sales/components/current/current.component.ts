@@ -36,26 +36,37 @@ import { SalesInterface } from '../../interfaces/sales.interface';
 })
 export class CurrentSaleComponent implements OnInit, OnDestroy {
   errorSubscription: Subscription;
+
   subCompleted: Subscription;
+
   isCurrentProduct$: Subscription;
 
   isLoading$: Observable<boolean>;
+
   clients$: Observable<ClientInterface[]>;
+
   praisList$: Observable<PraisInterface[]>;
 
   currentSum: number = 0;
+
   delivery: boolean = false;
+
   printcheck: boolean = false;
+
   titleSearch: number;
 
   isType: number = 0;
+
   searchShow: boolean = false;
+
   currentSale: CurrentSaleInterface[] = [];
+
   isCurrentProduct: ProductInterface;
 
   praisList: PraisInterface[] = null;
 
   form: FormGroup;
+
   deliveryForm: FormGroup;
 
   constructor(

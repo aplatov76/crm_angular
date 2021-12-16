@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { switchMap, map, catchError } from 'rxjs/operators';
+import { switchMap, map, tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngrx/store';
@@ -20,7 +20,9 @@ import {
   productsWarningAction,
   productsWarningActionSuccess,
   productsWarningActionFailed,
-  productActionRemove
+  productActionRemove,
+  productActionRemoveSuccess,
+  productActionRemoveFailed
 } from '../actions/action';
 import { ProductsService } from '../services/products.service';
 import { ProductsInterface } from '../../interfaces/products.interface';
@@ -42,7 +44,7 @@ export class ProductsEffect {
         this.productsService.getAllProducts(query.query).pipe(
           map((products: ProductsInterface[]) =>
             productsActionSuccess({
-              products: this.addKeyField(products)
+              products // this.addKeyField(products)
             })
           ),
           catchError((errorResponse: HttpErrorResponse) =>
@@ -137,7 +139,9 @@ export class ProductsEffect {
       switchMap(() =>
         this.productsService.getGroups().pipe(
           map((groups: GroupsInterface[]) =>
-            productGroupsSuccess({ groups: this.buildTree(groups) })
+            productGroupsSuccess({
+              groups /* this.buildTree(groups) */
+            })
           ),
           catchError((errorResponse: HttpErrorResponse) =>
             of(productGroupsFailed({ err: errorResponse }))
@@ -152,17 +156,28 @@ export class ProductsEffect {
       ofType(productActionRemove),
       switchMap(({ id }) =>
         this.productsService.removeProductOrGroup(id).pipe(
-          map((groups: GroupsInterface[]) =>
-            productGroupsSuccess({ groups: this.buildTree(groups) })
-          ),
+          map((item) => productActionRemoveSuccess(item)),
           catchError((errorResponse: HttpErrorResponse) =>
-            of(productGroupsFailed({ err: errorResponse }))
+            of(productActionRemoveFailed({ err: errorResponse }))
           )
         )
       )
     )
   );
 
+  updateProductsAfterRemovePositionOrGroup$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(productActionRemoveSuccess),
+        tap(() => {
+          this.store.dispatch(
+            productsAction({ query: { view: 'tree' } })
+          );
+        })
+      ),
+    { dispatch: false }
+  );
+  /*
   buildTree(controllers: GroupsInterface[]): GroupsInterface[] {
     const map = new Map(
       controllers.map((item: GroupsInterface) => [item.id, item])
@@ -182,18 +197,20 @@ export class ProductsEffect {
 
     return [...map.values()].filter((item) => !item.parent);
   }
-
-  addKeyField(item: ProductsInterface[]): ProductsInterface[] {
-    return item.map((el: ProductsInterface) => {
-      if (el.children) {
-        return {
-          ...el,
-          isLeaf: !(el.children.length > 0),
-          children: this.addKeyField(el.children),
-          key: el.id
-        };
-      }
-      return { ...el, isLeaf: true, key: el.id };
-    });
-  }
+  */
+  /*
+    addKeyField(item: ProductsInterface[]): ProductsInterface[] {
+      return item.map((el: ProductsInterface) => {
+        if (el.children) {
+          return {
+            ...el,
+            isLeaf: !(el.children.length > 0),
+            children: this.addKeyField(el.children),
+            key: el.id
+          };
+        }
+        return { ...el, isLeaf: true, key: el.id };
+      });
+    }
+  */
 }

@@ -9,7 +9,7 @@ import { Observable, of, Subject, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { catchError, filter } from 'rxjs/operators';
 import { cloneDeep } from 'lodash-es';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { ToastrService } from 'ngx-toastr';
 import {
   productAction,
@@ -57,6 +57,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private store: Store,
     private modal: NzModalRef,
+    private modalConfirm: NzModalService,
     private toastr: ToastrService,
     private productService: ProductsService
   ) {}
@@ -144,7 +145,24 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.modal.close();
   }
 
+  showDeleteConfirm(): void {
+    this.modalConfirm.confirm({
+      nzTitle: `Удаление ${
+        this.type === 'group' ? ' группы' : ' позиции'
+      }`,
+      nzContent: `<b style="color: red;">Действительно удалить ${this.form.value.title} ? </b>`,
+      nzOkText: 'Да',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () => this.remove(),
+      nzCancelText: 'Нет',
+      nzOnCancel: () => null,
+      nzAutofocus: null
+    });
+  }
+
   remove() {
     this.store.dispatch(productActionRemove({ id: this.id }));
+    this.modal.close();
   }
 }

@@ -10,6 +10,7 @@ export interface ProductInterface {
   price: number;
   trade_price?: number;
   parent: number;
+  isDeleted: boolean;
 
   /** К удалению */
   info?: string;
