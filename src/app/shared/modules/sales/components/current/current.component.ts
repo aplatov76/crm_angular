@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -34,35 +34,28 @@ import { SalesInterface } from '../../interfaces/sales.interface';
   templateUrl: './current.template.html',
   styleUrls: ['./current.component.css']
 })
-export class CurrentSaleComponent {
+export class CurrentSaleComponent implements OnInit, OnDestroy {
   errorSubscription: Subscription;
-
   subCompleted: Subscription;
-
-  currentSum: number = 0;
-
-  delivery: boolean = false;
-
-  printcheck: boolean = false;
+  isCurrentProduct$: Subscription;
 
   isLoading$: Observable<boolean>;
-
   clients$: Observable<ClientInterface[]>;
-
   praisList$: Observable<PraisInterface[]>;
 
+  currentSum: number = 0;
+  delivery: boolean = false;
+  printcheck: boolean = false;
+  titleSearch: number;
+
   isType: number = 0;
-
+  searchShow: boolean = false;
   currentSale: CurrentSaleInterface[] = [];
-
   isCurrentProduct: ProductInterface;
-
-  isCurrentProduct$: Subscription;
 
   praisList: PraisInterface[] = null;
 
   form: FormGroup;
-
   deliveryForm: FormGroup;
 
   constructor(
@@ -83,6 +76,7 @@ export class CurrentSaleComponent {
   ngOnDestroy(): void {
     this.isCurrentProduct$.unsubscribe();
     this.errorSubscription.unsubscribe();
+    this.subCompleted.unsubscribe();
   }
 
   initializeListeners(): void {
@@ -166,6 +160,13 @@ export class CurrentSaleComponent {
   /** Запрос выбранной позиции на сервер, т.к. количество на складе и цена могут отличаться от загруженных ранее */
   onChange(target) {
     this.store.dispatch(productAction({ id: target.id }));
+  }
+
+  onChangeCode(target: ProductInterface) {
+    if (target) {
+      this.titleSearch = target.id;
+      this.store.dispatch(productAction({ id: target.id }));
+    }
   }
 
   submit() {

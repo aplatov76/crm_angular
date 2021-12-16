@@ -80,10 +80,9 @@ export class DebtorComponent implements OnInit {
       pageOrientation: 'landscape',
       content: [
         {
-          text: `Договор № ${this.id} от ${this.datepipe.transform(
-            order.data,
-            'yyyy-MM-dd'
-          )}`,
+          text: `Товарный чек № ${
+            this.id
+          } от ${this.datepipe.transform(order.data, 'yyyy-MM-dd')}`,
           style: 'header'
         },
         '____________________________________________________________________________________________________________________________',
