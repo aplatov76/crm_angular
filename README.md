@@ -1,6 +1,17 @@
 # Crm
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.8.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.0.
+
+Run dev server
+
+## git checkout angular/12
+
+## npm install
+
+## npm start
+
+Run eslint
+##ng lint
 
 ## Development server
 
