@@ -40,6 +40,16 @@
         Создать группу
       </button>
     </div>
+    <div class="btn-group mr-2">
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-secondary"
+        *ngIf="expandedNodeList.length > 0"
+        (click)="printPriceList()"
+      >
+        Печать ценников
+      </button>
+    </div>
   </div>
 </div>
 <ng-container *ngIf="nodes">

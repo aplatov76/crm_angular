@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -18,10 +19,9 @@ export class AppIndicatorComponent implements OnInit {
 
   productWarning$: Observable<ProductInterface[]>;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private router: Router) {}
 
   ngOnInit(): void {
-    // this.store.dispatch
     this.store.dispatch(
       productsWarningAction({ query: { warning: true } })
     );
@@ -33,6 +33,9 @@ export class AppIndicatorComponent implements OnInit {
       select(isCurrentOrderDataCount)
     );
     this.productWarning$ = this.store.pipe(select(isWarningProducts));
-    // this.productWarning$ = this.store.pipe(select(isPro))
+  }
+
+  navigate() {
+    this.router.navigate(['products']);
   }
 }

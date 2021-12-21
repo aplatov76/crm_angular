@@ -8,6 +8,7 @@
 </button>
 <button
   type="button"
+  (click)="navigate()"
   *ngIf="productWarning$ | async as warning"
   class="btn btn-sm btn-outline-danger"
 >

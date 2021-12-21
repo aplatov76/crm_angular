@@ -10,6 +10,7 @@ import { Store, select } from '@ngrx/store';
 import { Subject, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { cloneDeep } from 'lodash-es';
+import pdfMake from 'pdfmake/build/pdfmake';
 import { ToastrService } from 'ngx-toastr';
 
 import { NzTreeComponent, NzTreeNode } from 'ng-zorro-antd/tree';
@@ -22,6 +23,7 @@ import {
   productsAction,
   productGroups
 } from '../../store/actions/action';
+import { ProductInterface } from 'src/app/shared/interfaces/product.interface';
 
 @Component({
   selector: 'products-component',
@@ -71,8 +73,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
     const checkedElement: any =
       this.nzTreeComponent.getCheckedNodeList();
 
-    const checkedProducts =
-      this.detourTreeProducts(checkedElement).flat(Infinity);
+    const checkedProducts = this.detourTreeProducts(checkedElement)
+      .flat(Infinity)
+      .filter((item) => item.price);
     if (checkedProducts.length > 0) {
       this.store.dispatch(
         orderInsertAction({ orderdata: checkedProducts })
@@ -91,7 +94,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
         articul: item.origin.articul,
         quantity: 1,
         trade_price: item.origin.trade_price,
-        unit: 1
+        unit: 1,
+        price: item.origin.price,
+        id: item.origin.id
       };
     });
   }
@@ -152,5 +157,109 @@ export class ProductsComponent implements OnInit, OnDestroy {
       nzAutofocus: null,
       nzContent: ProductComponent
     });
+  }
+
+  printPriceList(): void {
+    const checkedElement: any =
+      this.nzTreeComponent.getCheckedNodeList();
+
+    const checkedProducts = this.detourTreeProducts(checkedElement)
+      .flat(Infinity)
+      .filter((item) => item.price);
+    if (checkedProducts.length > 0) {
+      this.createCheck(checkedProducts);
+    } else this.toastr.error('Ничего не выбрано');
+  }
+
+  createCheck(products: ProductInterface[]) {
+    let tmp: Array<Array<ProductInterface>> = [];
+    const productsLength = products.length;
+
+    products.map((item, index) => {
+      if (index % 2 === 0 && index > 0) {
+        tmp.push([products[index - 2], products[index - 1]]);
+      }
+      if (index % 2 === 1 && index === productsLength - 1)
+        tmp.push([products[index - 1], products[index]]);
+    });
+
+    if (productsLength % 2) {
+      tmp.push([
+        products[productsLength - 1],
+        {
+          ...products[productsLength - 1],
+          title: 'Пустой ценник',
+          price: 0,
+          id: 0
+        }
+      ]);
+    }
+
+    const docDefinition = {
+      pageOrientation: 'portrait',
+      content: [
+        {
+          style: 'tableExample',
+
+          table: {
+            widths: ['*', '*'],
+            body: [
+              ...tmp.map((item, index) => [
+                {
+                  table: {
+                    widths: ['*', '*'],
+                    body: [
+                      [
+                        'Наименование: ',
+                        {
+                          text: `Код: ${item[0].id}`,
+                          aligment: 'right'
+                        }
+                      ],
+                      [
+                        {
+                          text: item[0].title,
+                          colSpan: 2,
+                          alignment: 'center'
+                        },
+                        {}
+                      ],
+                      [`Цена: ${item[0].price} руб.`, {}]
+                    ]
+                  }
+                },
+                {
+                  table: {
+                    widths: ['*', '*'],
+                    body: [
+                      ['Наименование: ', `Код: ${item[1].id}`],
+                      [
+                        {
+                          text: item[1].title,
+                          colSpan: 2,
+                          alignment: 'center'
+                        },
+                        {}
+                      ],
+                      [`Цена: ${item[1].price} руб.`, {}]
+                    ]
+                  }
+                }
+              ])
+            ]
+          }
+        }
+      ],
+      styles: {
+        tableExample: {
+          width: '100%'
+        }
+      },
+      defaultStyle: {
+        // alignment: 'justify'
+      }
+    };
+
+    pdfMake.createPdf(docDefinition).open();
   }
 }
