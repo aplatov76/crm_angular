@@ -15,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 
 import { NzTreeComponent, NzTreeNode } from 'ng-zorro-antd/tree';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { ProductInterface } from 'src/app/shared/interfaces/product.interface';
 import { ProductComponent } from '../product/product.component';
 import { ProductsInterface } from '../../interfaces/products.interface';
 import { isProductsList } from '../../store/selectors';
@@ -23,7 +24,6 @@ import {
   productsAction,
   productGroups
 } from '../../store/actions/action';
-import { ProductInterface } from 'src/app/shared/interfaces/product.interface';
 
 @Component({
   selector: 'products-component',
@@ -172,10 +172,10 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   createCheck(products: ProductInterface[]) {
-    let tmp: Array<Array<ProductInterface>> = [];
+    const tmp: Array<Array<ProductInterface>> = [];
     const productsLength = products.length;
 
-    products.map((item, index) => {
+    products.forEach((item, index) => {
       if (index % 2 === 0 && index > 0) {
         tmp.push([products[index - 2], products[index - 1]]);
       }
