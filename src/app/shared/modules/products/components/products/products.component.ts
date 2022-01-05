@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 
-import { Subject, Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { of, Subject, Subscription } from 'rxjs';
+import { debounceTime, filter } from 'rxjs/operators';
 import { cloneDeep } from 'lodash-es';
 import pdfMake from 'pdfmake/build/pdfmake';
 import { ToastrService } from 'ngx-toastr';
@@ -24,6 +24,7 @@ import {
   productsAction,
   productGroups
 } from '../../store/actions/action';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'products-component',
@@ -41,10 +42,11 @@ export class ProductsComponent implements OnInit, OnDestroy {
   isCollapsed: boolean = false;
 
   searchValue = '';
+  searchT: string = '';
 
   productsSub: Subscription;
 
-  productSub: Subscription;
+  searchSub: Subscription;
 
   nodes: ProductsInterface[] = null;
 
@@ -57,6 +59,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
+
+  searchNameControl: FormControl;
 
   nzClick(event: any): void {
     const tmp: any = { ...event.node.origin };
@@ -117,6 +121,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.productsSub.unsubscribe();
+
+    if (this.searchSub) this.searchSub.unsubscribe();
   }
 
   initializeSubscription(): void {
@@ -125,6 +131,14 @@ export class ProductsComponent implements OnInit, OnDestroy {
       .subscribe((items: ProductsInterface[]) => {
         this.nodes = cloneDeep(items);
         this.expandedNodeList = [...this.expandedNodeList];
+      });
+
+    this.searchNameControl = new FormControl();
+
+    this.searchSub = this.searchNameControl.valueChanges
+      .pipe(debounceTime(1000))
+      .subscribe((item) => {
+        if (item) this.searchValue = item;
       });
   }
 

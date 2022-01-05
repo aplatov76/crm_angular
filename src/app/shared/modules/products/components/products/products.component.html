@@ -88,7 +88,8 @@
         <input
           type="text"
           class="form-control"
-          [(ngModel)]="searchValue"
+          [value]="searchT"
+          [formControl]="searchNameControl"
         />
         <!--<input type="text" class="form-control" id="filter" #filter (keyup)="filterFn(filter.value, tree.treeModel)" placeholder="">-->
       </div>
@@ -162,6 +163,7 @@
             'bg-danger':
               node.origin.price < node.origin.trade_price * 1.1,
             'bg-info':
+              node.origin.trade_price &&
               node.origin.price > node.origin.trade_price * 1.45
           }"
           class="tr"
@@ -185,7 +187,9 @@
             >
           </div>
           <div class="td pr-2 position-relative">
-            <span>{{ node.origin.trade_price.toFixed(2) }}</span>
+            <span *ngIf="node.origin.trade_price">{{
+              node.origin.trade_price.toFixed(2)
+            }}</span>
             <small class="text-muted position-absolute position"
               >Цена СМ</small
             >

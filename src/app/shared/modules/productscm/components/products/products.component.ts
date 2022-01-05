@@ -12,7 +12,8 @@ import { Observable, Subscription, Subject } from 'rxjs';
 import {
   filter,
   debounceTime,
-  distinctUntilChanged
+  distinctUntilChanged,
+  take
 } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { productsCmAction } from '../../store/actions/action';
@@ -190,5 +191,12 @@ export class ProductsCmComponent implements OnInit, OnDestroy {
 
   handleChange(): void {
     this.pushPrices = true;
+  }
+
+  pushFiles(files) {
+    this.cmService
+      .pushFiles(files)
+      .pipe(take(1))
+      .subscribe((item) => this.initializeSubscription());
   }
 }

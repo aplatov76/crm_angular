@@ -62,7 +62,7 @@
       type="number"
       class="form-control"
       formControlName="trade_price"
-      placeholder="Цена поставщика"
+      placeholder="Цена поставщика опционально"
     />
   </div>
   <div
@@ -118,6 +118,17 @@
       class="form-control"
       formControlName="description"
     ></textarea>
+  </div>
+  <div *ngIf="type === 'product'" class="d-flex input-group mb-1">
+    <div class="input-group-prepend">
+      <span class="input-group-text cw">Коэффициент: </span>
+    </div>
+    <input
+      type="number"
+      class="form-control"
+      formControlName="coefficient"
+      placeholder="Коэффициент опционально"
+    />
   </div>
   <div
     *ngIf="event === 'correct' && type === 'product'"

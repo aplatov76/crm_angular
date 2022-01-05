@@ -11,7 +11,7 @@ export interface ProductInterface {
   trade_price?: number;
   parent: number;
   isDeleted: boolean;
-
+  coefficient: number;
   /** К удалению */
   info?: string;
   attribute_id?: number | null;

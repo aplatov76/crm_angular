@@ -39,6 +39,17 @@ export class ProductsCmService {
       .unsubscribe();
   }
 
+  pushFiles(files: File[]): Observable<any> {
+    //console.log(files[0]);
+    const uploadData = new FormData();
+    Array.from(files).map((file) => {
+      console.log(file);
+      uploadData.append('files', file, file.name);
+    });
+
+    return this.http.post(`${environment.url}/cm/`, uploadData, {});
+  }
+
   removeCurrentPrices(): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(
       `${environment.url}/cm/statistic`

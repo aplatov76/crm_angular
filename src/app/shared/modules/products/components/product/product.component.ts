@@ -125,7 +125,8 @@ export class ProductComponent implements OnInit, OnDestroy {
         [Validators.required]
       ],
       visible: [item ? item.visible : 1, [Validators.required]],
-      description: [item ? item.description : null]
+      description: [item ? item.description : null],
+      coefficient: [item ? item.coefficient : 1]
     });
   }
 

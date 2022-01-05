@@ -4,13 +4,20 @@
   <h1 class="h2"></h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-      <button
+      <label
         type="button"
-        class="btn btn-sm btn-outline-secondary"
-        (click)="createTplModal('Загрузка прайса', loadprice)"
+        class="btn btn-sm btn-outline-secondary m-0"
+        for="file"
+        >Загрузить прайс</label
       >
-        Загрузить прайс
-      </button>
+      <input
+        type="file"
+        id="file"
+        multiple="true"
+        (change)="pushFiles($event.target.files)"
+        hidden
+      />
+
       <button
         type="button"
         class="btn btn-sm btn-outline-danger"
@@ -164,7 +171,6 @@
     [nzMultiple]="true"
     (nzChange)="handleChange()"
     nzAction="{{ baseUrl }}"
-    [nzMultiple]="true"
   >
     <p class="ant-upload-drag-icon">
       <i class="material-icons">cloud_upload</i>
