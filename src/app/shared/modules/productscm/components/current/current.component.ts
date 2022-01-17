@@ -56,6 +56,8 @@ export class CurrentCmProductComponent implements OnInit, OnDestroy {
 
   currentParent: number[] = [];
 
+  visible: boolean = true;
+
   constructor(
     private store: Store,
     private fb: FormBuilder,

@@ -2,7 +2,12 @@
   <div class="col-md-6">
     <img src="{{ url }}" width="500px" alt="Загрузка..." />
   </div>
-  <div class="col-md-6">
+  <div class="col-md-6 d-flex justify-content-end" *ngIf="!visible">
+    <button class="btn btn-outline-info" (click)="visible = !visible">
+      Показать
+    </button>
+  </div>
+  <div class="col-md-6" *ngIf="visible">
     <form
       [formGroup]="form"
       class="mb-1"
@@ -77,8 +82,11 @@
         </div>
 
         <div class="btn-group mt-2">
-          <button class="btn btn-outline-info mr-1">
-            История цен
+          <button
+            class="btn btn-outline-info mr-1"
+            (click)="visible = !visible"
+          >
+            Скрыть
           </button>
         </div>
       </div>
@@ -140,7 +148,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-12" *ngIf="lineChartData">
+  <div class="col-md-12" *ngIf="lineChartData && visible">
     <canvas
       baseChart
       height="60"
