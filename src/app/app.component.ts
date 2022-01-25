@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 import {
   getCurrentUserAction,
   loginActionFailed
-} from './shared/modules/auth/store/actions/action';
-import { currentUserSelector } from './shared/modules/auth/store/selectors';
+} from './modules/auth/store/actions/action';
+import { currentUserSelector } from './modules/auth/store/selectors';
 
 @Component({
   selector: 'app-root',

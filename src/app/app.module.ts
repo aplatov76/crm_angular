@@ -19,25 +19,25 @@ import { AppRoutingModule } from './app-routing.module';
 import { environment } from '../environments/environment'; // Angular CLI environment
 
 import { AppComponent } from './app.component';
-import { LeftNav } from './shared/components/LeftNav/leftNav.component';
-import { AppIndicatorComponent } from './shared/components/app-indicator/app-indicator.component';
+import { LeftNav } from './components/LeftNav/leftNav.component';
+import { AppIndicatorComponent } from './components/app-indicator/app-indicator.component';
 
-import { SalesModule } from './shared/modules/sales/sales.module';
-import { OrdersModule } from './shared/modules/orders/orders.module';
-import { InvoiceModule } from './shared/modules/invoice/invoice.module';
-import { HistorySalesModule } from './shared/modules/historySales/historySales.module';
-import { ReturnSalesModule } from './shared/modules/returnSales/returnSales.module';
-import { OrderCmModule } from './shared/modules/ordercm/ordercm.module';
-import { DebtorsModule } from './shared/modules/debtors/debtors.module';
-import { AuthModule } from './shared/modules/auth/auth.module';
-import { AuthInterceptor } from './shared/services/auth.interceptor';
-import { ProductsModule } from './shared/modules/products/products.module';
-import { ProductsCmModule } from './shared/modules/productscm/productscm.module';
-import { ClientsModule } from './shared/modules/clients/clients.module';
-import { DeliveryModule } from './shared/modules/delivery/delivery.module';
+import { SalesModule } from './modules/sales/sales.module';
+import { OrdersModule } from './modules/orders/orders.module';
+import { InvoiceModule } from './modules/invoice/invoice.module';
+import { HistorySalesModule } from './modules/historySales/historySales.module';
+import { ReturnSalesModule } from './modules/returnSales/returnSales.module';
+import { OrderCmModule } from './modules/ordercm/ordercm.module';
+import { DebtorsModule } from './modules/debtors/debtors.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { AuthInterceptor } from './services/auth.interceptor';
+import { ProductsModule } from './modules/products/products.module';
+import { ProductsCmModule } from './modules/productscm/productscm.module';
+import { ClientsModule } from './modules/clients/clients.module';
+import { DeliveryModule } from './modules/delivery/delivery.module';
 
 registerLocaleData(ru);
-// import {WebProductsModule} from './shared/modules/webProducts/webProducts.module';
+// import {WebProductsModule} from './modules/webProducts/webProducts.module';
 
 @NgModule({
   declarations: [AppComponent, LeftNav, AppIndicatorComponent],
