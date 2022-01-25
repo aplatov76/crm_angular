@@ -1,0 +1,8 @@
+export interface OrderCmDataInterface {
+  id: number;
+  articul: number;
+  title: string;
+  quantity: number;
+  unit: any;
+  description?: string;
+}

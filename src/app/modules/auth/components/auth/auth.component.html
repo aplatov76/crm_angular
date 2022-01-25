@@ -1,0 +1,28 @@
+<form class="form-signin" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <fieldset>
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <fieldset>
+      <input
+        type="phone"
+        formControlName="phone"
+        class="form-control mb-3"
+        placeholder="Phone"
+      />
+    </fieldset>
+    <fieldset>
+      <input
+        type="password"
+        formControlName="password"
+        class="form-control mb-3"
+        placeholder="Password"
+      />
+    </fieldset>
+    <button
+      [disabled]="isSubmitting$ | async"
+      class="btn btn-lg btn-primary btn-block"
+      type="submit"
+    >
+      Войти
+    </button>
+  </fieldset>
+</form>

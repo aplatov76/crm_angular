@@ -1,0 +1,12 @@
+.custom-search {
+  flex: auto;
+}
+
+.table-responsive {
+  height: 300px;
+  overflow: scroll;
+}
+
+tr:hover {
+  cursor: pointer;
+}

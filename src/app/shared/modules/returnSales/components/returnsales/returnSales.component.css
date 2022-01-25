@@ -1,9 +1,0 @@
-.custom-search{
-    flex: auto;
-}
-
-::ng-deep .modal-dialog{
-    max-width: 1200px !important;
-    max-height: 90% !important;
-    width: 1200px;
-  }

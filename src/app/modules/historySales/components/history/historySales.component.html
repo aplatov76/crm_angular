@@ -1,0 +1,108 @@
+<div
+  class="
+    d-flex
+    justify-content-between
+    flex-wrap flex-md-nowrap
+    align-items-center
+    pt-3
+    pb-2
+    mb-3
+    border-bottom
+  "
+>
+  <h1 class="h2"></h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group mr-2">
+      <button type="button" class="btn btn-sm btn-outline-secondary">
+        Экспорт
+      </button>
+    </div>
+    <nz-range-picker
+      [(ngModel)]="daterangepickerModel"
+      [nzFormat]="dateFormat"
+    ></nz-range-picker>
+    <button
+      type="button"
+      (click)="getSales()"
+      class="btn btn-sm btn-outline-secondary"
+    >
+      Показать
+    </button>
+  </div>
+</div>
+<div class="table-responsive">
+  <div class="d-flex header-dashboard justify-content-between">
+    <h2>История продаж</h2>
+    <i class="material-icons" (click)="visible = !visible"
+      >filter_list</i
+    >
+  </div>
+  <div *ngIf="visible">
+    <div class="card card-body">
+      <div class="card card-body">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <button type="button" class="btn btn-outline-secondary">
+              Поиск
+            </button>
+            <button
+              type="button"
+              class="
+                btn btn-outline-secondary
+                dropdown-toggle dropdown-toggle-split
+              "
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Наименование</a>
+              <a class="dropdown-item" href="#">Код</a>
+            </div>
+          </div>
+          <ng-select
+            [items]="praisList$ | async"
+            placeholder="Поиск"
+            class="custom-search"
+            bindLabel="title"
+            bindValue="id"
+            (change)="onChange($event)"
+          >
+          </ng-select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Код</th>
+        <th scope="col">Наименование</th>
+        <th scope="col">Количество</th>
+        <th scope="col">Цена</th>
+        <th scope="col">Сумма</th>
+        <th scope="col">Отпустил</th>
+        <th scope="col">Дата</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let item of sales$ | async; let i = index"
+        (click)="showModal(item.check.id, item.check.data)"
+      >
+        <th>{{ i + 1 }}</th>
+        <td>{{ item.product.id }}</td>
+        <td>{{ item.product.title }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.sum }}</td>
+        <td>{{ item.check.user.name }}</td>
+        <td>{{ item.check.data | date: 'yyyy-MM-dd hh:mm' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

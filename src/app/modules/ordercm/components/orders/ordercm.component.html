@@ -1,0 +1,83 @@
+<div
+  class="
+    d-flex
+    justify-content-between
+    flex-wrap flex-md-nowrap
+    align-items-center
+    pt-3
+    pb-2
+    mb-3
+    border-bottom
+  "
+>
+  <h1 class="h2"></h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group mr-2">
+      <button
+        type="button"
+        (click)="createEmptyOrder()"
+        class="btn btn-sm btn-outline-secondary"
+      >
+        Создать
+      </button>
+    </div>
+    <div class="btn-group mr-2">
+      <nz-range-picker
+        [(ngModel)]="daterangepickerModel"
+        [nzFormat]="dateFormat"
+      ></nz-range-picker>
+    </div>
+    <button
+      type="button"
+      (click)="showWithInperiod()"
+      [disabled]="daterangepickerModel.length < 2"
+      class="btn btn-sm btn-outline-secondary"
+    >
+      Показать
+    </button>
+  </div>
+</div>
+<div class="table-responsive">
+  <div class="d-flex header-dashboard justify-content-between">
+    <h2>Отправленные заявки</h2>
+    <i
+      class="material-icons"
+      data-toggle="collapse"
+      data-target="#collapseExample"
+      aria-expanded="false"
+      aria-controls="collapseExample"
+      >filter_list</i
+    >
+  </div>
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body"></div>
+  </div>
+  <table class="table table-striped table-hover" *ngIf="orders">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Заявка</th>
+        <th scope="col">Дата</th>
+        <th scope="col">Пользователь</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let order of orders; let i = index"
+        (click)="onClick(order.id, order.data)"
+      >
+        <th scope="row">{{ i + 1 }}</th>
+        <td
+          [ngClass]="{
+            'bg-warning': order.status === 0,
+            'bg-success': order.status === 1
+          }"
+        >
+          Заявка № {{ order.id }}
+        </td>
+        <td>{{ order.data | date: 'yyy-MM-dd hh:mm a' }}</td>
+        <td>{{ order.user.name }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
