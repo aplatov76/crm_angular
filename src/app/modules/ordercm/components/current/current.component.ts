@@ -113,7 +113,16 @@ export class CurrentCmOrderComponent implements OnInit, OnDestroy {
           this.fb.group({
             id: [item.id],
             articul: [{ value: item.articul, disabled: disable }],
-            title: [{ value: item.title, disabled: disable }],
+            title: [
+              {
+                value: item.title
+                  ? item.title
+                  : item.product?.title
+                  ? item.product?.title
+                  : '',
+                disabled: disable
+              }
+            ],
             quantity: [
               { value: item.quantity, disabled: disable },
               [Validators.required, Validators.min(1)]
