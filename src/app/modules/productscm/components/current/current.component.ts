@@ -8,6 +8,7 @@ import {
 
 import { ChartConfiguration, ChartType } from 'chart.js';
 
+import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { NzModalRef } from 'ng-zorro-antd/modal';
@@ -62,6 +63,7 @@ export class CurrentCmProductComponent implements OnInit, OnDestroy {
     private store: Store,
     private fb: FormBuilder,
     private modal: NzModalRef,
+    private toastr: ToastrService,
     private productService: ProductsCmService,
     private persistanceService: PersistanceService
   ) {}
@@ -166,6 +168,8 @@ export class CurrentCmProductComponent implements OnInit, OnDestroy {
     });
 
     this.persistanceService.set('orderdata', array);
+    this.toastr.success(`${this.product.title} добавлено в заявку`);
+    this.modal.close();
   }
 
   close() {

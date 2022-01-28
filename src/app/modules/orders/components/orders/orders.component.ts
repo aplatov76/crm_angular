@@ -7,6 +7,7 @@ import { OrderInterface } from '../../interfaces/order.interface';
 import { ordersAction } from '../../store/actions/action';
 import { currentOrders } from '../../store/selectors';
 import { CreateOrderComponent } from '../create/create.component';
+import { PersistanceService } from 'src/app/services/persistence.service';
 
 @Component({
   selector: 'orders',
@@ -28,7 +29,8 @@ export class OrdersComponent implements OnInit {
   constructor(
     private store: Store,
     private modalService: NzModalService,
-    private viewContainerRef: ViewContainerRef
+    private viewContainerRef: ViewContainerRef,
+    public persistanceService: PersistanceService
   ) {}
 
   ngOnInit(): void {
