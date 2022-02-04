@@ -1,3 +1,7 @@
 .custom-search {
   flex: auto;
 }
+
+.trm-search {
+  display: flex;
+}
